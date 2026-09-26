@@ -13,12 +13,12 @@ reference for a route module), `worker/jobs/registry.ts` + `worker/routes/jobs.t
 ## Setup
 
 ```bash
-cd ~/GitHub/sheila-creator-dashboard
+cd ~/GitHub/mercedes-creator-dashboard
 git fetch origin
 git worktree add ../scd-<your-letter> -b phase/<your-branch> origin/main
 cd ../scd-<your-letter>
-ln -s ~/GitHub/sheila-creator-dashboard/node_modules node_modules
-cp ~/GitHub/sheila-creator-dashboard/.dev.vars .dev.vars
+ln -s ~/GitHub/mercedes-creator-dashboard/node_modules node_modules
+cp ~/GitHub/mercedes-creator-dashboard/.dev.vars .dev.vars
 ```
 
 Run the suites with your assigned port so the four worktrees never collide:

@@ -26,9 +26,9 @@ function page(title: string, body: string): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title} · Sheila Studio</title>
-<meta name="description" content="${title} for Sheila Studio, Sheila Bruce's creator dashboard.">
-<link rel="icon" href="/assets/brand/sheila-logo.png">
+<title>${title} · Mercedes Studio</title>
+<meta name="description" content="${title} for Mercedes Studio, Mercedes Asare's creator dashboard.">
+<link rel="icon" href="/assets/brand/mercedes-logo.png">
 <style>
   :root { color-scheme: light; }
   body { margin: 0; background: #f7f1e7; color: #211713; font: 16px/1.6 Montserrat, "Helvetica Neue", Arial, sans-serif; }
@@ -47,7 +47,7 @@ function page(title: string, body: string): string {
 <main>
 ${body}
 <footer>
-  <a href="/">Sheila Studio</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:${LEGAL_CONTACT}">${LEGAL_CONTACT}</a>
+  <a href="/">Mercedes Studio</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:${LEGAL_CONTACT}">${LEGAL_CONTACT}</a>
 </footer>
 </main>
 </body>
@@ -57,13 +57,13 @@ ${body}
 export const PRIVACY_HTML = page(
   "Privacy policy",
   `<h1>Privacy policy</h1>
-<p class="updated">Sheila Studio · last updated ${LEGAL_UPDATED}</p>
-<p>Sheila Studio is a private dashboard that Sheila Bruce uses to turn her own videos into posts and
-to put her full-length videos on her own YouTube channel. It has one user: Sheila. It is not sold,
+<p class="updated">Mercedes Studio · last updated ${LEGAL_UPDATED}</p>
+<p>Mercedes Studio is a private dashboard that Mercedes Asare uses to turn her own videos into posts and
+to put her full-length videos on her own YouTube channel. It has one user: Mercedes. It is not sold,
 it shows no ads, and it never sells or shares anyone's data.</p>
 
 <h2>What it reads and does on YouTube</h2>
-<p>Only when Sheila taps <strong>Connect YouTube</strong> and allows it on Google's own page, the
+<p>Only when Mercedes taps <strong>Connect YouTube</strong> and allows it on Google's own page, the
 dashboard uses her Google account's permission for her YouTube channel to:</p>
 <ul>
   <li><strong>Upload</strong> the full-length videos she chooses to her channel, with the title,
@@ -91,14 +91,14 @@ and it does nothing on YouTube she did not ask for in the dashboard.</p>
 </ul>
 
 <h2>Google user data</h2>
-<p>Sheila Studio's use and transfer of information received from Google APIs adheres to the
+<p>Mercedes Studio's use and transfer of information received from Google APIs adheres to the
 <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User
 Data Policy</a>, including the Limited Use requirements. Google data is used only to provide the
-features above to Sheila, is not used for advertising, is not sold, is not used to train any AI
+features above to Mercedes, is not used for advertising, is not sold, is not used to train any AI
 model, and is not read by a person except to fix a problem she asks about.</p>
 
 <h2>Other services it works with</h2>
-<p>Short clips are posted through Buffer with the key Sheila pastes in. Email notices go through
+<p>Short clips are posted through Buffer with the key Mercedes pastes in. Email notices go through
 Resend. Optional services she chooses to connect (for example ElevenLabs for voice overs) receive
 only what that feature needs. Each connection can be removed on the Connect screen.</p>
 
@@ -107,7 +107,7 @@ only what that feature needs. Each connection can be removed on the Connect scre
   <li>In the dashboard: <strong>Settings → Connections → YouTube → Disconnect</strong>. The stored
   token is deleted at once.</li>
   <li>At Google, at any time: <a href="${GOOGLE_PERMISSIONS_URL}">${GOOGLE_PERMISSIONS_URL}</a> →
-  Sheila Studio → Remove access. The dashboard then stops and shows "Reconnect YouTube".</li>
+  Mercedes Studio → Remove access. The dashboard then stops and shows "Reconnect YouTube".</li>
   <li>Videos already on her channel stay hers, in YouTube Studio, whatever happens to the dashboard.</li>
 </ul>
 
@@ -118,17 +118,17 @@ only what that feature needs. Each connection can be removed on the Connect scre
 export const TERMS_HTML = page(
   "Terms of service",
   `<h1>Terms of service</h1>
-<p class="updated">Sheila Studio · last updated ${LEGAL_UPDATED}</p>
-<p>Sheila Studio is a private dashboard for one creator, Sheila Bruce. By using it you agree to these
+<p class="updated">Mercedes Studio · last updated ${LEGAL_UPDATED}</p>
+<p>Mercedes Studio is a private dashboard for one creator, Mercedes Asare. By using it you agree to these
 short terms.</p>
 
 <h2>What it is</h2>
-<p>A tool that helps cut, schedule and post Sheila's own videos: short clips through Buffer, and
+<p>A tool that helps cut, schedule and post Mercedes' own videos: short clips through Buffer, and
 full-length videos uploaded to her own YouTube channel when she connects it. Nothing is posted or
 uploaded without her approval in the dashboard.</p>
 
 <h2>Her content stays hers</h2>
-<p>Every video, picture and word belongs to Sheila. The dashboard only moves it where she tells it
+<p>Every video, picture and word belongs to Mercedes. The dashboard only moves it where she tells it
 to. She is responsible for having the rights to what she posts and for following YouTube's Terms of
 Service (<a href="https://www.youtube.com/t/terms">youtube.com/t/terms</a>) and Community
 Guidelines. Using the YouTube features also means agreeing to the

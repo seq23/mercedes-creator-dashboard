@@ -10,7 +10,7 @@ steer (vendor pages, checked 26 Sep 2026; sources at the end).
 
 ## What creators steer, ranked by how often they would really use it
 
-| # | Control | How often | Who offers it | Sheila Studio before this change |
+| # | Control | How often | Who offers it | Mercedes Studio before this change |
 | --- | --- | --- | --- | --- |
 | 1 | **Look / template** (captions + layout + brand) | Every batch | CapCut templates, Opus Clip brand template, Captions "styles", Submagic presets | 12 Looks, but only from Settings for all dumps; a note asking for one was **ignored** |
 | 2 | **Must include / leave out a moment** ("the kitchen bit", "not the part where I cough") | Most batches | Opus Clip ClipAnything prompt, Descript criteria field, Captions chat | Notes reach the moment picker **only when the AI is connected**; with no OpenRouter (staging today) the note is **ignored completely**; nothing reports whether it was followed |

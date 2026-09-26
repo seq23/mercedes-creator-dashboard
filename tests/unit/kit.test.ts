@@ -15,15 +15,15 @@ const NOW = new Date("2026-09-25T12:00:00.000Z");
 const fig = (p: Partial<PlatformFigures> = {}): PlatformFigures => ({ platform: "tiktok", followers: 12_400, avgViews: 3_100, asOf: "2026-09-24T12:00:00.000Z", source: "TikTok export you uploaded", avgSelfReported: false, engagement: null, bestTimes: [], topFormats: [], ...p });
 
 function kit(p: Partial<KitContent> = {}): KitContent {
-  return { ...emptyKit("Sheila Bruce"), photoKey: "kit/photo/upl_abcdef12", handles: { tiktok: "@sheila" }, positioning: "Hosting that makes guests feel celebrated.", showcase: ["c1", "c2", "c3"], packages: starterPackages().map((x) => ({ ...x, startingAt: 300, floor: 250, target: 400 })), contactEmail: "partnerships@sheila.example", testimonials: [{ quote: "Sold out.", name: "Maya", role: "Brand" }], ...p };
+  return { ...emptyKit("Mercedes Asare"), photoKey: "kit/photo/upl_abcdef12", handles: { tiktok: "@mercedes" }, positioning: "Hosting that makes guests feel celebrated.", showcase: ["c1", "c2", "c3"], packages: starterPackages().map((x) => ({ ...x, startingAt: 300, floor: 250, target: 400 })), contactEmail: "partnerships@mercedes.example", testimonials: [{ quote: "Sold out.", name: "Maya", role: "Brand" }], ...p };
 }
 
 describe("what she can save", () => {
   it("cleans handles, keeps limits, and says what is wrong in plain words", () => {
-    const ok = cleanKit({ name: "Sheila", handles: { tiktok: "sheilabruce", instagram: "@sheila.bruce" }, showcase: ["a", "a", "b"] }, "X");
-    expect("kit" in ok && ok.kit.handles).toEqual({ tiktok: "@sheilabruce", instagram: "@sheila.bruce" });
+    const ok = cleanKit({ name: "Mercedes", handles: { tiktok: "mercedesasare", instagram: "@mercedes.asare" }, showcase: ["a", "a", "b"] }, "X");
+    expect("kit" in ok && ok.kit.handles).toEqual({ tiktok: "@mercedesasare", instagram: "@mercedes.asare" });
     expect("kit" in ok && ok.kit.showcase).toEqual(["a", "b"]);
-    expect(cleanKit({ handles: { tiktok: "not a handle!" } }, "X")).toEqual({ problem: "That TikTok handle does not look right. Use letters, numbers, dots and underscores, like @sheilabruce." });
+    expect(cleanKit({ handles: { tiktok: "not a handle!" } }, "X")).toEqual({ problem: "That TikTok handle does not look right. Use letters, numbers, dots and underscores, like @mercedesasare." });
     expect(cleanKit({ showcase: ["1", "2", "3", "4", "5", "6", "7"] }, "X")).toEqual({ problem: "Pick up to 6 clips." });
     expect(cleanKit({ contactEmail: "nope" }, "X")).toEqual({ problem: "That contact email does not look right." });
   });
@@ -84,11 +84,11 @@ describe("Kit check", () => {
 });
 
 describe("QR code (no dependency)", () => {
-  it("encodes her kit link: the same matrix OpenCV decoded back to the link when this was built", () => {
-    const q = qrEncode("https://sheilastudio.seq-taylor.workers.dev/kit/sheila");
+  it("encodes her kit link: the same matrix a decoder (OpenCV when built; jsQR at the 26 Sep 2026 relink) read back as the link", () => {
+    const q = qrEncode("https://dashboard.justbeingmercedes.com/kit/mercedes");
     expect(q).toMatchObject({ version: 4, size: 33 });
     const hash = createHash("sha256").update(q.modules.map((r) => r.map((b) => (b ? 1 : 0)).join("")).join("\n")).digest("hex");
-    expect(hash).toBe("37c748d2850349df1a34398c3b8d459d0dee15b7bef6c773b334446b73a33aa3");
+    expect(hash).toBe("b7f4229033fa2dca46bb0e3d7c7f361dff37dea4eaa652961bb2cdc9382040dd");
     expect(createHash("sha256").update(qrEncode("HELLO").modules.map((r) => r.map((b) => (b ? 1 : 0)).join("")).join("\n")).digest("hex")).toBe("c346c75add5698735afe3f7eb4f3e6c57ccefd9563f45f65c6d76aa518fb6f91");
   });
   it("has the three finder patterns, timing lines and the dark module", () => {
@@ -128,52 +128,52 @@ describe("the public link: newest published version only (real schema)", () => {
 
   it("a draft is never public: nothing until she publishes", async () => {
     raw.prepare("UPDATE media_kit SET draft = ? WHERE id = 1").run(JSON.stringify(kit({ bio: "draft only" })));
-    const r = await get("/kit/sheila");
+    const r = await get("/kit/mercedes");
     expect(r.status).toBe(404);
     expect(await r.json()).toEqual({ error: "This media kit isn't published yet." });
   });
   it("serves the newest version, strips private rates, dates every figure, counts real views only", async () => {
-    raw.prepare("INSERT INTO media_kit_versions (version, content, slug, published_at) VALUES (1, ?, 'sheila', '2026-09-01T00:00:00Z')").run(JSON.stringify(kit({ bio: "old" })));
-    raw.prepare("INSERT INTO media_kit_versions (version, content, slug, published_at) VALUES (2, ?, 'sheila', '2026-09-20T00:00:00Z')").run(JSON.stringify(kit({ bio: "new" })));
+    raw.prepare("INSERT INTO media_kit_versions (version, content, slug, published_at) VALUES (1, ?, 'mercedes', '2026-09-01T00:00:00Z')").run(JSON.stringify(kit({ bio: "old" })));
+    raw.prepare("INSERT INTO media_kit_versions (version, content, slug, published_at) VALUES (2, ?, 'mercedes', '2026-09-20T00:00:00Z')").run(JSON.stringify(kit({ bio: "new" })));
     raw.prepare("UPDATE media_kit SET draft = ? WHERE id = 1").run(JSON.stringify(kit({ bio: "unpublished edit" })));
     raw.prepare("INSERT INTO account_stats (id, platform, captured_at, followers, avg_views, source) VALUES ('a1', 'tiktok', '2026-09-24T12:00:00.000Z', 12400, 3100, 'import')").run();
-    const r = await get("/kit/sheila");
+    const r = await get("/kit/mercedes");
     expect(r.status).toBe(200);
     const body = (await r.json()) as { bio: string; version: number; figures: PlatformFigures[]; packages: unknown[]; qrSvg: string; url: string };
     expect(body.bio).toBe("new");
     expect(body.version).toBe(2);
     expect(body.figures).toEqual([expect.objectContaining({ platform: "tiktok", followers: 12400, asOf: "2026-09-24T12:00:00.000Z", source: "TikTok export you uploaded" })]);
     expect(JSON.stringify(body.packages)).not.toMatch(/"floor"|"target"|:250|:400/);
-    expect(body.url).toBe("https://studio.example/kit/sheila");
+    expect(body.url).toBe("https://studio.example/kit/mercedes");
     expect(body.qrSvg).toContain("<svg");
     expect(views()).toBe(1);
-    await get("/kit/sheila?preview=1");
-    await get("/kit/sheila", "Mozilla/5.0 (compatible; Googlebot/2.1)");
+    await get("/kit/mercedes?preview=1");
+    await get("/kit/mercedes", "Mozilla/5.0 (compatible; Googlebot/2.1)");
     expect(views()).toBe(1);
   });
   it("numbers she typed on Stats are self-reported on the kit, never a verified figure", async () => {
-    raw.prepare("INSERT INTO media_kit_versions (version, content, slug) VALUES (1, ?, 'sheila')").run(JSON.stringify(kit()));
+    raw.prepare("INSERT INTO media_kit_versions (version, content, slug) VALUES (1, ?, 'mercedes')").run(JSON.stringify(kit()));
     raw.prepare("INSERT INTO account_stats (id, platform, captured_at, followers, avg_views, source) VALUES ('m1', 'instagram', '2026-09-20T12:00:00.000Z', 8200, 1900, 'manual')").run();
     raw.prepare("INSERT INTO account_stats (id, platform, captured_at, followers, avg_views, source) VALUES ('y1', 'youtube', '2026-09-24T12:00:00.000Z', 2100, 900, 'api')").run();
-    const body = (await (await get("/kit/sheila")).json()) as { figures: PlatformFigures[]; manual: { platform: string; label: string; value: string; asOf: string; selfReported: boolean }[] };
+    const body = (await (await get("/kit/mercedes")).json()) as { figures: PlatformFigures[]; manual: { platform: string; label: string; value: string; asOf: string; selfReported: boolean }[] };
     expect(body.figures.map((f) => f.platform)).toEqual(["youtube"]);
     expect(body.figures[0].source).toBe("YouTube Shorts, read by the dashboard");
     expect(body.manual).toContainEqual(expect.objectContaining({ platform: "instagram", label: "Followers", value: "8,200", asOf: "2026-09-20", selfReported: true }));
   });
   it("an old link name forwards to the current one; an unknown one is a 404", async () => {
-    raw.prepare("INSERT INTO media_kit_versions (version, content, slug) VALUES (1, ?, 'sheila')").run(JSON.stringify(kit()));
-    raw.prepare("UPDATE media_kit SET public_slug = 'sheilabruce' WHERE id = 1").run();
-    raw.prepare("INSERT INTO kit_slugs (slug) VALUES ('sheilabruce')").run();
-    expect(await (await get("/kit/sheila")).json()).toEqual({ moved: "sheilabruce" });
-    expect((await get("/kit/sheilabruce")).status).toBe(200);
+    raw.prepare("INSERT INTO media_kit_versions (version, content, slug) VALUES (1, ?, 'mercedes')").run(JSON.stringify(kit()));
+    raw.prepare("UPDATE media_kit SET public_slug = 'mercedesasare' WHERE id = 1").run();
+    raw.prepare("INSERT INTO kit_slugs (slug) VALUES ('mercedesasare')").run();
+    expect(await (await get("/kit/mercedes")).json()).toEqual({ moved: "mercedesasare" });
+    expect((await get("/kit/mercedesasare")).status).toBe(200);
     expect((await get("/kit/nobody")).status).toBe(404);
   });
   it("only images the published kit uses are served", async () => {
-    raw.prepare("INSERT INTO media_kit_versions (version, content, slug) VALUES (1, ?, 'sheila')").run(JSON.stringify(kit({ photoKey: "kit/photo/upl_pubphoto1" })));
+    raw.prepare("INSERT INTO media_kit_versions (version, content, slug) VALUES (1, ?, 'mercedes')").run(JSON.stringify(kit({ photoKey: "kit/photo/upl_pubphoto1" })));
     const files = new Map<string, string>([["kit/photo/upl_pubphoto1", "img"], ["kit/photo/upl_draftonly", "img"]]);
     env = { ...env, FILES: { get: async (k: string) => (files.has(k) ? { body: files.get(k), httpEtag: "e", writeHttpMetadata: () => undefined } : null) } } as unknown as Env;
-    expect((await get("/kit/sheila/image/upl_pubphoto1")).status).toBe(200);
-    expect((await get("/kit/sheila/image/upl_draftonly")).status).toBe(404);
+    expect((await get("/kit/mercedes/image/upl_pubphoto1")).status).toBe(200);
+    expect((await get("/kit/mercedes/image/upl_draftonly")).status).toBe(404);
   });
 });
 

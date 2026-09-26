@@ -147,7 +147,7 @@ type Section = { items: { key: string }[]; total: number };
 beforeEach(() => {
   db = sqliteD1();
   r2 = memoryR2();
-  env = { DB: db.DB, FILES: r2.FILES, OWNER_EMAIL: "owner@example.com", SESSION_SECRET: "s", SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=", APP_NAME: "Sheila Studio", FAKE_SERVICES: "1", AUTH_MODE: "open", PUBLIC_BASE_URL: BASE, GITHUB_REPO: "seq23/sheila-creator-dashboard" } as unknown as Env;
+  env = { DB: db.DB, FILES: r2.FILES, OWNER_EMAIL: "owner@example.com", SESSION_SECRET: "s", SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=", APP_NAME: "Mercedes Studio", FAKE_SERVICES: "1", AUTH_MODE: "open", PUBLIC_BASE_URL: BASE, GITHUB_REPO: "seq23/mercedes-creator-dashboard" } as unknown as Env;
   db.raw.exec(yearSql(NOW).sql);
 });
 

@@ -1,5 +1,5 @@
 // Day 358 (docs/reviews/2026-09-26-day-358.md): a YEAR of demo data (scripts/seed-year.mjs), used
-// the way Sheila would on her phone and on a desktop. Home fits one phone screen however much has
+// the way Mercedes would on her phone and on a desktop. Home fits one phone screen however much has
 // piled up; every card dismisses with Undo; dumps, deals and voice overs archive with Undo and come
 // back from Show archived; long lists page with true counts; the daily lane clears storage and
 // warns before any unreviewed clip goes, with one-tap Keep; Settings shows the meter and the rules.

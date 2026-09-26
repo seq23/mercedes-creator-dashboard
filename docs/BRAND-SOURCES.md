@@ -1,4 +1,4 @@
-# Brand sources: where Sheila can get listed
+# Brand sources: where Mercedes can get listed
 
 This table feeds the Deals tab's "Get listed here" steps: the creator marketplaces and platform programs where a US hosting, tablescape and home-entertaining creator with about 2K-15K followers per platform can sign up herself and get paid. The dashboard reads the structured list in `worker/domain/marketplaces.ts`, and that list must match this table: same keys, same yes/no/unconfirmed status. Everything was checked on 25 Sep 2026. Where the official page could not be read (403, or no detail given), the row says so and gives the 2026 secondary source used. "Unconfirmed" means we could not confirm it from a 2025-2026 source. It is not a guess.
 

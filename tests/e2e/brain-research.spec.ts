@@ -9,7 +9,7 @@ import path from "node:path";
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import { sql } from "./helpers";
 
-const MD = `# A Sheila Bruce Affair — notes\nLuxury yacht days, galas and wellness talks for Black women over 50 in Sarasota.\nGoal: fill every event and land brand partners that fit.\n`;
+const MD = `# Just Being Mercedes — notes\nHonest beauty reviews, get-ready routines and real-budget style for Black women in their 20s to 40s in New York.\nGoal: grow a following that saves the routine and land brand partners that fit.\n`;
 
 const TIKTOK_CSV = `Video title,Video link,Post time,Total likes,Total comments,Total shares,Total views,Average watch time
 "Yacht day, white party",https://www.tiktok.com/@fabul11/video/7412345678901234567,2026-08-02 19:05:00,1.2K,48,31,"18,400",11.5
@@ -71,16 +71,16 @@ test("brain → research → the cutting gate opens only after lock + approve", 
   await page.getByRole("button", { name: /Draft my profile|Redraft profile from all docs/ }).click();
   await expect(page.locator(".toast").filter({ hasText: "New draft ready." })).toBeVisible();
   await expect(page.getByText(/· v\d+ · drafted/)).toBeVisible();
-  await expect(page.getByLabel("Who she is")).toHaveValue(/A Sheila Bruce Affair/);
+  await expect(page.getByLabel("Who she is")).toHaveValue(/Just Being Mercedes/);
   const ctas = page.getByLabel("Calls to action");
-  await ctas.fill(`${await ctas.inputValue()}\n• "Save the date for the fall gala."`);
+  await ctas.fill(`${await ctas.inputValue()}\n• "Save this for your next Sephora run."`);
   await page.getByRole("button", { name: "Save changes" }).click();
   await expect(page.locator(".toast").filter({ hasText: "Saved as a new version." })).toBeVisible();
   await expect(page.getByText(/· v\d+ · edited/)).toBeVisible();
   await page.getByRole("button", { name: "Lock profile" }).click();
   await expect(page.locator(".pill", { hasText: "Locked" })).toBeVisible();
   await expect(page.getByLabel("Calls to action")).toBeDisabled();
-  await expect(page.getByLabel("Calls to action")).toHaveValue(/fall gala/);
+  await expect(page.getByLabel("Calls to action")).toHaveValue(/Sephora run/);
 
   // ---- Research: refresh → fake job → cited brief → approve
   await page.goto("/research");
@@ -171,7 +171,7 @@ test("stats with no sign-in: YouTube public numbers, Instagram numbers form, Tik
   await expect(page.getByText(/may show a warning page until the app is approved/)).toBeVisible();
 
   // YouTube: public numbers, no sign-in; the channel typed once.
-  await page.getByLabel("Different channel? Paste its @name or link").fill("@asheilabruceaffair");
+  await page.getByLabel("Different channel? Paste its @name or link").fill("@justbeingmercedes");
   await page.getByRole("button", { name: "Use this channel" }).click();
   await expect(page.locator(".toast").filter({ hasText: "Channel saved." })).toBeVisible();
   await expect(page.getByText(/1,260 subscribers/)).toBeVisible();

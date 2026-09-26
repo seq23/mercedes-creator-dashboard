@@ -154,7 +154,7 @@ let raw: ReturnType<typeof sqliteD1>["raw"];
 beforeEach(() => {
   const d = sqliteD1();
   raw = d.raw;
-  env = { DB: d.DB, FAKE_SERVICES: "1", OWNER_EMAIL: "owner@example.com", PUBLIC_BASE_URL: "https://example.test", APP_NAME: "Sheila Studio", GITHUB_REPO: "x/y", AUDIENCE_TIMEZONE: "America/New_York", ENV_NAME: "dev" } as unknown as Env;
+  env = { DB: d.DB, FAKE_SERVICES: "1", OWNER_EMAIL: "owner@example.com", PUBLIC_BASE_URL: "https://example.test", APP_NAME: "Mercedes Studio", GITHUB_REPO: "x/y", AUDIENCE_TIMEZONE: "America/New_York", ENV_NAME: "dev" } as unknown as Env;
 });
 const q = <T>(sql: string) => raw.prepare(sql).all() as T[];
 const seedApproved = () => {

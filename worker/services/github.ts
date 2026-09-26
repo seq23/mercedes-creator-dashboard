@@ -52,7 +52,7 @@ export async function dispatchJob(env: Env, type: JobType, refId: string | null)
       headers: {
         Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
         Accept: "application/vnd.github+json",
-        "User-Agent": "sheila-creator-dashboard",
+        "User-Agent": "mercedes-creator-dashboard",
         "X-GitHub-Api-Version": "2022-11-28",
       },
       body: JSON.stringify(dispatchBody(env, type, { jobId, nonce, ts: timestamp, sig: signature })),

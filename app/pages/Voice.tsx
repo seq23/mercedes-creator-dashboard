@@ -198,7 +198,7 @@ function SetupSteps({ v, onChange }: { v: VoiceState; onChange: () => void }) {
             <Dot light="green" /> Voice ready · saved {fmtDate(v.consent_at)}
           </div>
         ) : null}
-        <Notice tone="info">Only Sheila’s own login can record or replace the voice.</Notice>
+        <Notice tone="info">Only Mercedes’ own login can record or replace the voice.</Notice>
       </Card>
     );
   }

@@ -1,6 +1,6 @@
 # Editors: which creator video tools can be connected, and how
 
-The owner's ask (25 Sep 2026): "make sure we have a connection option for Sheila to connect her
+The owner's ask (25 Sep 2026): "make sure we have a connection option for Mercedes to connect her
 own CapCut and use that in lieu of our open source alt. We also need to make sure any other
 premium popular influencer software can be connected that can adjust videos (only the most
 popular)."

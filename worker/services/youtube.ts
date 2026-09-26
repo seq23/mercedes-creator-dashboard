@@ -1,5 +1,5 @@
 // YouTube public numbers with an API key, no sign-in (owner decision 25 Sep 2026: production
-// Stats is no-login; Sheila never sees a Google consent screen). YouTube Data API v3 with the
+// Stats is no-login; Mercedes never sees a Google consent screen). YouTube Data API v3 with the
 // Worker secret YOUTUBE_API_KEY: a channel's subscriberCount / viewCount / videoCount and each
 // upload's views, likes, comments, publishedAt and title are public, so a key is enough.
 // Quota: channels.list and playlistItems.list and videos.list cost 1 unit each (a sync is 3
@@ -129,7 +129,7 @@ class RealYouTube implements YouTubePublicClient {
 }
 
 // ---- fake: one channel with six weeks of uploads, plus the failure shapes.
-const FAKE_CHANNEL: YouTubeChannel = { id: "UCfakeSheilaBruce000001", title: "Sheila Bruce", handle: "@asheilabruceaffair", subscribers: 1260, views: 48_300, videos: 12, uploads: "UUfakeSheilaBruce000001" };
+const FAKE_CHANNEL: YouTubeChannel = { id: "UCfakeMercedesAsare000001", title: "Mercedes Asare", handle: "@justbeingmercedes", subscribers: 1260, views: 48_300, videos: 12, uploads: "UUfakeMercedesAsare000001" };
 
 class FakeYouTube implements YouTubePublicClient {
   constructor(private key: string) {}

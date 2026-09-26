@@ -411,7 +411,7 @@ export function KitEditor() {
         </h2>
         {draft.testimonials.map((t, i) => (
           <div key={i} className="kit-testimonial">
-            <textarea className="textarea" aria-label="Their words" placeholder="Sheila's video sold out our holiday set in a week." value={t.quote} onChange={(e) => change("testimonials", draft.testimonials.map((x, j) => (j === i ? { ...x, quote: e.target.value } : x)))} />
+            <textarea className="textarea" aria-label="Their words" placeholder="Mercedes' video sold out our holiday set in a week." value={t.quote} onChange={(e) => change("testimonials", draft.testimonials.map((x, j) => (j === i ? { ...x, quote: e.target.value } : x)))} />
             <div className="grid cols-2">
               <input className="input" aria-label="Name" placeholder="Name" value={t.name} onChange={(e) => change("testimonials", draft.testimonials.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} />
               <input className="input" aria-label="Role and brand" placeholder="Marketing lead, Brand" value={t.role} onChange={(e) => change("testimonials", draft.testimonials.map((x, j) => (j === i ? { ...x, role: e.target.value } : x)))} />

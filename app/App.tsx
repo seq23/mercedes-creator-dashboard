@@ -59,7 +59,7 @@ function Unreachable({ onRetry }: { onRetry: () => Promise<void> }) {
     <div className="login-wrap">
       <div className="login-card">
         <div className="login-title">
-          <h1>Sheila Studio</h1>
+          <h1>Mercedes Studio</h1>
         </div>
         <p className="section">We could not reach your dashboard just now. Check your connection, then try again.</p>
         <button type="button" className="btn big block" data-primary onClick={() => void onRetry()}>

@@ -203,11 +203,11 @@ beforeEach(async () => {
     OWNER_EMAIL: "owner@example.com",
     SESSION_SECRET: "session-secret-for-tests",
     SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=",
-    APP_NAME: "Sheila Studio",
+    APP_NAME: "Mercedes Studio",
     FAKE_SERVICES: "1",
     AUTH_MODE: "open",
     PUBLIC_BASE_URL: BASE_URL,
-    GITHUB_REPO: "seq23/sheila-creator-dashboard",
+    GITHUB_REPO: "seq23/mercedes-creator-dashboard",
   } as unknown as Env;
   db.raw.exec(`INSERT INTO brand_profile (sections, locked, locked_at, source) VALUES ('{"who":"x","ctas":"Subscribe"}', 1, '2026-09-25T00:00:00Z', 'edited');
     INSERT INTO research_briefs (body, status, approved_at) VALUES ('{"hooks":[],"shot_list":[]}', 'approved', '2026-09-25T00:00:00Z');`);
@@ -301,7 +301,7 @@ describe("Calendar → Buffer → posted → Finish in YouTube Studio → the fi
     const tok = one<{ media_token: string }>("SELECT media_token FROM clips WHERE id = ?", cid).media_token;
     expect(await fullVideoCards(env)).toEqual([expect.objectContaining({ kind: "upload_yourself", download_url: `/media/${tok}?download=1`, studio_url: "https://www.youtube.com/upload" })]);
     const dl = await app.request(`${BASE_URL}/media/${tok}?download=1`, {}, env);
-    expect(dl.headers.get("content-disposition")).toBe('attachment; filename="sheila-studio-youtube.mp4"');
+    expect(dl.headers.get("content-disposition")).toBe('attachment; filename="mercedes-studio-youtube.mp4"');
     const ok = await call("POST", `/api/clips/${cid}/youtube/posted`, { url: "https://youtu.be/abcdefghijk" });
     expect(ok.json).toMatchObject({ ok: true, url: "https://www.youtube.com/watch?v=abcdefghijk" });
     expect(one<{ status: string }>("SELECT status FROM posts WHERE clip_id = ?", cid).status).toBe("posted");

@@ -106,7 +106,7 @@ async function sendDumpToEditor(env: Env, dumpId: string, editor: ApiEditorId, s
     const id = newId("edj");
     const token = mediaToken();
     await env.DB.prepare("INSERT INTO editor_jobs (id, editor, capability, dump_id, asset_id, source_token, status) VALUES (?, ?, 'cut_from_source', ?, ?, ?, 'submitted')").bind(id, editor, dumpId, a.id, token).run();
-    const r = await client.submit(`${sourceBase}/media/source/${token}`, "cut_from_source", "Sheila Studio dump");
+    const r = await client.submit(`${sourceBase}/media/source/${token}`, "cut_from_source", "Mercedes Studio dump");
     if (!r.ok) {
       await env.DB.prepare("UPDATE editor_jobs SET status = 'failed', error = ?, source_token = NULL, updated_at = ? WHERE dump_id = ? AND status = 'submitted'").bind(`submit ${r.failure}`, nowIso(), dumpId).run();
       await editorLight(env, editor, r.failure, "cut the dump instead");

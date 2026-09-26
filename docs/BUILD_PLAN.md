@@ -1,10 +1,12 @@
-# Sheila Creator Dashboard — Firm Build Plan
+# Mercedes Creator Dashboard — Firm Build Plan
+
+Copied from Sheila Studio on 26 Sep 2026 (seq23/sheila-creator-dashboard @456a623); fixes may be cherry-picked between the two.
 
 Sep 25, 2026 · exported from the Claude Docs build plan
 
 ## 1. Locked decisions
 
-Repo: **`sheila-creator-dashboard`** (public GitHub repo). Owner: **Sheila**. Builder: you, hands-off after handoff.
+Repo: **`mercedes-creator-dashboard`** (public GitHub repo). Owner: **Mercedes**. Builder: you, hands-off after handoff.
 
 | # | Decision | Locked choice |
 | --- | --- | --- |
@@ -17,18 +19,18 @@ Repo: **`sheila-creator-dashboard`** (public GitHub repo). Owner: **Sheila**. Bu
 | 7 | Posting | **Buffer free plan** (TikTok, Instagram, YouTube = its 3 channels) via Buffer's API. |
 | 8 | Cadence | **Hard cap: 10 posts per channel per week (30 total).** Launch default from research: TikTok 10 · Instagram 7 · YouTube Shorts 5. Adjustable in Settings. See section 10b. |
 | 9 | Approval | Nothing posts unless approved. Approve all / reject all / delete one / edit one. |
-| 10 | Supply | Email Sheila when fewer than 2 weeks (20 approved clips) remain. |
+| 10 | Supply | Email Mercedes when fewer than 2 weeks (20 approved clips) remain. |
 | 11 | Voice | Voice-clone narration built but **off** until she turns it on. |
 | 12 | Cost | $0/month target. Optional paid levers are listed, never required. |
 | 13 | Brand deals | Deals tab: media kit, brand finder, public contacts with source links, pitch drafts she sends herself, deal tracker. See section 12b. |
 | 14 | Help | In-app Help center: step-by-step guides with auto-captured, annotated screenshots; "?" on every screen; fix-it guides linked from every error. See section 12c. |
-| 15 | Testing | Builder's own test accounts for development; Sheila's accounts only at handoff. Automated tests with fake services + live checklists per phase. See section 15b. |
+| 15 | Testing | Builder's own test accounts for development; Mercedes' accounts only at handoff. Automated tests with fake services + live checklists per phase. See section 15b. |
 
 ## 2. Ownership, users and handoff
 
-- **Sheila owns everything.** Every account is created in her name: GitHub, Cloudflare, Buffer, OpenRouter, Resend, Firecrawl, and her Google and Meta developer access for stats.
+- **Mercedes owns everything.** Every account is created in her name: GitHub, Cloudflare, Buffer, OpenRouter, Resend, Firecrawl, and her Google and Meta developer access for stats.
 - **You build it**, then hand off. After handoff she never needs a terminal, a code editor or you.
-- **Users:** Sheila (owner, full access). Optional second login for you as a helper, which she can remove in Settings.
+- **Users:** Mercedes (owner, full access). Optional second login for you as a helper, which she can remove in Settings.
 - **Non-technical by design:**
   - Plain words everywhere ("Dump", "Review", "Calendar"), no jargon.
   - Works on her phone: dumping and reviewing are phone-first.
@@ -91,7 +93,7 @@ One **Connect accounts** screen, shown as the first-run wizard and later under S
 
 ## 5. Client Brain
 
-**Purpose:** everything the AI knows about who Sheila is and what she wants, in one place she controls.
+**Purpose:** everything the AI knows about who Mercedes is and what she wants, in one place she controls.
 
 - **Upload:** PDF, DOCX, MD, TXT, including exports of past AI chats about her goals. Multiple files at once; add more any time.
 - **Extraction:** text is pulled out in a GitHub Actions job. Scanned PDFs (pictures of text) get OCR. Files that can't be read are flagged, not silently skipped.
@@ -103,7 +105,7 @@ One **Connect accounts** screen, shown as the first-run wizard and later under S
 
 ## 6. Research Brief
 
-**Gate:** no clips are cut until a brief exists and Sheila approves it. After that it refreshes monthly and adjusts weekly from her results.
+**Gate:** no clips are cut until a brief exists and Mercedes approves it. After that it refreshes monthly and adjusts weekly from her results.
 
 **Starting research is already done:** how much and when to post, from Buffer and Sprout Social studies, is in section 10b. The first Research Brief starts from that baseline and adds her niche and her own numbers.
 
@@ -297,7 +299,7 @@ Sources: [Hunter free plan](https://help.hunter.io/en/articles/11060999-what-s-i
 
 ## 12c. Help center
 
-**Purpose:** Sheila can do everything alone. Every task has a short, picture-by-picture guide written for someone who has never used a dashboard.
+**Purpose:** Mercedes can do everything alone. Every task has a short, picture-by-picture guide written for someone who has never used a dashboard.
 
 **Where help shows up**
 
@@ -328,7 +330,7 @@ Sources: [Hunter free plan](https://help.hunter.io/en/articles/11060999-what-s-i
 
 **Optional later:** an **Ask a question** box that answers only from these guides (OpenRouter free model) and links the guide it used. Off by default.
 
-**Phasing:** every phase ships the guides for what it adds; Phase 12 audits all of them with a real walkthrough by Sheila.
+**Phasing:** every phase ships the guides for what it adds; Phase 12 audits all of them with a real walkthrough by Mercedes.
 
 ## 13. Architecture, stack, public-repo security
 
@@ -397,7 +399,7 @@ Each phase = one artifact (full repo snapshot ZIP), structurally checked, then v
 | **9. Recycle + polish** | Cooldowns, re-hooks, duplicate check, branded subtitle styles | Old videos return without looking reposted |
 | **10. Brand deals** | Media kit page + PDF, brand finder, public contact finder, pitch + follow-up drafts, Open in Gmail, deal tracker, Paid-partnership flag | She sends her first 5 pitches from real brand cards |
 | **11. Voice (optional)** | Consent flow, Chatterbox cloning, narration, attach to clip; hidden switch | She can generate narration once switched on |
-| **12. Hardening + handoff** | End-to-end tests, D1 backups, Help center audit (every guide walked through by Sheila), ownership transfer, walkthrough | She runs a full cycle alone |
+| **12. Hardening + handoff** | End-to-end tests, D1 backups, Help center audit (every guide walked through by Mercedes), ownership transfer, walkthrough | She runs a full cycle alone |
 
 **Next artifact:** Phase 0 + Phase 1.
 
@@ -405,9 +407,9 @@ Each phase = one artifact (full repo snapshot ZIP), structurally checked, then v
 
 **Two separate environments, never mixed**
 
-| | Test (builder's) | Production (Sheila's) |
+| | Test (builder's) | Production (Mercedes') |
 | --- | --- | --- |
-| Accounts | Builder's GitHub, Cloudflare, Buffer, OpenRouter, Firecrawl, Resend, Hunter + throwaway TikTok, Instagram Professional, YouTube | Sheila's own accounts, created at the setup session |
+| Accounts | Builder's GitHub, Cloudflare, Buffer, OpenRouter, Firecrawl, Resend, Hunter + throwaway TikTok, Instagram Professional, YouTube | Mercedes' own accounts, created at the setup session |
 | Data | Demo data and neutral sample clips only | Her real footage and docs |
 | Keys | Test keys | Her keys; never copied into test |
 | When | Every phase | Only at handoff (Phase 12) |
@@ -418,16 +420,16 @@ Each phase = one artifact (full repo snapshot ZIP), structurally checked, then v
 - **Local stack:** Cloudflare's local tools run the Worker, D1 and R2 on the machine; integration tests cover upload → Dump → job → clips → approve → schedule.
 - **Fake outside services:** Buffer, OpenRouter, Firecrawl, Hunter, Resend, Meta, Google and TikTok are replaced by stand-ins that return realistic answers, including failures (expired token, rate limit, rejected video). Tests prove each failure shows the right Health light, email and fix guide.
 - **Video pipeline:** short non-personal sample clips run through the real cutting job in GitHub Actions; tests check 9:16, length, subtitles, audio level and that the file plays.
-- **End-to-end:** Playwright drives the dashboard at phone and desktop sizes like Sheila would: dump, approve all, delete one, edit a caption, move a post, send a pitch to "Open in Gmail", open a help guide. The same run captures the Help screenshots.
+- **End-to-end:** Playwright drives the dashboard at phone and desktop sizes like Mercedes would: dump, approve all, delete one, edit a caption, move a post, send a pitch to "Open in Gmail", open a help guide. The same run captures the Help screenshots.
 - **Public-repo safety:** a test runs a full job with marker text in the demo data and fails the build if that text appears in any log.
 
 **Layer 2 — live checks with the builder's test accounts (per phase, done by a person)**
 
 - Claude Code cannot log into TikTok, Instagram, Google or Buffer, approve their login pop-ups, or look at a feed. Each phase ends with a short **live checklist** for the builder, e.g. "Connect Buffer → press Dump on sample-01 → confirm the post appears on the test TikTok", and the result is reported back before the phase is marked done.
 - Phase 0 is mostly Layer 2: a real public post through Buffer to each test account, then deleted.
-- Test posts use a neutral test clip. Nothing is ever posted to Sheila's accounts for testing.
+- Test posts use a neutral test clip. Nothing is ever posted to Mercedes' accounts for testing.
 
-**Layer 3 — production acceptance (Phase 12, with Sheila)**
+**Layer 3 — production acceptance (Phase 12, with Mercedes)**
 
 - Her dashboard is set up with her own accounts.
 - One real dump of her footage goes through to Review; nothing posts until she approves it.
@@ -437,15 +439,15 @@ Each phase = one artifact (full repo snapshot ZIP), structurally checked, then v
 
 ## 16. One-time setup checklist
 
-Done together with Sheila in one sitting, all in her name.
+Done together with Mercedes in one sitting, all in her name.
 
-- [ ] GitHub account; repo `sheila-creator-dashboard` created under her account (or transferred to her at handoff)
+- [ ] GitHub account; repo `mercedes-creator-dashboard` created under her account (or transferred to her at handoff)
 - [ ] Cloudflare account (free); Pages, Workers, D1, R2, Access enabled
 - [ ] Buffer free account; connect TikTok, Instagram (Professional), YouTube; create API key
 - [ ] OpenRouter account; API key
 - [ ] Firecrawl account; API key
 - [ ] Resend account; sender set up
-- [ ] Meta developer app (for Instagram stats), Sheila as admin
+- [ ] Meta developer app (for Instagram stats), Mercedes as admin
 - [ ] Google Cloud project (for YouTube stats), set to "In production"
 - [ ] Hunter.io free account (optional, for brand-deal contacts); API key
 - [ ] All keys pasted into the dashboard's first-run setup screen (stored encrypted; never shown again)

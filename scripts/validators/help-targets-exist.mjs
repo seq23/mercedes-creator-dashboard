@@ -20,6 +20,12 @@ async function walk(dir, exts) {
 }
 
 const DIRECTIVE = /<!--\s*(target|click|fill):\s*([\s\S]*?)\s*-->/g;
+
+/** The part of a directive that names a screen element. A fill's typed value (after `=>`, e.g. an
+ * email whose dots are not class names) is what the screenshot job types, never a selector. */
+export function selectorOf(kind, raw) {
+  return kind === "fill" ? raw.split("=>")[0].trim() : raw;
+}
 // Quoted words the selector needs on screen: has-text("…"), text-is("…"), [name="…"], [aria-label="…"], [placeholder="…"], text=…
 const WORDS = [/:has-text\("([^"]+)"\)/g, /:text-is\("([^"]+)"\)/g, /\[name="([^"]+)"\]/g, /\[aria-label="([^"]+)"\]/g, /\[placeholder="([^"]+)"\]/g, /^text=(.+)$/g];
 const ROLES = new Set(["button", "link", "tab", "dialog", "textbox", "checkbox", "radio", "group", "heading", "region", "switch", "combobox", "list", "listitem", "img", "status", "alert", "navigation", "main", "form", "menu", "menuitem", "option", "row", "cell", "table", "tablist", "tabpanel"]);
@@ -73,7 +79,8 @@ export default async function ({ root }) {
   for (const g of guides) {
     const md = await readFile(path.join(guideDir, g), "utf8");
     for (const m of md.matchAll(DIRECTIVE)) {
-      const [, kind, sel] = m;
+      const [, kind, raw] = m;
+      const sel = selectorOf(kind, raw);
       items++;
       const where = `help/guides/${g} ${kind} '${sel}'`;
       for (const re of WORDS) for (const w of sel.matchAll(re)) if (!found(text, w[1], tpl)) problems.push(`${where}: "${w[1]}" is on no screen (renamed? change the guide with the screen)`);

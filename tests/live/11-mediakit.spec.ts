@@ -8,7 +8,7 @@ test("11 · edit → publish a version → public kit with QR → PDF", async ({
   test.setTimeout(6 * 60_000);
   await page.goto("/deals?tab=kit");
   await expect(page.locator(".kit-bar")).toBeVisible();
-  await page.getByLabel("Name", { exact: true }).fill("Sheila Bruce (TEST kit)");
+  await page.getByLabel("Name", { exact: true }).fill("Mercedes Asare (TEST kit)");
   await page.getByLabel("One line under your name").fill("Hosting and tablescapes that feel expensive, for less");
   await page.getByLabel("TikTok handle").fill("iamcindymercer");
   await page.getByLabel("About you (a few sentences)").fill("TEST kit for the Phase 0 live run. Warm, practical hosting ideas for women who love to gather.");
@@ -39,7 +39,7 @@ test("11 · edit → publish a version → public kit with QR → PDF", async ({
   const anon = await browser.newContext({ storageState: { cookies: [], origins: [] }, baseURL });
   const pub = await anon.newPage();
   await pub.goto(`/kit/${slug}`);
-  await expect(pub.getByRole("heading", { name: "Sheila Bruce (TEST kit)", level: 1 })).toBeVisible();
+  await expect(pub.getByRole("heading", { name: "Mercedes Asare (TEST kit)", level: 1 })).toBeVisible();
   await expect(pub.locator(".ks-qr svg")).toBeVisible();
   await expect(pub.getByRole("link", { name: "Work with me" })).toHaveAttribute("href", /^mailto:/);
   const json = await (await anon.request.get(`/api/public/kit/${slug}?preview=1`)).text();

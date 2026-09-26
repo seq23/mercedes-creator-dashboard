@@ -5,7 +5,7 @@
 import { sql } from "./helpers";
 import { expect, test } from "@playwright/test";
 
-const OWNER = "asheilabruceaffair@gmail.com";
+const OWNER = "mercasare.social@gmail.com";
 
 test.describe("open mode: no login at all", () => {
   test("the server says it is open: /api/me is the owner with no cookie", async ({ request }) => {
@@ -16,7 +16,7 @@ test.describe("open mode: no login at all", () => {
 
   test("/ renders Home as the owner, straight away, with no login form", async ({ page, context }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "Hi Sheila" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Hi Mercedes" })).toBeVisible();
     await expect(page.getByText("Runway")).toBeVisible();
     await expect(page.getByRole("link", { name: "+ Dump videos" })).toBeVisible();
     await expect(page.getByLabel("Your email")).toHaveCount(0);
@@ -28,14 +28,14 @@ test.describe("open mode: no login at all", () => {
   test("/login lands on Home", async ({ page }) => {
     await page.goto("/login");
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole("heading", { name: "Hi Sheila" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Hi Mercedes" })).toBeVisible();
     await expect(page.locator(".login-card")).toHaveCount(0);
   });
 
   test("/privacy and /terms are the public pages, not Home (Google's Branding page links them)", async ({ page }) => {
     await page.goto("/privacy");
     await expect(page.getByRole("heading", { name: "Privacy policy" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Hi Sheila" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Hi Mercedes" })).toHaveCount(0);
     await page.goto("/terms");
     await expect(page.getByRole("heading", { name: "Terms of service" })).toBeVisible();
   });
@@ -93,11 +93,11 @@ test.describe("open mode: no login at all", () => {
   test("public routes are unchanged: the media kit and media links", async ({ page }) => {
     // A draft is never public: nothing shows until she publishes (as the owner, with no login).
     sql("DELETE FROM media_kit_versions");
-    await page.goto("/kit/sheila");
+    await page.goto("/kit/mercedes");
     await expect(page.getByRole("heading", { name: "No media kit here" })).toBeVisible();
     expect((await page.request.post("/api/mediakit/publish")).ok()).toBe(true);
-    await page.goto("/kit/sheila");
-    await expect(page.getByRole("heading", { name: "Sheila Bruce" })).toBeVisible();
+    await page.goto("/kit/mercedes");
+    await expect(page.getByRole("heading", { name: "Mercedes Asare" })).toBeVisible();
     expect((await page.request.get("/media/notavalidtokenatall000000000000000000")).status()).toBe(404);
   });
 });

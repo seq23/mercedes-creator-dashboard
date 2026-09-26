@@ -31,7 +31,7 @@ export interface Env {
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
   // No-login YouTube numbers (owner decision 25 Sep 2026): a YouTube Data API v3 key, API
-  // restricted to youtube.googleapis.com (Google Cloud project sheilastudio-staging-p0). It
+  // restricted to youtube.googleapis.com (the owner's Google Cloud project, named in docs/YOUTUBE.md). It
   // reads public channel and video numbers only; no Google sign-in. Vendor-prefixed on purpose,
   // not a reserved name: nothing reads YOUTUBE_API_KEY on its own (unlike GOOGLE_API_KEY, which
   // Google SDKs pick up). Without it the Stats screen names the stop and the light says so.

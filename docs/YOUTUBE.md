@@ -4,12 +4,12 @@ Owner's note, 26 Sep 2026. Read this before touching anything YouTube-related. I
 two of us spent a day re-deriving these facts, and one of them (the "private lock") turned out
 to be wrong.
 
-## The two ways Sheila Studio reaches YouTube
+## The two ways Mercedes Studio reaches YouTube
 
 | Path | What it carries | Who signs in | Google review needed |
 |---|---|---|---|
-| **Buffer** (`worker/services/buffer.ts`) | Shorts: vertical, ≤ 3 minutes. Also TikTok and Instagram. | Sheila, once, inside Buffer. | None. Buffer is Google-approved. |
-| **Direct upload** (`worker/routes/oauth.ts`, the `fullvideo` job) | Full-length videos: title, description, chapters, tags, thumbnail, scheduled publish time, privacy, Calendar moves. | Sheila, once, on Google's page via **Connect YouTube (full videos)**. | Optional (see below). It works without it. |
+| **Buffer** (`worker/services/buffer.ts`) | Shorts: vertical, ≤ 3 minutes. Also TikTok and Instagram. | Mercedes, once, inside Buffer. | None. Buffer is Google-approved. |
+| **Direct upload** (`worker/routes/oauth.ts`, the `fullvideo` job) | Full-length videos: title, description, chapters, tags, thumbnail, scheduled publish time, privacy, Calendar moves. | Mercedes, once, on Google's page via **Connect YouTube (full videos)**. | Optional (see below). It works without it. |
 | **Public numbers** (`YOUTUBE_API_KEY`) | Stats: subscribers, views, per-video counts. Read-only. | Nobody. | None. |
 
 Buffer's YouTube posting is **Shorts only** (proven 26 Sep 2026: Buffer refused a 200 s
@@ -37,12 +37,12 @@ direct upload path exists.
 - **Sign-in lifetime:** the Google app is **published** ("In production"). Had it stayed in
   "Testing", every sign-in would expire after 7 days. Never move it back to Testing.
 
-## What Sheila sees today, and why verification is being filed
+## What Mercedes sees today, and why verification is being filed
 
 The Google project is registered under the owner's account (seq.taylor@gmail.com, project
-`sheilastudio-staging-p0`; the owner chose to keep it there, not transfer it to Sheila). The app
+`sheilastudio-staging-p0`; the owner chose to keep it there, not transfer it to Mercedes). The app
 is published but **not yet verified**, and it asks for a *sensitive* scope, so Google shows
-Sheila, once, on connect:
+Mercedes, once, on connect:
 
 1. "Google hasn't verified this app" → small **Advanced** link
 2. **Go to seq-taylor.workers.dev (unsafe)**
@@ -52,9 +52,10 @@ It works. It is ugly. The help guide `connect-youtube-full-videos` shows each st
 picture.
 
 **Google OAuth verification** was filed on 26 Sep 2026 (Search Console ownership of
-https://sheilastudio.seq-taylor.workers.dev verified by HTML tag; demo video unlisted at
+https://sheilastudio.seq-taylor.workers.dev, the Sheila Studio deployment this repo was copied
+from, verified by HTML tag; Mercedes Studio's own domain needs the same proof; demo video unlisted at
 https://youtu.be/7R7noD6LCCg; scopes and justifications on Data Access). It is polish, not a
-requirement: once approved, step 1–2 disappear and Sheila sees a normal Continue. Google
+requirement: once approved, step 1–2 disappear and Mercedes sees a normal Continue. Google
 usually answers by email to the owner in days to a few weeks. Nothing waits on it.
 
 how-we-know never needed this because its app and its only user are the same account: the

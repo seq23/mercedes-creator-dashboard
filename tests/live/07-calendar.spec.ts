@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { d1, evidence, shot, vaultSecret, waitForRow } from "./helpers";
 
-const TEST_CAPTION = "TEST POST · Phase 0 live test of Sheila Studio. Please ignore.";
+const TEST_CAPTION = "TEST POST · Phase 0 live test of Mercedes Studio. Please ignore.";
 const TZ = "America/New_York";
 const CAPS: Record<string, number> = { tiktok: 10, instagram: 7, youtube: 5 };
 

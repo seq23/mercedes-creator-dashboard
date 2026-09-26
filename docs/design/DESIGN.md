@@ -1,8 +1,8 @@
-# Design — Sheila Studio
+# Design — Mercedes Studio
 
-A locked design system for Sheila's creator dashboard (Hallmark multi-page flow: one system,
-every screen reads it). Brand-preserve: palette, faces and logo come from A Sheila Bruce Affair
-(`github.com/seq23/sheila-bruce`). Do not regenerate per page — amend this file when the system
+A locked design system for Mercedes' creator dashboard (Hallmark multi-page flow: one system,
+every screen reads it). Brand tokens: `app/styles/tokens.css` (Mercedes palette; the one file
+allowed to hold raw colours and font names). Do not regenerate per page — amend this file when the system
 needs to grow. The rules marked **guarded** are enforced by `scripts/validators/design-tokens.mjs`
 (`npm run validate`); the rest by `docs/design/capture.mjs` metrics and the e2e suite.
 
@@ -61,7 +61,7 @@ margins use these; hairlines ≤ 2 px are the only literals.
   outline red. Every button, including `.small`, is at least 44 px tall. One hover signal (colour),
   a 1 px press, no scale, no bounce.
 - **Cards** — ivory, 1 px gold-soft border, 20 px radius, soft shadow. `.card.accent` adds the
-  brand's inset hairline frame (from the sheila-bruce hero card) — at most one per screen, on
+  brand's inset hairline frame (from the brand site's hero card) — at most one per screen, on
   the thing that needs her. No card inside a card.
 - **Icons** — one hand-drawn line set (`app/components/Icon.tsx`), 1.7 stroke. No emoji or
   Unicode glyphs as icons. Icon-only buttons carry an `aria-label`.

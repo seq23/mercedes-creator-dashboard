@@ -71,7 +71,7 @@ class RealLlm implements LlmClient {
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
-        headers: { Authorization: `Bearer ${this.key}`, "Content-Type": "application/json", "HTTP-Referer": this.referer, "X-Title": "Sheila Studio" },
+        headers: { Authorization: `Bearer ${this.key}`, "Content-Type": "application/json", "HTTP-Referer": this.referer, "X-Title": "Mercedes Studio" },
         body: JSON.stringify({
           model: FREE_MODEL,
           max_tokens: maxTokens,

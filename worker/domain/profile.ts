@@ -54,17 +54,18 @@ export function profileUserPrompt(docs: { n: number; text: string }[]): string {
 }
 
 /**
- * Stand-in profile for FAKE_SERVICES=1: a realistic draft for Sheila Bruce, built from the
- * public facts on her site (seq23/sheila-bruce: about page and site.json). Demo data only.
+ * Stand-in profile for FAKE_SERVICES=1: a realistic draft for Mercedes Asare, built from the
+ * public facts on her site (justbeingmercedes.com: New York style and beauty creator, corporate
+ * beauty strategy leader, Spelman alum, open to brand collaborations). Demo data only.
  */
 export const FAKE_PROFILE: BrandProfileSections = {
-  who: "Sheila Bruce is the host behind A Sheila Bruce Affair, a luxury lifestyle and event brand on Florida's Gulf Coast. She is a Black woman over 50 who started by bringing women together through Sisters of Sarasota and grew it into a brand for social gatherings, wellness conversations, empowerment experiences and unforgettable celebrations.",
-  audience: "• Black women and their friends who want to gather with intention\n• Couples, accomplished professionals and community leaders who still love to show up well\n• Retirees and Gulf Coast neighbors in Sarasota, Venice, Palmetto and nearby\n• Mostly 40+, style-minded, into culture, wellness and elevated living",
-  goals: "90 days: post consistently on TikTok, Instagram and YouTube Shorts; grow followers who come to the next affair; fill every event.\n1 year: be the go-to name for luxury social events on the Gulf Coast; land 3–5 paid brand partnerships that fit the brand (hospitality, beauty, wellness, fashion, travel).",
-  voice: "Warm, gracious and polished, with joy in it. Speaks like a host welcoming you in: \"Come gather with us.\" Confident, never loud; celebratory, never flashy for its own sake. Sisterly and encouraging.",
-  themes: "• Signature boat and yacht experiences: white parties, champagne moments, DJ-led afternoons by the water\n• Formal balls and galas: black-tie glamour, dinner and dancing\n• Wellness and empowerment: health, wealth, leadership and confidence conversations for women\n• Dinners, cocktail gatherings and seasonal socials on the Gulf Coast\n• Behind the scenes of hosting: planning, styling, the setting",
-  do_dont: "Do: show real guests having a beautiful time (with their OK); show the Gulf Coast setting; lead with the feeling of the room; credit venues and partners.\nDon't: post guests who did not agree to be filmed; use slang that doesn't sound like her; make it look cheap or rushed.",
-  off_limits: "Politics, religion debates, gossip about guests or other hosts, guests' private details, anything that embarrasses a guest.",
-  deal_fit: "Hospitality and venues (marinas, yacht charters, resorts, restaurants), champagne and wine, fashion and formalwear, beauty and hair care for Black women, wellness brands for women over 40, travel along the Gulf Coast. Not a fit: fast food, gambling, anything off-brand for a luxury host.",
-  ctas: "• \"Come to the next affair: link in bio.\"\n• \"Follow for the next date.\"\n• \"Have Sheila host your event.\"\n• \"Tag the friend you're bringing.\"",
+  who: "Mercedes Asare is the creator behind Just Being Mercedes, a New York style and beauty brand. She is a Black woman who leads business strategy at a global beauty company by day and shares the honest, well-put-together version of her life the rest of the time: what she wears, what she puts on her skin, how she gets ready, and how a corporate beauty pro actually shops.",
+  audience: "• Black women in their 20s to 40s who love beauty and style and want the real review, not the ad\n• Young professionals building a wardrobe, a routine and a career at the same time\n• New Yorkers and city women who get ready fast and want it to look effortless\n• People who trust a corporate beauty insider more than a trend",
+  goals: "90 days: post consistently on TikTok, Instagram and YouTube Shorts; grow followers who save and come back for the routine; make the media kit brand-ready.\n1 year: be a go-to name for honest beauty and style from an insider; land 3–5 paid brand partnerships that fit (skincare, makeup, hair, fashion, city life).",
+  voice: "Warm, direct and polished, with humour in it. Talks like a friend who happens to know the industry: \"Here's what actually works.\" Confident, never preachy; aspirational, never out of reach. Encouraging and specific.",
+  themes: "• Get ready with me: the morning routine, the going-out look, the office face\n• Honest beauty reviews from someone who knows how the products are made\n• Style on a real budget: outfits, repeats, what earns its place in the closet\n• New York days: commutes, coffee, the city as the backdrop\n• Career and confidence: what a corporate beauty job is really like",
+  do_dont: "Do: show the real result on her own skin and hair; name the product and the price; show the whole outfit, not a flat lay; keep the city in frame.\nDon't: claim a result she has not seen; read a brand's script; make it look expensive when it was not; talk down to anyone starting out.",
+  off_limits: "Politics, gossip about colleagues or other creators, anything confidential from her employer, medical claims about skin or hair.",
+  deal_fit: "Skincare and makeup (drugstore to prestige), hair care for Black women, fashion and accessories, fragrance, city and travel brands, tools and beauty tech. Not a fit: fast fashion that falls apart, crash diets, anything that clashes with an honest review.",
+  ctas: "• \"Save this for your next Sephora run.\"\n• \"Follow for the full routine.\"\n• \"Tell me what you want reviewed next.\"\n• \"Send this to the friend who always asks what you're wearing.\"",
 };

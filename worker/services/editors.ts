@@ -229,7 +229,7 @@ class Submagic implements EditorClient {
     const r = await editorFetch("submagic", `${this.base}/v1/projects`, {
       method: "POST",
       headers: this.h(),
-      body: JSON.stringify({ title: title.slice(0, 80) || "Sheila Studio clip", language: "en", videoUrl: sourceUrl, magicZooms: cap === "enhance", removeSilencePace: cap === "enhance" ? "natural" : undefined }),
+      body: JSON.stringify({ title: title.slice(0, 80) || "Mercedes Studio clip", language: "en", videoUrl: sourceUrl, magicZooms: cap === "enhance", removeSilencePace: cap === "enhance" ? "natural" : undefined }),
     });
     if (!r.ok) return r;
     const id = str(obj(r.data).id);
@@ -268,7 +268,7 @@ class Descript implements EditorClient {
     const r = await editorFetch("descript", `${this.base}/jobs/import/project_media`, {
       method: "POST",
       headers: this.h(),
-      body: JSON.stringify({ project_name: title.slice(0, 80) || "Sheila Studio clip", media: [{ url: sourceUrl }] }),
+      body: JSON.stringify({ project_name: title.slice(0, 80) || "Mercedes Studio clip", media: [{ url: sourceUrl }] }),
     });
     if (!r.ok) return r;
     const d = obj(r.data);

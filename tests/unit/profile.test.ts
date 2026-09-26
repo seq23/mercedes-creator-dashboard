@@ -8,15 +8,15 @@ describe("brand profile", () => {
   it("the prompt names all nine sections", () => {
     for (const s of BRAND_PROFILE_SECTIONS) expect(PROFILE_SYSTEM).toContain(`"${s.key}"`);
   });
-  it("the fake profile fills every section and is about A Sheila Bruce Affair", () => {
+  it("the fake profile fills every section and is about Just Being Mercedes", () => {
     expect(filledCount(FAKE_PROFILE)).toBe(9);
-    expect(FAKE_PROFILE.who).toContain("A Sheila Bruce Affair");
+    expect(FAKE_PROFILE.who).toContain("Just Being Mercedes");
     expect(FAKE_PROFILE.audience).toMatch(/Black women/);
   });
   it("keeps only the nine keys, turns lists into bullets and bounds length", () => {
-    const s = cleanSections({ who: "  Sheila  ", themes: ["Yachts", "Galas"], extra: "dropped", voice: "x".repeat(SECTION_MAX_CHARS + 50) });
+    const s = cleanSections({ who: "  Mercedes  ", themes: ["Yachts", "Galas"], extra: "dropped", voice: "x".repeat(SECTION_MAX_CHARS + 50) });
     expect(Object.keys(s).sort()).toEqual(BRAND_PROFILE_SECTIONS.map((x) => x.key).sort());
-    expect(s.who).toBe("Sheila");
+    expect(s.who).toBe("Mercedes");
     expect(s.themes).toBe("• Yachts\n• Galas");
     expect(s.voice).toHaveLength(SECTION_MAX_CHARS);
     expect(s.goals).toBe("");

@@ -1,7 +1,7 @@
 # Hallmark audit — before / after
 
 Design pass on branch `design/hallmark-pass`, base `17522fc` (frozen main). Mode: **hallmark
-redesign, multi-page flow, brand-preserve** (A Sheila Bruce Affair palette, faces and logo kept).
+redesign, multi-page flow, brand-preserve** (brand palette, faces and logo kept; tokens in `app/styles/tokens.css`).
 The locked system is `docs/design/DESIGN.md`.
 
 ## How the numbers were made (reproducible)

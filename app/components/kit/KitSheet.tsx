@@ -60,7 +60,7 @@ export function KitSheet({ kit, print = false, pdfHref }: { kit: PublicKit; prin
           <img className="ks-photo" src={kit.photoUrl} alt={kit.name} />
         ) : (
           <span className="ks-mark">
-            <img src="/assets/brand/sheila-logo.png" alt={`${kit.name} logo`} />
+            <img src="/assets/brand/mercedes-logo.png" alt={`${kit.name} logo`} />
           </span>
         )}
         <span className="script ks-script">media kit</span>

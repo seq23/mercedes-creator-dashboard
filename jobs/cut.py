@@ -1168,7 +1168,7 @@ def fetch_url(url: str, dest: Path) -> Path:
     if not url.startswith("https://"):
         raise NoUsableMoments("import link is not https")
     got = 0
-    req = urllib.request.Request(url, headers={"User-Agent": "sheila-studio-import"})
+    req = urllib.request.Request(url, headers={"User-Agent": "mercedes-studio-import"})
     with urllib.request.urlopen(req, timeout=300) as res, open(dest, "wb") as out:
         while True:
             chunk = res.read(1024 * 1024)

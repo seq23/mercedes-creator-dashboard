@@ -14,7 +14,7 @@ Klap adds captions to your clips using your Klap credits, instead of the built-i
 ![Step 1](/help/screenshots/connect-klap-1.png)
 <!-- mock: klap-api -->
 
-Log in at **klap.app** and open its API page (paid plans). Create a key named Sheila Studio and copy it.
+Log in at **klap.app** and open its API page (paid plans). Create a key named Mercedes Studio and copy it.
 
 ## Paste it and tap Check key
 

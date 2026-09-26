@@ -44,11 +44,11 @@ export function Login() {
     <div className="login-wrap">
       <div className="login-card">
         <span className="brand-mark">
-          <img src="/assets/brand/sheila-logo.png" alt="Sheila Bruce" />
+          <img src="/assets/brand/mercedes-logo.png" alt="Mercedes Asare" />
         </span>
         <div className="login-title">
           <span className="script">welcome back</span>
-          <h1>Sheila Studio</h1>
+          <h1>Mercedes Studio</h1>
         </div>
         {stage === "email" ? (
           <form onSubmit={request} className="section">
