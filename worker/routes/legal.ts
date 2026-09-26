@@ -28,18 +28,18 @@ function page(title: string, body: string): string {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} · Mercedes Studio</title>
 <meta name="description" content="${title} for Mercedes Studio, Mercedes Asare's creator dashboard.">
-<link rel="icon" href="/assets/brand/mercedes-logo.png">
+<link rel="icon" href="/assets/brand/mercedes-logo.svg" type="image/svg+xml">
 <style>
   :root { color-scheme: light; }
-  body { margin: 0; background: #f7f1e7; color: #211713; font: 16px/1.6 Montserrat, "Helvetica Neue", Arial, sans-serif; }
+  body { margin: 0; background: #f3eae0; color: #24160f; font: 16px/1.6 Jost, "Helvetica Neue", Arial, sans-serif; }
   main { max-width: 42rem; margin: 0 auto; padding: 32px 16px 48px; }
-  h1, h2 { font-family: "Playfair Display", Georgia, serif; font-weight: 600; line-height: 1.25; }
+  h1, h2 { font-family: "Bodoni Moda", Didot, Georgia, serif; font-weight: 600; line-height: 1.25; }
   h1 { font-size: 2rem; margin: 0 0 4px; }
   h2 { font-size: 1.25rem; margin: 28px 0 8px; }
-  .updated { color: #665850; margin: 0 0 24px; }
-  a { color: #7a5a1c; }
+  .updated { color: #5e4f45; margin: 0 0 24px; }
+  a { color: #725420; }
   ul { padding-left: 1.25rem; }
-  footer { border-top: 1px solid rgba(33,23,19,.12); margin-top: 40px; padding-top: 16px; color: #665850; font-size: .9rem; }
+  footer { border-top: 1px solid rgba(36,22,15,.12); margin-top: 40px; padding-top: 16px; color: #5e4f45; font-size: .9rem; }
   footer a { margin-right: 16px; }
 </style>
 </head>

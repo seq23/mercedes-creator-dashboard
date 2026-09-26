@@ -124,7 +124,7 @@
   //                           no SDK or runtime reads YOUTUBE_API_KEY on its own (unlike
   //                           GOOGLE_API_KEY / GOOGLE_APPLICATION_CREDENTIALS), so it can never be
   //                           picked up by something else. Vault: sheila-youtube-api-key (shared
-  //                           with Sheila Studio; the same Google Cloud project).
+  //                           with the upstream dashboard; the same Google Cloud project).
   // Per-user connection keys (Buffer, OpenRouter, Firecrawl, Hunter, Meta, Google) are NOT
   // secrets here: she pastes them in Connect accounts and they are stored encrypted in D1.
 }

@@ -140,7 +140,7 @@ export function compareEnvs(cfg) {
       }
       const strip = (o) => Object.fromEntries(Object.entries(o).filter(([f]) => !idFields.includes(f)));
       if (!same(strip(pb), strip(sb))) problems.push(`env.staging ${key} ${pb.binding} differs from production beyond its id/name`);
-      for (const f of idFields) if (pb[f] !== undefined && pb[f] === sb[f]) problems.push(`env.staging ${key} ${pb.binding}.${f} is production's: staging would write to Sheila's data`);
+      for (const f of idFields) if (pb[f] !== undefined && pb[f] === sb[f]) problems.push(`env.staging ${key} ${pb.binding}.${f} is production's: staging would write to production's data`);
     }
   };
   bind("d1_databases", ["database_name", "database_id"]);

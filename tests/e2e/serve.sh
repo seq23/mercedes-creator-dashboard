@@ -16,7 +16,7 @@ fi
 # .dev.vars overrides wrangler.jsonc's vars locally; whatever ENV_NAME it had becomes dev.
 { grep -v '^ENV_NAME=' .dev.vars || true; echo "ENV_NAME=dev"; } > .dev.vars.tmp && mv .dev.vars.tmp .dev.vars
 rm -rf .wrangler/state/v3/d1 .wrangler/state/v3/r2
-npx wrangler d1 migrations apply sheila-creator-dashboard-db --local >/dev/null
+npx wrangler d1 migrations apply mercedes-creator-dashboard-db --local >/dev/null
 PORT="${E2E_PORT:-8787}"
 # Several worktrees run this suite side by side: each gets its own port and inspector port.
 # --test-scheduled: a spec can run a cron lane (GET /cdn-cgi/handler/scheduled?cron=…), e.g. the day-358 daily lane.

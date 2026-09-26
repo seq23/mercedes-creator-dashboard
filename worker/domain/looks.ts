@@ -31,7 +31,7 @@ export interface Look extends LookOptions {
 }
 
 export const FRAME = { w: 1080, h: 1920, gutter: 12 } as const;
-export const DEFAULT_BRAND = { primary: "#d7b56d", ink: "#211713", paper: "#f7f1e7", accent: "#8f4b5b" } as const;
+export const DEFAULT_BRAND = { primary: "#deb05a", ink: "#24160f", paper: "#f3eae0", accent: "#a3321f" } as const;
 export const DEFAULT_FONT = "DejaVu Sans";
 
 /** [x, y, w, h] in the 1080×1920 frame. */
@@ -298,7 +298,7 @@ export interface Branding {
 }
 
 /** Fonts the cut job can fetch for captions (jobs/looks.py FONT_URLS). */
-export const BRAND_FONTS = ["Montserrat", "Playfair Display", "Poppins", "Inter", "Lato", "Open Sans"] as const;
+export const BRAND_FONTS = ["Jost", "Bodoni Moda", "Montserrat", "Playfair Display", "Poppins", "Inter", "Lato", "Open Sans"] as const;
 
 /**
  * Her branding for a render: the handle of her TikTok channel in Buffer (else any channel, else

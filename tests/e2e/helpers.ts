@@ -22,7 +22,7 @@ export function sql<T = Record<string, unknown>>(command: string): T[] {
   let out = "";
   for (let attempt = 1; ; attempt++) {
     try {
-      out = execFileSync("npx", ["wrangler", "d1", "execute", "sheila-creator-dashboard-db", "--local", "--json", "--command", command], { cwd: process.cwd(), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+      out = execFileSync("npx", ["wrangler", "d1", "execute", "mercedes-creator-dashboard-db", "--local", "--json", "--command", command], { cwd: process.cwd(), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
       break;
     } catch (e) {
       if (attempt >= 3 || !String((e as { stderr?: unknown }).stderr ?? e).includes("internal error")) throw e;

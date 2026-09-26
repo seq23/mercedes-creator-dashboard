@@ -36,7 +36,7 @@ login-code email is ever needed; only the runway, recap and brief emails wait on
 
 `GITHUB_DISPATCH_TOKEN` (production and staging) only needs to fire `repository_dispatch` on this
 repo (Contents: Read and write). **Not set yet (26 Sep 2026): a NAMED STOP that only the account
-owner can clear.** Why: Sheila's dashboard used `gh auth token` (the Mac's own broad GitHub
+owner can clear.** Why: the upstream dashboard used `gh auth token` (the Mac's own broad GitHub
 login), which is not acceptable for a second client's Worker; the vault's fine-grained token
 (`github-cloud-1ab31c45`, seq23, expires 2027-07-12) reads this repo but was refused (403) on
 `POST /repos/seq23/mercedes-creator-dashboard/dispatches` because this repo is not in its
@@ -73,7 +73,7 @@ Per-user keys (Buffer, OpenRouter, Firecrawl, Hunter, ElevenLabs) are pasted on 
 Connections and stored AES-GCM encrypted in D1 `connections.secret_enc`.
 
 **Pre-wired connections** (OpenRouter = Sequoia's, vault `openrouter-ai-c4dc6108`; Firecrawl =
-vault `seq-firecrawl-api-key`; Hunter = vault `sheila-hunter-api-key`, shared with Sheila Studio):
+vault `seq-firecrawl-api-key`; Hunter = vault `sheila-hunter-api-key`, shared with the upstream dashboard):
 never raw SQL of a plaintext key. The route `POST /api/connections/:service/key` checks the key
 live and stores it encrypted with that Worker's `SECRETS_KEY`, so pre-wiring is one authenticated
 call per service against the deployed Worker. Staging (code login; the cookie comes from the
@@ -461,10 +461,10 @@ Worker (`worker_url` in the payload), so it can only ever touch the staging buck
 | Piece | State (26 Sep 2026, Mercedes Studio staging) |
 | --- | --- |
 | Worker, D1, R2, crons | Real, all migrations applied (`mercedesstudio-staging`, D1 `19ea68a7-c501-4a4b-af6a-f1817ed824d2`, R2 `mercedes-creator-dashboard-files-staging`) |
-| Buffer | Not connected yet. Sheila Studio's staging used the owner's test Buffer account (seq.taylor@gmail.com, free plan, 3 of 3 channels): TikTok `@iamcindymercer`, Instagram `seq23`, YouTube "Sequoia Taylor". All three are her **test channels** (her word, 25 Sep 2026); the Phase 0 TEST POST goes to all three. Key: vault `buffer-access-token`, created 25 Sep 2026, **expires 25 Sep 2027** (Buffer → Settings → API; the free plan allows ONE key per account, so this key is shared with `authority-backlink-network`'s `BUFFER_ACCESS_TOKEN` secret; renewing it means Regenerate there, then `vault set buffer-access-token --from-file`, `gh secret set BUFFER_ACCESS_TOKEN -R seq23/authority-backlink-network`, and paste on staging's Connect). The account's 3,000 requests / 30 days are shared too; the dashboard's own idle spend is 20 a day (`tests/unit/buffer-budget.test.ts`). |
+| Buffer | Not connected yet. The upstream dashboard's staging used the owner's test Buffer account (seq.taylor@gmail.com, free plan, 3 of 3 channels): TikTok `@iamcindymercer`, Instagram `seq23`, YouTube "Sequoia Taylor". All three are her **test channels** (her word, 25 Sep 2026); the Phase 0 TEST POST goes to all three. Key: vault `buffer-access-token`, created 25 Sep 2026, **expires 25 Sep 2027** (Buffer → Settings → API; the free plan allows ONE key per account, so this key is shared with `authority-backlink-network`'s `BUFFER_ACCESS_TOKEN` secret; renewing it means Regenerate there, then `vault set buffer-access-token --from-file`, `gh secret set BUFFER_ACCESS_TOKEN -R seq23/authority-backlink-network`, and paste on staging's Connect). The account's 3,000 requests / 30 days are shared too; the dashboard's own idle spend is 20 a day (`tests/unit/buffer-budget.test.ts`). |
 | Email (Resend) | Real: the West Peek Resend key sends from `onboarding@resend.dev` to its own account owner, `sequoia@westpeek.ventures`, which is staging's OWNER_EMAIL. Login codes and every staging email land there. Production's OWNER_EMAIL and sender are unchanged. |
 | Jobs (cut, extract, research, metrics, brand finder, voice, full video, YouTube upload) | Wired but WAITING on `GITHUB_DISPATCH_TOKEN` (see Secrets: a named stop). Once set: dispatch with it; the job fetches its spec and files from the staging Worker and writes its outputs back through it (no storage keys anywhere). |
-| YouTube stats | Real, no sign-in: `YOUTUBE_API_KEY` set (the same Google API key as Sheila Studio); channel from Buffer's serviceId (see "Stats: no-login"). The optional Google sign-in needs `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (set separately, same Google project as Sheila Studio). |
+| YouTube stats | Real, no sign-in: `YOUTUBE_API_KEY` set (the same Google API key as the upstream dashboard); channel from Buffer's serviceId (see "Stats: no-login"). The optional Google sign-in needs `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (set separately, same Google project as the upstream dashboard). |
 | Instagram stats | The form path (public profile login-walled from the Worker); a Meta app is not set up (optional) |
 | OpenRouter, Firecrawl, Hunter | Pre-wired through `/api/connections/:service/key` (Secrets → "Pre-wired connections"): OpenRouter = Sequoia's key, Firecrawl = `seq-firecrawl-api-key`, Hunter = `sheila-hunter-api-key`. Production gets the same three after its first deploy. |
 
@@ -566,7 +566,7 @@ N=$(gcloud --account seq.taylor@gmail.com services api-keys create --project she
   --format='value(response.name)')
 gcloud --account seq.taylor@gmail.com services api-keys get-key-string "$N" --format='value(keyString)' | tr -d '\n' > "$S"
 npx wrangler secret put YOUTUBE_API_KEY < "$S"                 # production (mercedesstudio)
-# The same key is on Sheila Studio's Workers (vault sheila-youtube-api-key is shared): rotate it
+# The same key is on the upstream dashboard's Workers (vault sheila-youtube-api-key is shared): rotate it
 # there too (that repo's RUNBOOK, same steps) before deleting the old key below.
 npx wrangler secret put YOUTUBE_API_KEY --env staging < "$S"
 (cd ~/repo-tools/agent && python3 -m repo_operator.cli vault set sheila-youtube-api-key --class APPLICATION_SECRET --provider google --from-file "$S")

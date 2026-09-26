@@ -8,7 +8,7 @@ import type { APIRequestContext } from "@playwright/test";
 
 const ROOT = process.cwd(); // playwright runs from the repo root
 const SEED = path.join("tests", "e2e", "seed-demo.sql");
-const DB = "sheila-creator-dashboard-db";
+const DB = "mercedes-creator-dashboard-db";
 
 function d1(args: string[]) {
   execFileSync("npx", ["wrangler", "d1", "execute", DB, "--local", ...args], { cwd: ROOT, stdio: "pipe", env: { ...process.env, CI: "1" } });
@@ -69,7 +69,7 @@ function cleanupOf(file: string): string {
     .filter((l) => l.trim() && !l.startsWith("--"))
     .join(" ");
 }
-const BUCKET = "sheila-creator-dashboard-files";
+const BUCKET = "mercedes-creator-dashboard-files";
 
 /** The services the help pictures show as connected (fake keys, FAKE_SERVICES=1). */
 export const HELP_CONNECTED: Record<string, string> = {

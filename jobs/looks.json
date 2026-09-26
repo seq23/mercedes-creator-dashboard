@@ -15,7 +15,7 @@
   },
   "frame": { "w": 1080, "h": 1920, "gutter": 12 },
   "defaults": {
-    "brand": { "primary": "#d7b56d", "ink": "#211713", "paper": "#f7f1e7", "accent": "#8f4b5b" },
+    "brand": { "primary": "#deb05a", "ink": "#24160f", "paper": "#f3eae0", "accent": "#a3321f" },
     "font": "DejaVu Sans"
   },
   "grids": {

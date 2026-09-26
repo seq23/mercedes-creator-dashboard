@@ -141,7 +141,7 @@ describe("the owner's rules are read by code, not only written down", () => {
   it("staging's named stops are exactly the one secret only the account owner can mint, and no doc tells anyone to make R2 keys for jobs", () => {
     const ledger = readFileSync(path.join(root, "docs", "PHASE-LEDGER.md"), "utf8");
     const row = ledger.split("\n").find((l) => l.startsWith("| Staging |"));
-    expect(row).toContain("Named stops: none."); // Sheila Studio's history, carried over unchanged
+    expect(row).toContain("Named stops: none."); // the upstream dashboard's history, carried over unchanged
     const runbook = readFileSync(path.join(root, "RUNBOOK.md"), "utf8");
     const stops = runbook.split("### Staging: named stops")[1]?.split("\n### ")[0] ?? "";
     // Mercedes Studio (26 Sep 2026): GITHUB_DISPATCH_TOKEN is the one stop, named, with its steps.
