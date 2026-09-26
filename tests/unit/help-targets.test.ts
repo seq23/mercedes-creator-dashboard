@@ -2,6 +2,7 @@
 // `=>` is what the screenshot job types (an email with dots, a name with spaces), never a class
 // or id to look for on a screen. Pinned 26 Sep 2026 when the owner's address gained a dot.
 import { describe, expect, it } from "vitest";
+// @ts-expect-error plain .mjs validator, no types
 import { selectorOf } from "../../scripts/validators/help-targets-exist.mjs";
 
 describe("help-targets-exist: fill directives", () => {
