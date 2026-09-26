@@ -7,7 +7,7 @@ import { expect, test } from "@playwright/test";
 import { d1, evidence, latestRun, shot, waitForRow } from "./helpers";
 
 const SAMPLE = process.env.LIVE_VOICE_SAMPLE ?? "";
-const SCRIPT = "TEST narration for Sheila Studio. Layer it up, mix your candle heights, and never forget the place cards. Save this for your next dinner party.";
+const SCRIPT = "TEST narration for Mercedes Studio. Layer it up, mix your candle heights, and never forget the place cards. Save this for your next dinner party.";
 
 test.describe.configure({ mode: "serial" });
 

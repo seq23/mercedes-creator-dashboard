@@ -1,4 +1,4 @@
-// Sheila Creator Dashboard Worker: API under /api, media links under /media, the React app
+// Mercedes Creator Dashboard Worker: API under /api, media links under /media, the React app
 // from static assets for everything else, and three cron lanes.
 import { Hono } from "hono";
 import type { Env, Vars } from "./env";

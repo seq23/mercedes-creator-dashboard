@@ -30,7 +30,7 @@ import { readSettings } from "./settings";
 export const mediakit = new Hono<{ Bindings: Env; Variables: Vars }>();
 mediakit.use("*", requireUser);
 
-export const KIT_NAME = "Sheila Bruce";
+export const KIT_NAME = "Mercedes Asare";
 
 interface KitRow {
   bio: string;
@@ -47,7 +47,7 @@ interface KitRow {
 
 export async function readKit(env: Env): Promise<KitRow> {
   const kit = await env.DB.prepare("SELECT bio, photo_r2_key, featured_clip_ids, past_partners, rates, public_slug, contact_email, updated_at, draft, draft_saved_at FROM media_kit WHERE id = 1").first<KitRow>();
-  return kit ?? { bio: "", photo_r2_key: null, featured_clip_ids: "[]", past_partners: "[]", rates: null, public_slug: "sheila", contact_email: null, updated_at: null, draft: null, draft_saved_at: null };
+  return kit ?? { bio: "", photo_r2_key: null, featured_clip_ids: "[]", past_partners: "[]", rates: null, public_slug: "mercedes", contact_email: null, updated_at: null, draft: null, draft_saved_at: null };
 }
 
 /** The locked Brand Profile every AI step reads (section 5), or null before she locks one. */

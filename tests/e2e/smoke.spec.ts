@@ -10,18 +10,18 @@ test.describe("login", () => {
   // database would hit the cap and see no code. Each test puts back the codes it asked for
   // (used ones count too; sessions are cookies and are not touched).
   test.afterEach(() => {
-    sql("DELETE FROM login_codes WHERE email = 'asheilabruceaffair@gmail.com'");
+    sql("DELETE FROM login_codes WHERE email = 'mercasare.social@gmail.com'");
   });
 
   test("the login page shows the brand and asks for an email", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "Sheila Studio" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Mercedes Studio" })).toBeVisible();
     await expect(page.getByLabel("Your email")).toBeVisible();
   });
 
   test("a code from the email logs her in", async ({ page }) => {
     await page.goto("/");
-    await page.getByLabel("Your email").fill("asheilabruceaffair@gmail.com");
+    await page.getByLabel("Your email").fill("mercasare.social@gmail.com");
     await page.getByRole("button", { name: "Email me a code" }).click();
     const code = await page.locator(".notice strong").textContent();
     await page.getByLabel("The code from your email").fill(code!.trim());
@@ -157,11 +157,11 @@ test.describe("public", () => {
   test("the media kit page needs no login, and shows only what she published", async ({ page, browser }) => {
     const pub = await (await browser.newContext({ storageState: { cookies: [], origins: [] }, viewport: page.viewportSize() ?? undefined })).newPage();
     sql("DELETE FROM media_kit_versions");
-    await pub.goto("/kit/sheila");
+    await pub.goto("/kit/mercedes");
     await expect(pub.getByRole("heading", { name: "No media kit here" })).toBeVisible();
     expect((await page.request.post("/api/mediakit/publish")).ok()).toBe(true); // as the signed-in owner
-    await pub.goto("/kit/sheila");
-    await expect(pub.getByRole("heading", { name: "Sheila Bruce", level: 1 })).toBeVisible();
+    await pub.goto("/kit/mercedes");
+    await expect(pub.getByRole("heading", { name: "Mercedes Asare", level: 1 })).toBeVisible();
     sql("DELETE FROM media_kit_versions");
     await pub.context().close();
   });

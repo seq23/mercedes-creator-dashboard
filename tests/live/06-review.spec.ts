@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { d1, evidence, shot } from "./helpers";
 
-const TEST_CAPTION = "TEST POST · Phase 0 live test of Sheila Studio. Please ignore.";
+const TEST_CAPTION = "TEST POST · Phase 0 live test of Mercedes Studio. Please ignore.";
 
 function dumpId(): string {
   const ev = JSON.parse(readFileSync("docs/design/live/evidence.json", "utf8")) as Record<string, { dump_id?: string }>;

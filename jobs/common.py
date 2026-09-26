@@ -112,7 +112,7 @@ def openrouter_content(key: str, payload: dict[str, Any], timeout: float = 180, 
         req = urllib.request.Request(OPENROUTER_URL, data=json.dumps(body).encode(), method="POST", headers={
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
-            "X-Title": "Sheila Studio",
+            "X-Title": "Mercedes Studio",
         })
         with urllib.request.urlopen(req, timeout=timeout) as res:
             data = json.loads(res.read().decode())
@@ -162,7 +162,7 @@ JINA_READ_URL = "https://r.jina.ai/"
 DDG_HTML_URL = "https://html.duckduckgo.com/html/"
 DDG_LITE_URL = "https://lite.duckduckgo.com/lite/"
 FREE_SEARCH = ("duckduckgo", "duckduckgo_lite", "jina_duckduckgo")
-_UA = "Mozilla/5.0 (compatible; SheilaStudio/1.0; +https://github.com/seq23/sheila-creator-dashboard)"
+_UA = "Mozilla/5.0 (compatible; MercedesStudio/1.0; +https://github.com/seq23/mercedes-creator-dashboard)"
 
 
 def _http(url: str, data: bytes | None = None, headers: dict[str, str] | None = None, timeout: float = 45) -> tuple[int, str]:
@@ -392,7 +392,7 @@ class Job:
             "X-Job-Signature": sig,
             "X-Job-Nonce": self.nonce,
             "X-Job-Run-Id": self.run_id,
-            "User-Agent": "sheila-creator-dashboard-job",
+            "User-Agent": "mercedes-creator-dashboard-job",
         }
 
     def _url(self, path: str) -> str:

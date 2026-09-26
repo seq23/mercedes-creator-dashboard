@@ -33,7 +33,7 @@ function graphql(body: string): unknown {
 
 beforeEach(async () => {
   const d = sqliteD1();
-  env = { DB: d.DB, FAKE_SERVICES: "0", SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=", RESEND_API_KEY: "re_test", GITHUB_DISPATCH_TOKEN: "x", OWNER_EMAIL: "owner@example.com", PUBLIC_BASE_URL: "https://e.test", APP_NAME: "Sheila Studio" } as unknown as Env;
+  env = { DB: d.DB, FAKE_SERVICES: "0", SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=", RESEND_API_KEY: "re_test", GITHUB_DISPATCH_TOKEN: "x", OWNER_EMAIL: "owner@example.com", PUBLIC_BASE_URL: "https://e.test", APP_NAME: "Mercedes Studio" } as unknown as Env;
   calls = [];
   vi.stubGlobal(
     "fetch",

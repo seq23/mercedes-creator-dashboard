@@ -57,7 +57,7 @@ test.describe("voice", () => {
     await expect(clips).toBeChecked();
     // the five setup steps, the read-aloud script and the recorder are on the screen
     for (let n = 1; n <= 5; n++) await expect(page.locator(`.voice-step[data-step="${n}"]`)).toBeVisible();
-    await expect(page.getByLabel("Script to read aloud")).toContainText("A Sheila Bruce Affair");
+    await expect(page.getByLabel("Script to read aloud")).toContainText("Just Being Mercedes");
     await page.getByRole("button", { name: "Bigger text" }).click();
     await expect(page.locator(".voice-script.big")).toBeVisible();
     await page.getByRole("button", { name: "Hide script" }).click();
@@ -84,7 +84,7 @@ test.describe("voice", () => {
     await expect(page.getByText(/Voice ready · saved/)).toBeVisible({ timeout: 15_000 });
 
     await page.getByRole("button", { name: "Draft with AI" }).click();
-    await expect(page.getByLabel("Script")).toHaveValue(/Hi, it's Sheila/);
+    await expect(page.getByLabel("Script")).toHaveValue(/Hi, it's Mercedes/);
     const [res] = await Promise.all([page.waitForResponse((r) => r.url().endsWith("/api/voice/narrations") && r.request().method() === "POST"), page.getByRole("button", { name: "Generate" }).click()]);
     const { jobId, id } = (await res.json()) as { jobId: string; id: string };
     expect((await page.request.post(`/api/jobs/${jobId}/run-fake`, { data: {} })).ok()).toBe(true);

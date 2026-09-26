@@ -22,7 +22,7 @@ export function kitMeta(k: { name: string; positioning: string; niche: string },
     `<meta property="og:title" content="${esc(title)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
     `<meta property="og:url" content="${esc(url)}">`,
-    `<meta property="og:image" content="${esc(new URL("/assets/brand/sheila-logo.png", url).toString())}">`,
+    `<meta property="og:image" content="${esc(new URL("/assets/brand/mercedes-logo.png", url).toString())}">`,
     `<meta name="twitter:card" content="summary">`,
   ].join("");
 }

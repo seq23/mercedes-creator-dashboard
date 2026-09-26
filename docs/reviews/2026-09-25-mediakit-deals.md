@@ -2,9 +2,9 @@
 
 How this was done: `origin/main` at bf94031, built, served by `tests/e2e/serve.sh` with fake
 services on port 8802, the demo data from `tests/e2e/seed-demo.sql` loaded, and both screens
-used as Sheila would on an iPhone 13 (390 wide) and a 1280 desktop with Playwright: Deals list,
+used as Mercedes would on an iPhone 13 (390 wide) and a 1280 desktop with Playwright: Deals list,
 a brand with no pitch, a drafted pitch, a sent pitch, the Media kit tab, the public kit
-`/kit/sheila`, the printable page and the PDF Chrome makes from it. Screenshots of what she saw
+`/kit/mercedes`, the printable page and the PDF Chrome makes from it. Screenshots of what she saw
 before the overhaul: `docs/design/mediakit-deals/before/`.
 
 The stance: a brand manager at a candle or tableware company opens her kit link from a cold
@@ -35,7 +35,7 @@ deal, or tells a brand something untrue), **weak** (works but amateur or unhelpf
 | K16 | **No "what is missing" check.** Nothing tells her the kit has no packages, stale numbers, or no showcase before she sends it. | weak |
 | K17 | **No preview.** The only way to see the kit is to save (publish) and open the public page. | weak |
 | K18 | **The sticky "Save media kit" bar covers the email field** on desktop and sits on the bottom tab bar on the phone. | weak |
-| K19 | **The contact button is a bare `mailto:` with "Working together: Sheila Bruce";** on a desktop without a mail app it does nothing, and the address is not shown as text to copy. | weak |
+| K19 | **The contact button is a bare `mailto:` with "Working together: Mercedes Asare";** on a desktop without a mail app it does nothing, and the address is not shown as text to copy. | weak |
 | K20 | **The printable page is `/api/public/kit/:slug/print`**, an API-looking address, not `/kit/:slug/print`. | polish |
 | K21 | **"YouTube Shorts" stat header wraps to two lines on the phone** while the others fit on one, so the three columns do not line up. | polish |
 | K22 | **The editor's link shows `PUBLIC_BASE_URL`** (`localhost:8787` locally even on another port); fine on production, confusing locally. | polish |
@@ -58,7 +58,7 @@ deal, or tells a brand something untrue), **weak** (works but amateur or unhelpf
 | D11 | **Only TikTok One is tracked;** Instagram's creator marketplace, Amazon Influencer, LTK, ShopMy and the rest are not mentioned. | weak |
 | D12 | **Follow-ups stop at two** and the second one reads as an ending, but the deal stays "Sent" forever with no close or "no reply" outcome. | weak |
 | D13 | **The day-5 / day-12 tabs are shown before the pitch is sent**, and on a sent pitch the subject is locked while the body is still editable (inconsistent). | polish |
-| D14 | **Subject line "Creator partnership idea: Brand × Sheila"** reads as a template; one subject, no alternatives. | weak |
+| D14 | **Subject line "Creator partnership idea: Brand × Mercedes"** reads as a template; one subject, no alternatives. | weak |
 | D15 | **No tone or length control;** Redraft gives the same thing again. | weak |
 | D16 | **No "before you send" check:** nothing says the kit link, the rate, the deliverables or the timeline is missing from what she is about to send. | weak |
 | D17 | **Nothing is kept of what she sent.** A redraft overwrites the pitch; there is no timeline of emails on the deal. | weak |

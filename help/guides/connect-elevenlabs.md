@@ -21,7 +21,7 @@ Log in at **elevenlabs.io**. Tap your profile at the bottom left, then **API key
 ![Step 2](/help/screenshots/connect-elevenlabs-2.png)
 <!-- mock: elevenlabs-create -->
 
-Tap **Create API key**, name it Sheila Studio, leave the access as it is and tap **Create**.
+Tap **Create API key**, name it Mercedes Studio, leave the access as it is and tap **Create**.
 
 ## Copy the key
 

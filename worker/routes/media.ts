@@ -83,7 +83,7 @@ media.get("/:token", async (c) => {
   if (!key) return c.text("Not found", 404);
   // "Save the clip" (Edit in CapCut): the same file, saved to her phone or computer.
   // "Download for YouTube" (a full video she uploads herself) is the same link.
-  if (kind === "clip" && c.req.query("download") === "1") return stream(c, c.env.FILES, key, "video/mp4", `attachment; filename="${row.youtube ? "sheila-studio-youtube" : "sheila-studio-clip"}.mp4"`);
+  if (kind === "clip" && c.req.query("download") === "1") return stream(c, c.env.FILES, key, "video/mp4", `attachment; filename="${row.youtube ? "mercedes-studio-youtube" : "mercedes-studio-clip"}.mp4"`);
   const range = c.req.header("range");
   const obj = await c.env.FILES.get(key, range ? { range: c.req.raw.headers } : undefined);
   if (!obj) return c.text("Not found", 404);

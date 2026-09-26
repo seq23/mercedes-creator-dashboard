@@ -15,7 +15,7 @@ Read against `main` at c26dd90 (after #34, editors / CapCut hand-back), then reb
 | Unique images (sha256) | 260: 300 files were copies of another guide's picture |
 | Largest identical groups | 20 files each: step 2 / step 3 / step 4 of 20 different Connect and Reconnect guides, desktop and phone |
 | Steps on another site (Buffer, TikTok Studio, the Instagram app, ElevenLabs…) with a picture of that site | 0 |
-| Of Sheila's questions ("how do I post", "why is my light red", "how do I get paid by brands", "how much should I charge", "find sponsors") answered by search | 1 of 5 answered usefully: three found nothing, "how do I post" listed 5 unrelated guides (measured with the old every-word rule on the old files) |
+| Of Mercedes' questions ("how do I post", "why is my light red", "how do I get paid by brands", "how much should I charge", "find sponsors") answered by search | 1 of 5 answered usefully: three found nothing, "how do I post" listed 5 unrelated guides (measured with the old every-word rule on the old files) |
 
 ### Root cause of the identical pictures (CONFIRMED)
 

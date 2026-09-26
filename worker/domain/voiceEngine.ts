@@ -25,7 +25,7 @@ export type EngineReason = "chosen_built_in" | "not_connected" | "needs_reconnec
 export interface EngineChoice {
   engine: VoiceEngine;
   reason: EngineReason;
-  /** One sentence in Sheila's words for the card at the top of Voice. */
+  /** One sentence in Mercedes' words for the card at the top of Voice. */
   why: string;
 }
 

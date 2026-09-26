@@ -14,7 +14,7 @@ Opus Clip cuts your dumps into clips using your Opus Clip credits, instead of th
 ![Step 1](/help/screenshots/connect-opusclip-1.png)
 <!-- mock: opusclip-api -->
 
-Log in at **opus.pro** and open its API page (Pro, Max or Business plans). Create a key named Sheila Studio and copy it.
+Log in at **opus.pro** and open its API page (Pro, Max or Business plans). Create a key named Mercedes Studio and copy it.
 
 ## Paste it and tap Check key
 

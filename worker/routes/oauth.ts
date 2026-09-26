@@ -83,7 +83,7 @@ async function failConnect(env: Env, p: StatsProvider, why: string) {
 oauth.get("/youtube/start", requireOwner, async (c) => {
   if (fakeServices(c.env)) {
     const token: OAuthToken = { access_token: `fake-youtube-token-${newId("t", 8)}`, refresh_token: "fake-refresh", expires_at: new Date(Date.now() + 3600_000).toISOString(), account_id: "fake_yt_channel" };
-    await storeYouTube(c.env, token, "Sheila Bruce", YT_UPLOAD_SCOPES.join(" "), c.get("user").email);
+    await storeYouTube(c.env, token, "Mercedes Asare", YT_UPLOAD_SCOPES.join(" "), c.get("user").email);
     return c.redirect(back("connected=youtube"));
   }
   const app = appCredentials(c.env, "google");
@@ -124,7 +124,7 @@ oauth.get("/:provider/start", requireOwner, async (c) => {
       expires_at: new Date(Date.now() + 60 * 86_400_000).toISOString(),
       account_id: p === "meta" ? "fake_ig_user" : "fake_yt_channel",
     };
-    await storeToken(c.env, p, token, p === "meta" ? "@fabulousgigi58" : "Sheila Bruce", c.get("user").email);
+    await storeToken(c.env, p, token, p === "meta" ? "@fabulousgigi58" : "Mercedes Asare", c.get("user").email);
     return c.redirect(back(`connected=${p}`));
   }
 

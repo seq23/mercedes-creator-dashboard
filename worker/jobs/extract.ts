@@ -163,9 +163,9 @@ export const extractJob: JobHandler = {
   },
 };
 
-const FAKE_DOC_TEXT = `A Sheila Bruce Affair — brand notes (demo text)
-A luxury lifestyle and event brand on Florida's Gulf Coast: boat and yacht experiences, formal balls and galas,
-wellness and empowerment conversations, dinners and cocktail gatherings, seasonal socials.
-Who gathers: Black women and friends, couples and professionals, retirees and Gulf Coast neighbors.
-Origin: Sisters of Sarasota, a circle for friendship, conversation, sisterhood and joy.
-Goals: grow a following that comes to the next affair; partner with hospitality, beauty and wellness brands that fit.`;
+const FAKE_DOC_TEXT = `Just Being Mercedes — brand notes (demo text)
+A New York style and beauty brand: get-ready-with-me routines, honest product reviews, outfits on a real budget,
+the city as the backdrop, and what a corporate beauty job is really like.
+Who watches: Black women in their 20s to 40s, young professionals, city women who want effortless done right.
+Origin: a corporate beauty strategy leader and Spelman alum who started sharing the honest version of her routine.
+Goals: grow a following that saves and comes back for the routine; partner with skincare, makeup, hair and fashion brands that fit.`;

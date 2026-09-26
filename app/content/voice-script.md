@@ -1,4 +1,4 @@
-Hi, it's Sheila, and welcome to A Sheila Bruce Affair. Come on in, pull up a chair, and let me pour you something nice.
+Hi, it's Mercedes, and welcome to Just Being Mercedes. Come on in, pull up a chair, and let me pour you something nice.
 
 Today we're setting a table for eight, and I want to walk you through it from the very beginning. It's March 21, the first real weekend of spring, and I have been waiting all winter for this one.
 
@@ -16,4 +16,4 @@ So what are you celebrating this season? A birthday, a shower, a Sunday supper w
 
 If you want to try this at home, start with what you already have. Borrow a few things from a friend. Shop your cupboards before you shop the stores. And please, light the candles, even on a Tuesday.
 
-Thank you so much for spending this time with me. Save this video so you have the list, share it with the friend who always hosts, and follow along for more. Until next time, this has been A Sheila Bruce Affair. Take care, my friends, and keep gathering.
+Thank you so much for spending this time with me. Save this video so you have the list, share it with the friend who always hosts, and follow along for more. Until next time, this has been Just Being Mercedes. Take care, my friends, and keep gathering.

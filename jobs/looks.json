@@ -1,6 +1,6 @@
 {
   "_contract": {
-    "what": "The Looks Sheila can pick for a clip. One source of truth: jobs/cut.py renders these, worker/domain/looks.ts mirrors them (tests/unit/looks.test.ts fails if the two disagree), and the validator `looks` fails on a Look without a description, a thumbnail (public/looks/<id>.webp) or test coverage.",
+    "what": "The Looks Mercedes can pick for a clip. One source of truth: jobs/cut.py renders these, worker/domain/looks.ts mirrors them (tests/unit/looks.test.ts fails if the two disagree), and the validator `looks` fails on a Look without a description, a thumbnail (public/looks/<id>.webp) or test coverage.",
     "captions": "clean = white words at the bottom (or centre), no highlight | karaoke = centred, the spoken word lights up in the brand colour | boxed = words on a brand-coloured box | none",
     "caption_position": "bottom | center",
     "hook": "top_bold = big bold hook text at the top for the first 2.5 s | none",

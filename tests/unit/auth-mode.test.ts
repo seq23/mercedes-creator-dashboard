@@ -16,7 +16,7 @@ import { compareEnvs, loginLinks, parseJsonc, REQUIRED_AUTH_MODE } from "../../s
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-const OWNER = "asheilabruceaffair@gmail.com";
+const OWNER = "mercasare.social@gmail.com";
 const BASE = "http://w.example";
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
@@ -28,7 +28,7 @@ app.route("/api/home", home);
 
 let db: ReturnType<typeof sqliteD1>;
 const envFor = (mode: string | undefined): Env =>
-  ({ DB: db.DB, OWNER_EMAIL: OWNER, SESSION_SECRET: "session-secret-for-tests", APP_NAME: "Sheila Studio", FAKE_SERVICES: "1", PUBLIC_BASE_URL: BASE, AUTH_MODE: mode }) as unknown as Env;
+  ({ DB: db.DB, OWNER_EMAIL: OWNER, SESSION_SECRET: "session-secret-for-tests", APP_NAME: "Mercedes Studio", FAKE_SERVICES: "1", PUBLIC_BASE_URL: BASE, AUTH_MODE: mode }) as unknown as Env;
 const users = () => db.raw.prepare("SELECT id, email, role FROM users").all() as { id: string; email: string; role: string }[];
 
 beforeEach(() => {
@@ -71,7 +71,7 @@ describe("open mode (production)", () => {
     const res = await app.request(`${BASE}/api/me`, {}, env());
     expect(res.status).toBe(200);
     const body = (await res.json()) as Me;
-    expect(body).toMatchObject({ email: OWNER, role: "owner", appName: "Sheila Studio", authMode: "open" });
+    expect(body).toMatchObject({ email: OWNER, role: "owner", appName: "Mercedes Studio", authMode: "open" });
     expect(body.features).toEqual({ voice: true, deeper_research: true, weekly_recap: true, help_ask: true }); // nothing switched off (migration 0010)
   });
 

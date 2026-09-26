@@ -124,7 +124,7 @@ def spec_for(door: str, dump_id: str, assets: list[dict]) -> dict:
         "output_prefix": f"clips/{dump_id}/",
         # like the Worker's rotationFor: singles and grids interleaved, so a real dump renders grids
         "rotation": ["bold_hook", "karaoke", "grid_four", "cinematic", "clean", "split", "reaction", "brand_card", "grid_eight", "side_by_side", "grid_six", "hero_strip"],
-        "branding": {"handle": "@sheilastudio", "cta": "Follow for more real days", "colors": {}},
+        "branding": {"handle": "@mercedesstudio", "cta": "Follow for more real days", "colors": {}},
     }
 
 
@@ -321,7 +321,7 @@ def check_looks(tmp: Path, problems: list[str], write_thumbs: bool) -> None:
     runs = [(float(a), min(info["duration"], a + 4.5)) for a in range(0, int(info["duration"]), 6)]
     tr = cut.Transcript(words=words, segments=[(0.0, info["duration"], "synthetic")], engine="synthetic")
     src = cut.Source(work / "norm.mp4", info, tr, runs, None)
-    brand = L.Branding(handle="@sheilastudio", cta="Follow for more real days")
+    brand = L.Branding(handle="@mercedesstudio", cta="Follow for more real days")
     m = cut.Moment("ast_look", "hook_first", 2.0, 2.0 + LOOK_SECONDS - 2.0, [(8.0, 10.0), (2.0, 2.0 + LOOK_SECONDS - 2.0)], hook="You need to hear this part")
     others = [(f"clp_look{i:08d}", cut.Moment("ast_look", "talking_head", 4.0 * i, 4.0 * i + 8.0, [(4.0 * i, 4.0 * i + 8.0)]), src) for i in range(1, 8)]
     libass = cut.ffmpeg_has_filter("subtitles")

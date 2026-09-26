@@ -93,7 +93,7 @@ export function cleanKit(raw: unknown, fallbackName: string): { kit: KitContent 
   for (const p of PLATFORMS) {
     const h = str(handles[p], 31);
     if (!h) continue;
-    if (!HANDLE.test(h)) return { problem: `That ${PLATFORM_LABEL[p]} handle does not look right. Use letters, numbers, dots and underscores, like @sheilabruce.` };
+    if (!HANDLE.test(h)) return { problem: `That ${PLATFORM_LABEL[p]} handle does not look right. Use letters, numbers, dots and underscores, like @mercedesasare.` };
     k.handles[p] = h.startsWith("@") ? h : `@${h}`;
   }
   k.niche = str(r.niche, 90);

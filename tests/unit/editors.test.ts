@@ -209,14 +209,14 @@ beforeEach(async () => {
   env = {
     DB: db.DB,
     FILES: r2.FILES,
-    OWNER_EMAIL: "asheilabruceaffair@gmail.com",
+    OWNER_EMAIL: "mercasare.social@gmail.com",
     SESSION_SECRET: "session-secret-for-tests",
     SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=",
-    APP_NAME: "Sheila Studio",
+    APP_NAME: "Mercedes Studio",
     FAKE_SERVICES: "1",
     AUTH_MODE: "open",
     PUBLIC_BASE_URL: BASE_URL,
-    GITHUB_REPO: "seq23/sheila-creator-dashboard",
+    GITHUB_REPO: "seq23/mercedes-creator-dashboard",
   } as unknown as Env;
 });
 

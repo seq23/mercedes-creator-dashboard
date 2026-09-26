@@ -13,8 +13,8 @@ import { log } from "../lib/log";
 export const ELEVEN_BASE = "https://api.elevenlabs.io";
 export const ELEVEN_TTS_MODEL = "eleven_multilingual_v2";
 export const ELEVEN_OUTPUT = "mp3_44100_128";
-export const ELEVEN_VOICE_NAME = "Sheila Studio";
-const ELEVEN_VOICE_DESCRIPTION = "Sheila's own voice, cloned from her consented sample in Sheila Studio. Delete it from the dashboard with Delete my voice.";
+export const ELEVEN_VOICE_NAME = "Mercedes Studio";
+const ELEVEN_VOICE_DESCRIPTION = "Mercedes' own voice, cloned from her consented sample in Mercedes Studio. Delete it from the dashboard with Delete my voice.";
 /** Natural, close to her sample; the defaults ElevenLabs recommends for a cloned voice. */
 export const ELEVEN_VOICE_SETTINGS = { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true };
 

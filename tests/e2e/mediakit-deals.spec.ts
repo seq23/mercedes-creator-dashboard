@@ -1,4 +1,4 @@
-// Media kit + brand deals, as Sheila uses them, on phone and desktop with fake services and demo
+// Media kit + brand deals, as Mercedes uses them, on phone and desktop with fake services and demo
 // data (tests/e2e/seed-demo.sql). Each test re-seeds, so the phone and desktop runs each start
 // from the same state. Screenshots of each state go to test-results/mediakit-deals/ (the WebPs in
 // docs/design/mediakit-deals/ are made from them).
@@ -34,7 +34,7 @@ test.describe("media kit", () => {
     test.setTimeout(120_000);
     sql("DELETE FROM media_kit_versions; DELETE FROM kit_views; UPDATE media_kit SET draft = NULL, bio = '', featured_clip_ids = '[]', past_partners = '[]', contact_email = NULL WHERE id = 1");
     const { ctx, pub } = await anon(browser, page);
-    await pub.goto("/kit/sheila");
+    await pub.goto("/kit/mercedes");
     await expect(pub.getByRole("heading", { name: "No media kit here" })).toBeVisible();
 
     await page.goto("/deals?tab=kit");
@@ -56,7 +56,7 @@ test.describe("media kit", () => {
 
     // typed inputs autosave
     await page.getByLabel("One line under your name").fill("Hosting that makes every guest feel celebrated.");
-    await page.getByLabel("TikTok handle").fill("sheilabruce");
+    await page.getByLabel("TikTok handle").fill("mercedesasare");
     await expect(page.locator(".kit-bar")).toContainText(/Draft saved/, { timeout: 10_000 });
     await shot(page, "kit-02-filled");
 
@@ -70,9 +70,9 @@ test.describe("media kit", () => {
     await preview.getByRole("button", { name: "Publish" }).click();
     await expect(page.locator(".toast", { hasText: "Published version 1" })).toBeVisible();
 
-    await pub.goto("/kit/sheila");
-    await expect(pub.getByRole("heading", { name: "Sheila Bruce", level: 1 })).toBeVisible();
-    await expect(pub.getByText("TikTok @sheilabruce")).toBeVisible();
+    await pub.goto("/kit/mercedes");
+    await expect(pub.getByRole("heading", { name: "Mercedes Asare", level: 1 })).toBeVisible();
+    await expect(pub.getByText("TikTok @mercedesasare")).toBeVisible();
     await expect(pub.locator(".ks-figure").first()).toContainText(/As of Sep 24, 2026 · TikTok/);
     await expect(pub.getByText("Starting at $800")).toBeVisible();
     await shot(pub, "kit-03-public");
@@ -100,24 +100,24 @@ test.describe("media kit", () => {
     });
 
     // renaming the link keeps sent links working
-    await page.getByLabel("Link name").fill("sheilabruce");
-    await expect(page.getByLabel("Link name")).toHaveValue("sheilabruce");
+    await page.getByLabel("Link name").fill("mercedesasare");
+    await expect(page.getByLabel("Link name")).toHaveValue("mercedesasare");
     expect(refetches, "the kit screen re-fetched itself while she typed").toBe(0);
     const [renamed] = await Promise.all([page.waitForResponse((r) => r.url().endsWith("/api/mediakit") && r.request().method() === "PATCH" && (r.request().postData() ?? "").includes('"slug"')), page.getByLabel("Link name").blur()]);
     expect(renamed.status()).toBe(200);
-    expect(((await renamed.json()) as { view: { slug: string } }).view.slug).toBe("sheilabruce");
-    await expect(page.getByLabel("Link name")).toHaveValue("sheilabruce");
+    expect(((await renamed.json()) as { view: { slug: string } }).view.slug).toBe("mercedesasare");
+    await expect(page.getByLabel("Link name")).toHaveValue("mercedesasare");
     expect(refetches).toBe(0);
-    await pub.goto("/kit/sheila");
-    await expect(pub).toHaveURL(/\/kit\/sheilabruce$/);
-    await expect(pub.getByRole("heading", { name: "Sheila Bruce", level: 1 })).toBeVisible();
-    await page.request.patch("/api/mediakit", { data: { slug: "sheila" } });
+    await pub.goto("/kit/mercedes");
+    await expect(pub).toHaveURL(/\/kit\/mercedesasare$/);
+    await expect(pub.getByRole("heading", { name: "Mercedes Asare", level: 1 })).toBeVisible();
+    await page.request.patch("/api/mediakit", { data: { slug: "mercedes" } });
     await ctx.close();
   });
 
   test("the public kit: phone-first, private rates never sent, a QR of its own link, two printed pages", async ({ page, browser }) => {
     const { ctx, pub } = await anon(browser, page);
-    const res = await pub.request.get("/api/public/kit/sheila");
+    const res = await pub.request.get("/api/public/kit/mercedes");
     const body = await res.text();
     expect(res.status()).toBe(200);
     expect(body).not.toMatch(/"floor"|"target"/); // private floor/target never leave the Worker
@@ -130,8 +130,8 @@ test.describe("media kit", () => {
     expect(kit.manual.every((m) => m.selfReported)).toBe(true);
     expect(kit.qrSvg).toBe(qrSvg(kit.url, { dark: "#211713", light: "#fffaf1", title: `QR code: ${kit.url}` }));
 
-    await pub.goto("/kit/sheila");
-    await expect(pub.getByRole("heading", { name: "Sheila Bruce", level: 1 })).toBeVisible();
+    await pub.goto("/kit/mercedes");
+    await expect(pub.getByRole("heading", { name: "Mercedes Asare", level: 1 })).toBeVisible();
     await expect(pub.getByText("Self-reported, as of Sep 20, 2026")).toBeVisible();
     const work = pub.getByRole("link", { name: "Work with me" });
     await expect(work).toHaveAttribute("href", /^mailto:partnerships@demo-creator\.example/);
@@ -143,22 +143,22 @@ test.describe("media kit", () => {
     await pub.getByRole("button", { name: /^Play: / }).first().click();
     await expect(pub.locator(".ks-clip video")).toHaveCount(1);
     // the page's share preview names her
-    const html = await (await pub.request.get("/kit/sheila")).text();
-    expect(html).toContain("<title>Sheila Bruce · media kit</title>");
+    const html = await (await pub.request.get("/kit/mercedes")).text();
+    expect(html).toContain("<title>Mercedes Asare · media kit</title>");
     expect(html).toMatch(/og:description" content="Hosting that makes every guest feel celebrated\./);
     await shot(pub, "kit-04-public-phone-or-desktop");
 
-    await pub.goto("/kit/sheila/print");
+    await pub.goto("/kit/mercedes/print");
     await expect(pub.getByRole("button", { name: "Save as PDF" })).toBeVisible();
-    await expect(pub.locator(".ks-print h1")).toHaveText("Sheila Bruce");
+    await expect(pub.locator(".ks-print h1")).toHaveText("Mercedes Asare");
     await pub.emulateMedia({ media: "print" });
     const pdf = await pub.pdf({ format: "Letter", printBackground: true });
     const pages = (pdf.toString("latin1").match(/\/Type\s*\/Page[^s]/g) ?? []).length;
     expect(pages).toBe(2);
     // the old printable address forwards to the new one
-    const old = await pub.request.get("/api/public/kit/sheila/print", { maxRedirects: 0 });
+    const old = await pub.request.get("/api/public/kit/mercedes/print", { maxRedirects: 0 });
     expect(old.status()).toBe(302);
-    expect(old.headers()["location"]).toBe("/kit/sheila/print");
+    expect(old.headers()["location"]).toBe("/kit/mercedes/print");
     await ctx.close();
   });
 });
@@ -198,7 +198,7 @@ test.describe("brand deals", () => {
     await expect(page.getByRole("heading", { name: "Cedar & Salt Kitchen", level: 2 })).toBeVisible();
     const gmail = new URL((await page.getByRole("link", { name: "Open in Gmail" }).getAttribute("href"))!);
     expect(gmail.searchParams.get("to")).toBe("pr@cedarandsalt.example");
-    expect(gmail.searchParams.get("body")).toContain("/kit/sheila");
+    expect(gmail.searchParams.get("body")).toContain("/kit/mercedes");
     expect(gmail.searchParams.get("body")).toContain("Three ways we could do it");
     await expect(page.getByRole("region", { name: "Before you send" }).or(page.locator(".before-send"))).toContainText("Your media kit link is in it");
   });
@@ -330,7 +330,7 @@ test.describe("brand deals", () => {
     await dialog.getByLabel("Their website (optional)").fill("linenlark.example");
     await dialog
       .getByLabel("Paste what the brand sent")
-      .fill("Hi Sheila! We'd love 2 TikTok videos for our napkin launch. Our budget is $600. We need usage rights in perpetuity across all media and exclusivity with no other home brands for 6 months. Payment is net-90 after posting.");
+      .fill("Hi Mercedes! We'd love 2 TikTok videos for our napkin launch. Our budget is $600. We need usage rights in perpetuity across all media and exclusivity with no other home brands for 6 months. Payment is net-90 after posting.");
     await dialog.getByRole("button", { name: "Read it" }).click();
     await expect(page.getByRole("heading", { name: "Linen & Lark", level: 2 })).toBeVisible();
     const offer = page.locator(".offer-read");

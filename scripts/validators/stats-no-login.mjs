@@ -1,4 +1,4 @@
-// Stats with no login (owner decision 25 Sep 2026: Sheila never sees a Google or Meta consent
+// Stats with no login (owner decision 25 Sep 2026: Mercedes never sees a Google or Meta consent
 // screen; the sign-ins stay visible as optional extra detail, nothing gated behind them).
 //   1. TikTok: no route refuses an upload just because it starts with "PK" (TikTok Studio's
 //      "Download data → CSV" hands her a zip); the Excel refusal sits behind looksLikeXlsx; the

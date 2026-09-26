@@ -38,7 +38,7 @@ test("held clips stay out of the kit picker, Pick my best clips, the public kit 
   // and a draft that already held it (picked before the video was flagged) never shows it once published
   sql(`UPDATE media_kit SET draft = json_set(draft, '$.showcase', json('["${HELD}"]')) WHERE id = 1`);
   expect((await api.post("/api/mediakit/publish")).ok()).toBe(true);
-  const pub = await (await api.get("/api/public/kit/sheila?preview=1")).text();
+  const pub = await (await api.get("/api/public/kit/mercedes?preview=1")).text();
   expect(pub).not.toContain(TOKEN);
   expect(pub).not.toContain(HELD);
   // a pitch links two clips: never this one

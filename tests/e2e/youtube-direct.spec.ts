@@ -71,7 +71,7 @@ async function connectYouTube(page: Page) {
   await expect(card.getByText("Google then shows “Google hasn't verified this app”")).toBeVisible();
   await card.getByRole("link", { name: "Connect YouTube (full videos)" }).click();
   await expect(page.getByText("YouTube connected. Your full videos now upload straight to your channel")).toBeVisible();
-  await expect(card.getByText(/Connected · Sheila Bruce/)).toBeVisible();
+  await expect(card.getByText(/Connected · Mercedes Asare/)).toBeVisible();
 }
 
 test("one tap on Connect, then a full video uploads itself: private until its time, no Studio step", async ({ page }) => {

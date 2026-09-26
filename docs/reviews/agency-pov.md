@@ -1,7 +1,7 @@
-# What a talent manager does that Sheila does not have (agency point of view)
+# What a talent manager does that Mercedes does not have (agency point of view)
 
 Written from the seat of a talent manager at a creator agency who closes brand deals every week.
-The Deals tab is built to do this job underneath; Sheila sees one next step and one draft at a
+The Deals tab is built to do this job underneath; Mercedes sees one next step and one draft at a
 time. Each rule below names the file in `worker/domain/` that holds it, and each file has tests.
 
 ## How we price (`ratecard.ts`)
@@ -73,7 +73,7 @@ A **deal memo** per deal, one screen: who (brand, contact, buyer type), what (de
 money (fee, add-ons, upfront, kill fee, paid so far), dates (brief, draft, post window, report,
 invoice due), rights (usage, paid usage, exclusivity), status, and the one next step.
 
-## What changes for Sheila
+## What changes for Mercedes
 
 - The first thing she sees is **money**: pitched this month, replies, deals won, dollars agreed,
   dollars paid, and **brands to pitch this week**, ranked by expected money with the arithmetic

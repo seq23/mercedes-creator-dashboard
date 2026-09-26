@@ -31,7 +31,7 @@ export function Home() {
   const { me } = useApp();
   const toast = useToast();
   const { data, loading, error, reload } = useLoad(() => get<HomeSummary>("/api/home"));
-  const firstName = me?.role === "owner" ? "Sheila" : (me?.email.split("@")[0] ?? "");
+  const firstName = me?.role === "owner" ? "Mercedes" : (me?.email.split("@")[0] ?? "");
   const dismiss = (key: string, text?: string) => dismissWithUndo(toast, key, reload, text);
 
   async function keepDrafts() {

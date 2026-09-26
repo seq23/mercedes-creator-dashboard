@@ -1,4 +1,4 @@
-// "Edit in CapCut" on a clip in Review (docs/EDITORS.md): how Sheila uses CapCut (or InShot, or
+// "Edit in CapCut" on a clip in Review (docs/EDITORS.md): how Mercedes uses CapCut (or InShot, or
 // any editing app) instead of the built-in editor. CapCut has no API and no published app link, so:
 //   1. Save the clip: on the phone the share sheet (pick CapCut there), else a download
 //   2. Edit it in the app, export 9:16
@@ -31,7 +31,7 @@ export function HandoffModal({ clip, onClose, onReplaced }: { clip: ReviewClip; 
     setSharing(true);
     try {
       const res = await fetch(clip.media_url);
-      const file = new File([await res.blob()], "sheila-studio-clip.mp4", { type: "video/mp4" });
+      const file = new File([await res.blob()], "mercedes-studio-clip.mp4", { type: "video/mp4" });
       if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title: clip.hook_text });
       else window.location.href = downloadUrl(clip);
     } catch (e) {
@@ -74,7 +74,7 @@ export function HandoffModal({ clip, onClose, onReplaced }: { clip: ReviewClip; 
                 {sharing ? "Opening…" : `Share to ${app === "other" ? "an app" : name}`}
               </button>
             ) : null}
-            <a className="btn small quiet" href={downloadUrl(clip)} download="sheila-studio-clip.mp4">
+            <a className="btn small quiet" href={downloadUrl(clip)} download="mercedes-studio-clip.mp4">
               Save the clip
             </a>
           </div>

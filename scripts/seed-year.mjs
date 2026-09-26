@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// A realistic YEAR of demo data: day 358 of Sheila using the dashboard (owner, 26 Sep 2026:
+// A realistic YEAR of demo data: day 358 of Mercedes using the dashboard (owner, 26 Sep 2026:
 // "think about day 358 of using this"). Demo data only, never her real content, never production:
 // every row id starts with `yr_` (versions 9101+ for briefs, the profile and kit versions), the
 // CLI writes only to the LOCAL D1 (`--local`; anything else is refused), and nothing in worker/ or
@@ -83,8 +83,8 @@ const briefBody = (v) =>
 
 function kitContent(showcase, version) {
   return JSON.stringify({
-    name: "Sheila Bruce",
-    handles: { tiktok: "@demo.sheila", instagram: "@demo.sheila" },
+    name: "Mercedes Asare",
+    handles: { tiktok: "@demo.mercedes", instagram: "@demo.mercedes" },
     niche: "Hosting · tablescapes · everyday luxury",
     location: "Mobile, Alabama",
     positioning: "Hosting that makes every guest feel celebrated.",
@@ -153,7 +153,7 @@ export function yearSql(now = new Date(), { before = false } = {}) {
   let ev = 0;
   const event = (kind, ref, at, detail = {}) => out.push(row("events", { id: `yr_ev_${++ev}`, kind, ref_id: ref, detail: JSON.stringify(detail), actor: "owner", created_at: iso(at) }));
   let em = 0;
-  const email = (kind, subject, at, ref = null) => out.push(row("emails_sent", { id: `yr_em_${++em}`, kind, to_email: "sheila@demo-creator.example", subject, ref_id: ref, provider_id: `demo-${em}`, sent_at: iso(at) }));
+  const email = (kind, subject, at, ref = null) => out.push(row("emails_sent", { id: `yr_em_${++em}`, kind, to_email: "mercedes@demo-creator.example", subject, ref_id: ref, provider_id: `demo-${em}`, sent_at: iso(at) }));
 
   // The locked profile and the approved brief behind it (no "first things first" on day 358).
   out.push(row("brand_profile", { version: 9101, sections: JSON.stringify({ who: "Demo creator: a hostess and tablescape creator.", audience: "Women 30-55 who love hosting.", goals: "10 clips a week, 2 paid partnerships a quarter.", voice: "Warm, gracious, a little playful.", themes: "Table styling\nEasy entertaining\nHoliday hosting", do_dont: "Do: real homes. Don't: hard selling.", off_limits: "Alcohol brands, diet pills", deal_fit: "Tableware, candles, florals, linens.", ctas: "Save this for your next gathering." }), locked: 1, locked_at: iso(day0 + 2 * DAY), source: "edited", created_at: iso(day0 + 2 * DAY) }));
@@ -284,7 +284,7 @@ export function yearSql(now = new Date(), { before = false } = {}) {
       const y = r();
       let status = at > T ? "planned" : y < 0.07 ? "failed" : y < 0.13 ? "unscheduled" : "posted";
       if (status === "planned" && at - T < 7 * DAY) status = r() < 0.5 ? "in_buffer" : "planned";
-      out.push(row("posts", { id: pid, clip_id: c.id, platform: plat, scheduled_at: iso(at), status, url: status === "posted" ? `https://www.tiktok.com/@demo.sheila/video/7${String(++pv).padStart(18, "0")}` : null, error: status === "failed" ? pick(["Instagram did not accept the video. Reconnect Instagram in Buffer.", "Buffer was busy and the post was not sent. Tap Try again.", "TikTok said this video is too long."]) : null, retries: status === "failed" ? 2 : 0, posted_at: status === "posted" ? iso(at) : null, created_at: iso(c.at) }));
+      out.push(row("posts", { id: pid, clip_id: c.id, platform: plat, scheduled_at: iso(at), status, url: status === "posted" ? `https://www.tiktok.com/@demo.mercedes/video/7${String(++pv).padStart(18, "0")}` : null, error: status === "failed" ? pick(["Instagram did not accept the video. Reconnect Instagram in Buffer.", "Buffer was busy and the post was not sent. Tap Try again.", "TikTok said this video is too long."]) : null, retries: status === "failed" ? 2 : 0, posted_at: status === "posted" ? iso(at) : null, created_at: iso(c.at) }));
       stats.posts++;
       if (status === "failed") email("posting_problem", "A post did not go out", at + 3600_000, pid);
       if (status === "posted") {
@@ -346,7 +346,7 @@ export function yearSql(now = new Date(), { before = false } = {}) {
   }
 
   // ---------------------------------------------------------------- the kit, stats, a year of email and health
-  for (let v = 0; v < 26; v++) out.push(row("media_kit_versions", { version: 9101 + v, content: kitContent(showcase, v + 1), slug: "sheila", published_at: iso(day0 + 5 * DAY + v * 13 * DAY) }));
+  for (let v = 0; v < 26; v++) out.push(row("media_kit_versions", { version: 9101 + v, content: kitContent(showcase, v + 1), slug: "mercedes", published_at: iso(day0 + 5 * DAY + v * 13 * DAY) }));
   out.push(`UPDATE media_kit SET draft = ${q(kitContent(showcase, 27))}, draft_saved_at = ${q(iso(T - DAY))} WHERE id = 1;`);
   for (let v = 0; v < 400; v++) out.push(row("kit_views", { id: `yr_kv_${v}`, version: 9101 + Math.min(25, Math.floor(v / 16)), viewed_at: iso(day0 + 6 * DAY + Math.floor(v * 0.88) * DAY) }));
   for (let w = 0; w < 51; w++) {

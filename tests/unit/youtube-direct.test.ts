@@ -125,7 +125,7 @@ function seedVideo(privacy: "public" | "unlisted" | "private", hoursAhead: numbe
 }
 
 async function connect() {
-  await saveConnection(env, "youtube", JSON.stringify({ access_token: "fake-youtube-token", refresh_token: "fake-refresh", expires_at: new Date(Date.now() + H).toISOString(), account_id: "UCx" }), "ok", { account: "Sheila Bruce", scopes: ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.force-ssl"] });
+  await saveConnection(env, "youtube", JSON.stringify({ access_token: "fake-youtube-token", refresh_token: "fake-refresh", expires_at: new Date(Date.now() + H).toISOString(), account_id: "UCx" }), "ok", { account: "Mercedes Asare", scopes: ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.force-ssl"] });
 }
 async function scenario(s: FakeScenario) {
   const f = await readFake(env);
@@ -150,11 +150,11 @@ beforeEach(() => {
     SESSION_SECRET: "session-secret-for-tests",
     SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=",
     JOB_SHARED_SECRET: SECRET,
-    APP_NAME: "Sheila Studio",
+    APP_NAME: "Mercedes Studio",
     FAKE_SERVICES: "1",
     AUTH_MODE: "open",
     PUBLIC_BASE_URL: BASE_URL,
-    GITHUB_REPO: "seq23/sheila-creator-dashboard",
+    GITHUB_REPO: "seq23/mercedes-creator-dashboard",
     AUDIENCE_TIMEZONE: "America/New_York",
   } as unknown as Env;
 });

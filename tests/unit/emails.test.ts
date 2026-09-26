@@ -6,11 +6,11 @@ import { describe, expect, it } from "vitest";
 import { SCENARIOS, SCENARIO_KEYS, toBrand, allowedAmounts, amountsIn, emailPrompt, numbersLine, parseEmail, starterEmail, suggestedScenario, type EmailFacts, type ScenarioKey } from "@worker/domain/emails";
 import { beforeYouSend } from "@shared/emailcheck";
 
-const KIT = "https://sheilastudio.example/kit/sheila";
+const KIT = "https://mercedesstudio.example/kit/mercedes";
 
 function facts(p: Partial<EmailFacts> = {}): EmailFacts {
   return {
-    creatorName: "Sheila Bruce",
+    creatorName: "Mercedes Asare",
     voice: "Warm, gracious, a little playful; short sentences; never salesy.",
     themes: ["Table styling", "Easy entertaining"],
     audience: "Women 30-55 in the US who love hosting.",
@@ -22,7 +22,7 @@ function facts(p: Partial<EmailFacts> = {}): EmailFacts {
     ],
     engagementLine: "4.1% of TikTok viewers like, comment, share or save.",
     kitUrl: KIT,
-    clipLinks: ["https://sheilastudio.example/media/abc"],
+    clipLinks: ["https://mercedesstudio.example/media/abc"],
     idea: "a 30-second Sunday brunch reset using your stoneware",
     options: [
       { tier: "full", name: "3-video bundle", what: "2 × TikTok video + Instagram Reel, with 90 days of usage on your channels", price: 1200, onRequest: false },
@@ -75,7 +75,7 @@ describe("every scenario has a template, and each one is tested", () => {
     for (const s of e.subjects) expect(s.length).toBeLessThanOrEqual(120);
     expect(e.subject).toBe(e.subjects[0]);
     expect(e.body).toMatch(SCENARIO_TESTS[key]);
-    expect(e.body.trim().endsWith("Sheila")).toBe(true);
+    expect(e.body.trim().endsWith("Mercedes")).toBe(true);
     expect(e.body).not.toMatch(/undefined|null|NaN|\[object/);
     expect(SCENARIOS[key].label.length).toBeGreaterThan(3);
     expect(SCENARIOS[key].when.length).toBeGreaterThan(10);
@@ -121,9 +121,9 @@ describe("real facts only", () => {
     const short = starterEmail("cold_pitch", facts(), "short", "brief").body;
     const long = starterEmail("cold_pitch", facts(), "warm", "detailed").body;
     expect(short.length).toBeLessThan(long.length);
-    expect(long).toContain("https://sheilastudio.example/media/abc");
-    expect(short).not.toContain("https://sheilastudio.example/media/abc");
-    expect(long.endsWith("Warmly,\nSheila")).toBe(true);
+    expect(long).toContain("https://mercedesstudio.example/media/abc");
+    expect(short).not.toContain("https://mercedesstudio.example/media/abc");
+    expect(long.endsWith("Warmly,\nMercedes")).toBe(true);
   });
   it("an agency gets the roster pitch; the first pitch names what we found about the brand", () => {
     expect(starterEmail("agency_pitch", facts({ brand: { ...facts().brand, kind: "agency" } })).body).toMatch(/12.4K followers on TikTok/);

@@ -27,12 +27,12 @@ Type your email and tap **Email me a code**.
 ![Step 3](/help/screenshots/log-in-3.png)
 <!-- mock: email-login-code -->
 
-Open the email from Sheila Studio and find the 6-digit code.
+Open the email from Mercedes Studio and find the 6-digit code.
 
 ## Type the code
 
 ![Step 4](/help/screenshots/log-in-4.png)
-<!-- fill: input[type="email"] => asheilabruceaffair@gmail.com -->
+<!-- fill: input[type="email"] => mercasare.social@gmail.com -->
 <!-- click: role=button[name="Email me a code"] -->
 <!-- target: .code-input -->
 

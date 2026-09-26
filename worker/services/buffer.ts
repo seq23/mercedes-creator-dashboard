@@ -114,9 +114,9 @@ export class FakeBuffer implements BufferClient {
     // "no-channels": a real Buffer account where nothing has been added yet (her state on 25 Sep).
     if (this.key.includes("no-channels")) return { ok: true, channels: [], error: null, organizationId: "fake_org" };
     const channels: BufferChannel[] = [
-      { id: "ch_tiktok", platform: "tiktok", handle: "@sheila.bruce", connected: true },
-      { id: "ch_instagram", platform: "instagram", handle: "@asheilabruceaffair", connected: !this.key.includes("ig-missing"), service_id: "17841400000000001", link: "https://instagram.com/asheilabruceaffair" },
-      { id: "ch_youtube", platform: "youtube", handle: "Sheila Bruce", connected: true, service_id: "UCfakeSheilaBruce000001", link: "https://www.youtube.com/channel/UCfakeSheilaBruce000001" },
+      { id: "ch_tiktok", platform: "tiktok", handle: "@mercedes.asare", connected: true },
+      { id: "ch_instagram", platform: "instagram", handle: "@justbeingmercedes", connected: !this.key.includes("ig-missing"), service_id: "17841400000000001", link: "https://instagram.com/justbeingmercedes" },
+      { id: "ch_youtube", platform: "youtube", handle: "Mercedes Asare", connected: true, service_id: "UCfakeMercedesAsare000001", link: "https://www.youtube.com/channel/UCfakeMercedesAsare000001" },
     ];
     return { ok: true, channels, error: null, organizationId: "fake_org" };
   }

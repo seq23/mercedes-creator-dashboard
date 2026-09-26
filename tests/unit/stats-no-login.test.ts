@@ -46,21 +46,21 @@ const latest = (platform: string) => db.raw.prepare("SELECT followers, avg_views
 async function connectBuffer(channels: Record<string, unknown>[]) {
   await saveConnection(env, "buffer", "good-key", "ok", { channels });
 }
-const YT_CH = { id: "ch_youtube", platform: "youtube", handle: "Sheila Bruce", connected: true, service_id: "UCfakeSheilaBruce000001", link: null };
+const YT_CH = { id: "ch_youtube", platform: "youtube", handle: "Mercedes Asare", connected: true, service_id: "UCfakeMercedesAsare000001", link: null };
 const IG_CH = (handle: string) => ({ id: "ch_instagram", platform: "instagram", handle, connected: true, service_id: "1784", link: `https://instagram.com/${handle}` });
 
 beforeEach(async () => {
   db = sqliteD1();
   env = {
     DB: db.DB,
-    OWNER_EMAIL: "asheilabruceaffair@gmail.com",
+    OWNER_EMAIL: "mercasare.social@gmail.com",
     SESSION_SECRET: "session-secret-for-tests",
     SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=",
-    APP_NAME: "Sheila Studio",
+    APP_NAME: "Mercedes Studio",
     FAKE_SERVICES: "1",
     AUTH_MODE: "open",
     PUBLIC_BASE_URL: BASE_URL,
-    GITHUB_REPO: "seq23/sheila-creator-dashboard",
+    GITHUB_REPO: "seq23/mercedes-creator-dashboard",
     YOUTUBE_API_KEY: "fake-youtube-key",
   } as unknown as Env;
 });
@@ -145,13 +145,13 @@ describe("YouTube public numbers (no sign-in)", () => {
     expect(latest("youtube")!.avg_views).toBeGreaterThan(0);
     expect((db.raw.prepare("SELECT COUNT(*) AS n FROM platform_videos WHERE platform = 'youtube' AND source = 'api'").get() as { n: number }).n).toBe(12);
     expect(light("YouTube stats")).toMatchObject({ light: "green", note: "Public numbers · 1,260 subscribers · 12 videos", fix_guide: null });
-    expect(await getSetting(env.DB, "youtube_channel", null)).toMatchObject({ id: "UCfakeSheilaBruce000001", source: "buffer" });
+    expect(await getSetting(env.DB, "youtube_channel", null)).toMatchObject({ id: "UCfakeMercedesAsare000001", source: "buffer" });
   });
   it("a channel she types wins; one that does not exist says so with the guide", async () => {
     await connectBuffer([YT_CH]);
-    const ok = await call("POST", "/api/stats/youtube-channel", { channel: "https://www.youtube.com/@AsheilaBruceAffair" });
+    const ok = await call("POST", "/api/stats/youtube-channel", { channel: "https://www.youtube.com/@justbeingmercedes" });
     expect(ok.status).toBe(200);
-    expect(ok.json.channel).toMatchObject({ source: "typed", handle: "@asheilabruceaffair" });
+    expect(ok.json.channel).toMatchObject({ source: "typed", handle: "@justbeingmercedes" });
     const missing = await call("POST", "/api/stats/youtube-channel", { channel: "@missingchannel" });
     expect(missing).toMatchObject({ status: 422, json: { fix_guide: "your-youtube-numbers" } });
     expect(light("YouTube stats")).toMatchObject({ light: "yellow", fix_guide: "your-youtube-numbers" });
@@ -179,7 +179,7 @@ describe("YouTube public numbers (no sign-in)", () => {
     expect(parseChannelInput("UC7O1lQikHSc77s7gNnj9htQ")).toEqual({ id: "UC7O1lQikHSc77s7gNnj9htQ" });
     expect(parseChannelInput("https://www.youtube.com/channel/UC7O1lQikHSc77s7gNnj9htQ")).toEqual({ id: "UC7O1lQikHSc77s7gNnj9htQ" });
     expect(parseChannelInput("youtube.com/@sequoiataylor5498")).toEqual({ handle: "@sequoiataylor5498" });
-    expect(parseChannelInput("@sheila")).toEqual({ handle: "@sheila" });
+    expect(parseChannelInput("@mercedes")).toEqual({ handle: "@mercedes" });
     expect(parseChannelInput("   ")).toBeNull();
   });
 });
@@ -188,14 +188,14 @@ describe("YouTube public numbers (no sign-in)", () => {
 
 describe("Instagram numbers (no sign-in)", () => {
   it("login-walled (what staging measured): the form path, a yellow light with the guide, logged", async () => {
-    await connectBuffer([IG_CH("asheilabruceaffair")]);
+    await connectBuffer([IG_CH("justbeingmercedes")]);
     const r = await refreshInstagramPublic(env, { force: true });
-    expect(r).toMatchObject({ path: "manual", handle: "asheilabruceaffair", why: "login_wall", status: 302, api_status: 401 });
+    expect(r).toMatchObject({ path: "manual", handle: "justbeingmercedes", why: "login_wall", status: 302, api_status: 401 });
     expect(light("Instagram stats")).toMatchObject({ light: "yellow", fix_guide: "update-instagram-numbers" });
     expect(db.raw.prepare("SELECT COUNT(*) AS n FROM events WHERE kind = 'stats.instagram.path'").get()).toEqual({ n: 1 });
   });
   it("her typed numbers show at once and turn the light green", async () => {
-    await connectBuffer([IG_CH("asheilabruceaffair")]);
+    await connectBuffer([IG_CH("justbeingmercedes")]);
     const bad = await call("POST", "/api/stats/instagram-numbers", { followers: "lots", avg_reach: 10 });
     expect(bad).toMatchObject({ status: 422, json: { fix_guide: "update-instagram-numbers" } });
     const ok = await call("POST", "/api/stats/instagram-numbers", { followers: "4,820", avg_reach: "1500" });
@@ -207,7 +207,7 @@ describe("Instagram numbers (no sign-in)", () => {
     expect(light("Instagram stats")!.light).toBe("green");
   });
   it("public when Instagram answers: followers read on their own, her reach kept, cached for a day", async () => {
-    await connectBuffer([IG_CH("sheila.public")]);
+    await connectBuffer([IG_CH("mercedes.public")]);
     await call("POST", "/api/stats/instagram-numbers", { followers: 100, avg_reach: 900 });
     const r = await refreshInstagramPublic(env, { force: true });
     expect(r).toMatchObject({ path: "public", via: "profile_page", followers: 4820 });
@@ -222,8 +222,8 @@ describe("Instagram numbers (no sign-in)", () => {
   });
   it("no handle anywhere: the form path, and a typed handle is used next", async () => {
     expect(await refreshInstagramPublic(env, { force: true })).toMatchObject({ path: "manual", why: "no_handle" });
-    const r = await call("POST", "/api/stats/instagram-handle", { handle: "@sheila.public" });
-    expect(r.json.instagram).toMatchObject({ path: "public", handle: "sheila.public" });
+    const r = await call("POST", "/api/stats/instagram-handle", { handle: "@mercedes.public" });
+    expect(r.json.instagram).toMatchObject({ path: "public", handle: "mercedes.public" });
   });
   it("reads counts from the profile page's description", () => {
     expect(parseProfilePage('<meta property="og:description" content="1,417 Followers, 7,317 Following, 63 Posts - See Instagram photos" />')).toEqual({ followers: 1417, posts: 63 });
@@ -247,7 +247,7 @@ describe("Instagram numbers (no sign-in)", () => {
 
 describe("Update numbers", () => {
   it("works with no sign-in at all: YouTube read, Instagram path named, no job needed", async () => {
-    await connectBuffer([YT_CH, IG_CH("asheilabruceaffair")]);
+    await connectBuffer([YT_CH, IG_CH("justbeingmercedes")]);
     const r = await call("POST", "/api/stats/sync");
     expect(r.status).toBe(200);
     expect(r.json).toMatchObject({ ok: true, youtube: { state: "ok" }, instagram: { path: "manual" }, jobId: null });
@@ -266,10 +266,10 @@ describe("Update numbers", () => {
 describe("Monday lane", () => {
   it("reads the no-login numbers, starts no sign-in job without a sign-in, and carries the monthly reminder", async () => {
     const { weekly } = await import("@worker/crons/weekly");
-    await connectBuffer([YT_CH, IG_CH("asheilabruceaffair")]);
+    await connectBuffer([YT_CH, IG_CH("justbeingmercedes")]);
     db.raw.prepare("INSERT INTO brand_profile (version, sections, locked, source) VALUES (1, '{}', 1, 'draft')").run();
     await setSetting(env.DB, "features", { voice: true, deeper_research: true, weekly_recap: true, help_ask: true });
-    await setSetting(env.DB, "notify_emails", ["asheilabruceaffair@gmail.com"]);
+    await setSetting(env.DB, "notify_emails", ["mercasare.social@gmail.com"]);
     await setSetting(env.DB, "instagram_reminder", { on: true, last_sent_at: null });
     await weekly(env);
     expect(await getSetting(env.DB, "youtube_public", null)).toMatchObject({ state: "ok", subscribers: 1260 });

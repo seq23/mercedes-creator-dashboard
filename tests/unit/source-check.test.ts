@@ -70,7 +70,7 @@ describe("jobs/cut.py parse_marks (OCR text of sampled frames)", () => {
     expect(parse(["follow me on Instagram", "thanks @thevenue"])).toBeNull();
   });
   it("no watermark → nothing", () => {
-    expect(parse(["TEST POST", "Sheila Studio"])).toBeNull();
+    expect(parse(["TEST POST", "Mercedes Studio"])).toBeNull();
   });
   it("reads '@ handle', '© handle' and a bare handle beside the mark, the way tesseract prints them", () => {
     expect(parse(["TikTok\n\n@ evahfourevah\n"])).toEqual({ platform: "tiktok", handles: ["evahfourevah"] });

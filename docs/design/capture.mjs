@@ -52,7 +52,7 @@ const SCREENS = [
   { name: "connect", route: "/settings/connections", wait: "main h1" },
   { name: "deals", route: "/deals", wait: "main h1" },
   { name: "mediakit-editor", route: "/deals?tab=kit", wait: "main h1" },
-  { name: "mediakit-public", route: "/kit/sheila", loggedOut: true, wait: ".kit h1, h1" },
+  { name: "mediakit-public", route: "/kit/mercedes", loggedOut: true, wait: ".kit h1, h1" },
   { name: "voice", route: "/voice", wait: "main h1" },
   { name: "help", route: "/help", wait: "main h1" },
   { name: "help-guide", route: "/help/dump-new-footage", wait: "main h1" },
@@ -63,10 +63,10 @@ const VIEWPORTS = [
 ];
 
 async function login(ctx) {
-  const r = await ctx.request.post(`${BASE}/api/auth/request`, { data: { email: "asheilabruceaffair@gmail.com" } });
+  const r = await ctx.request.post(`${BASE}/api/auth/request`, { data: { email: "mercasare.social@gmail.com" } });
   const { dev_code } = await r.json();
   if (!dev_code) throw new Error("fake services did not return a login code");
-  const v = await ctx.request.post(`${BASE}/api/auth/verify`, { data: { email: "asheilabruceaffair@gmail.com", code: dev_code } });
+  const v = await ctx.request.post(`${BASE}/api/auth/verify`, { data: { email: "mercasare.social@gmail.com", code: dev_code } });
   if (!v.ok()) throw new Error(`verify failed ${v.status()}`);
 }
 

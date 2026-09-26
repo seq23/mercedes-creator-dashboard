@@ -4,7 +4,7 @@
 import { describe, expect, it } from "vitest";
 import { extractTerms, mergeModelTerms, qualify, redFlags } from "@worker/domain/offers";
 
-const GOOD = `Hi Sheila,
+const GOOD = `Hi Mercedes,
 We're launching our holiday stoneware and would love to partner. We'd like 2 TikTok videos and 1 Instagram Reel.
 Our budget is $900 for the package. Posting by Oct 20, draft by Oct 12.
 Usage: 30 days organic on our channels. Payment net-30 on invoice.
@@ -37,7 +37,7 @@ describe("reading their email", () => {
 
 describe("each term quotes only its own sentence", () => {
   it("a one-paragraph email is not quoted whole under every term", () => {
-    const t = extractTerms("Hi Sheila! We'd love 2 TikTok videos for our napkin launch. Our budget is $600. We need usage rights in perpetuity across all media. Payment is net-90 after posting.");
+    const t = extractTerms("Hi Mercedes! We'd love 2 TikTok videos for our napkin launch. Our budget is $600. We need usage rights in perpetuity across all media. Payment is net-90 after posting.");
     expect(t.usage).toBe("We need usage rights in perpetuity across all media.");
     expect(t.payment).toBe("Payment is net-90 after posting.");
     expect(t.fee).toBe(600);
