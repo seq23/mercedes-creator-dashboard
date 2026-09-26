@@ -10,7 +10,7 @@
 // or, on the owner's Mac, from the vault (resend-app-18f24eb6) through its Keychain adapter, never echoed.
 import { execFileSync } from "node:child_process";
 
-const BASE = "https://sheila-creator-dashboard-staging.seq-taylor.workers.dev";
+const BASE = "https://mercedesstudio-staging.seq-taylor.workers.dev";
 const OWNER = "sequoia@westpeek.ventures";
 const VAULT_ITEM = "repo-operator-credential-resend-app-18f24eb6";
 
@@ -38,7 +38,7 @@ function resendKey() {
 
 function latestLoginEmailId(after) {
   const sql = `SELECT provider_id, sent_at FROM emails_sent WHERE kind = 'login_code' AND provider_id IS NOT NULL${after ? ` AND sent_at > '${after}'` : ""} ORDER BY sent_at DESC LIMIT 1`;
-  const out = execFileSync("npx", ["wrangler", "d1", "execute", "sheila-creator-dashboard-db-staging", "--remote", "--env", "staging", "--json", "--command", sql], {
+  const out = execFileSync("npx", ["wrangler", "d1", "execute", "mercedes-creator-dashboard-db-staging", "--remote", "--env", "staging", "--json", "--command", sql], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "ignore"],
   });

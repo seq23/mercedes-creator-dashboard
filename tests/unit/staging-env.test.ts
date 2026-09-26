@@ -89,10 +89,26 @@ describe("envs-match validator", () => {
     expect(checkWorkflow("job-x.yml", ok + "          BUCKET: s-files\n", buckets).problems).toEqual(["job-x.yml: a job workflow must not name a bucket; storage goes through the Worker at WORKER_URL"]);
   });
 
-  it("staging logs in at the West Peek Resend owner's address; production stays Sheila's", () => {
+  it("staging logs in at the West Peek Resend owner's address; production stays Mercedes's", () => {
     const c = cfg();
     expect(c.env.staging.vars.OWNER_EMAIL).toBe("sequoia@westpeek.ventures");
-    expect(c.vars.OWNER_EMAIL).toBe("asheilabruceaffair@gmail.com");
+    expect(c.vars.OWNER_EMAIL).toBe("mercasare.social@gmail.com");
+  });
+
+  it("production owns the custom domain; staging answers only on workers.dev", () => {
+    const c = cfg();
+    expect(c.routes).toEqual([{ pattern: "dashboard.justbeingmercedes.com", custom_domain: true }]);
+    expect(c.env.staging.routes).toEqual([]);
+    expect(c.env.staging.vars.PUBLIC_BASE_URL).toBe("https://mercedesstudio-staging.seq-taylor.workers.dev");
+    const d = cfg();
+    delete d.env.staging.routes;
+    expect(compareEnvs(d).problems).toContain("env.staging must set routes: [] (wrangler inherits production's custom domain otherwise)");
+    const e = cfg();
+    e.env.staging.routes = e.routes;
+    expect(compareEnvs(e).problems).toContain("env.staging.routes claims production's custom domain");
+    const f = cfg();
+    delete f.routes;
+    expect(compareEnvs(f).problems).toContain("production must route the custom domain dashboard.justbeingmercedes.com");
   });
 });
 
@@ -122,13 +138,20 @@ describe("the owner's rules are read by code, not only written down", () => {
     expect(row).toContain("Nothing waits on the owner: the monthly refresh does not stop for approval, it emails and the approved brief stays live.");
   });
 
-  it("staging has no named stops left, and no doc tells anyone to make R2 keys for jobs", () => {
+  it("staging's named stops are exactly the one secret only the account owner can mint, and no doc tells anyone to make R2 keys for jobs", () => {
     const ledger = readFileSync(path.join(root, "docs", "PHASE-LEDGER.md"), "utf8");
     const row = ledger.split("\n").find((l) => l.startsWith("| Staging |"));
-    expect(row).toContain("Named stops: none.");
+    expect(row).toContain("Named stops: none."); // Sheila Studio's history, carried over unchanged
     const runbook = readFileSync(path.join(root, "RUNBOOK.md"), "utf8");
     const stops = runbook.split("### Staging: named stops")[1]?.split("\n### ")[0] ?? "";
-    expect(stops).toMatch(/^\s*None\./);
+    // Mercedes Studio (26 Sep 2026): GITHUB_DISPATCH_TOKEN is the one stop, named, with its steps.
+    // When it is set, this section goes back to "None." and this pin follows it — never a vaguer one.
+    const bullets = stops.split("\n").filter((l) => /^- \*\*/.test(l));
+    expect(bullets).toHaveLength(1);
+    expect(bullets[0]).toContain("`GITHUB_DISPATCH_TOKEN`");
+    expect(stops).toContain("Job runner (GitHub)");
+    expect(stops).not.toMatch(/^\s*None\./);
+    expect(runbook).toMatch(/`gh auth token` \(the Mac's own broad GitHub\s+login\), which is not acceptable/);
     for (const doc of ["RUNBOOK.md", "README.md", "CLAUDE.md"]) {
       const text = readFileSync(path.join(root, doc), "utf8");
       expect(text, doc).not.toMatch(/R2_ACCESS_KEY_ID|R2_SECRET_ACCESS_KEY|R2 API token/);

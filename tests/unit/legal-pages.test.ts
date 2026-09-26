@@ -62,7 +62,7 @@ describe("validator legal-pages", () => {
     const cases: [string, (g: ReturnType<typeof good>) => void, RegExp][] = [
       ["route", (g) => (g.legal = g.legal.replace('legal.get("/terms"', 'legal.get("/tos"')), /does not serve GET \/terms/],
       ["mount", (g) => (g.index = g.index.replace('app.route("/", legal);', "")), /does not mount/],
-      ["staging worker-first", (g) => (g.wrangler = g.wrangler.replace(/"\/kit\/\*", "\/privacy", "\/terms"\]\s*\},\s*"d1_databases": \[\s*\{\s*"binding": "DB",\s*"database_name": "sheila-creator-dashboard-db-staging"/, (m) => m.replace('"/kit/*", "/privacy", "/terms"]', '"/kit/*"]'))), /staging: run_worker_first is missing "\/privacy"/],
+      ["staging worker-first", (g) => (g.wrangler = g.wrangler.replace(/"\/kit\/\*", "\/privacy", "\/terms"\]\s*\},\s*"d1_databases": \[\s*\{\s*"binding": "DB",\s*"database_name": "mercedes-creator-dashboard-db-staging"/, (m) => m.replace('"/kit/*", "/privacy", "/terms"]', '"/kit/*"]'))), /staging: run_worker_first is missing "\/privacy"/],
       ["revoke", (g) => (g.legal = g.legal.replaceAll("https://myaccount.google.com/permissions", "https://example.com")), /revoke link/],
       ["sidebar", (g) => (g.shell = g.shell.replace("<LegalLinks />", "")), /1 time\(s\)/],
       ["login", (g) => (g.login = g.login.replace("<LegalLinks />", "")), /Login\.tsx does not show/],

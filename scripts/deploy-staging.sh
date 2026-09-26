@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Staging deploy: the owner's fully real twin of production (wrangler.jsonc env.staging,
-# FAKE_SERVICES=0, its own D1 + R2), for testing with throwaway accounts while Sheila's
+# FAKE_SERVICES=0, its own D1 + R2), for testing with throwaway accounts while Mercedes's
 # production stays untouched. Mirrors deploy-production.sh; never a bare `wrangler deploy`.
 #
 # Unlike production, staging needs no --var overrides: env.staging states FAKE_SERVICES "0"
@@ -11,7 +11,7 @@ cd "$(dirname "$0")/.."
 source scripts/lib/wrangler-retry.sh
 
 export CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-8d147e242033699dd37c6f5a451f48d2}"
-PUBLIC_BASE_URL="https://sheila-creator-dashboard-staging.seq-taylor.workers.dev"
+PUBLIC_BASE_URL="https://mercedesstudio-staging.seq-taylor.workers.dev"
 
 echo "==> twin check"
 node scripts/validate.mjs envs-match
@@ -20,7 +20,7 @@ echo "==> build client"
 npm run build
 
 echo "==> D1 migrations (remote, staging)"
-wr d1 migrations apply sheila-creator-dashboard-db-staging --remote --env staging
+wr d1 migrations apply mercedes-creator-dashboard-db-staging --remote --env staging
 
 echo "==> deploy worker (staging)"
 wr deploy --env staging

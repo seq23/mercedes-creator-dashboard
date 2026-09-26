@@ -397,7 +397,7 @@ if (isMain) {
     // The local D1 can answer "internal error" while a just-started wrangler dev opens it: try again.
     for (let attempt = 1; ; attempt++) {
       try {
-        execFileSync("npx", ["wrangler", "d1", "execute", "sheila-creator-dashboard-db", "--local", "--file", file], { stdio: "pipe", env: { ...process.env, CI: "1" } });
+        execFileSync("npx", ["wrangler", "d1", "execute", "mercedes-creator-dashboard-db", "--local", "--file", file], { stdio: "pipe", env: { ...process.env, CI: "1" } });
         break;
       } catch (e) {
         if (attempt >= 4) throw e;
