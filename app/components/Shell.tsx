@@ -86,13 +86,13 @@ export function Shell() {
   return (
     <div className="shell">
       <aside className="sidebar">
-        <NavLink to="/" className="brand" aria-label="Sheila Studio home">
+        <NavLink to="/" className="brand" aria-label="Mercedes Studio home">
           <span className="brand-mark">
-            <img src="/assets/brand/sheila-logo.png" alt="Sheila Bruce logo" />
+            <img src="/assets/brand/mercedes-logo.png" alt="Mercedes Studio monogram" />
           </span>
           <span>
-            <div className="brand-name">Sheila Studio</div>
-            <div className="brand-sub">a Sheila Bruce affair</div>
+            <div className="brand-name">Mercedes Studio</div>
+            <div className="brand-sub">just being mercedes</div>
           </span>
         </NavLink>
         <nav className="nav" aria-label="Main">

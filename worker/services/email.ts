@@ -24,7 +24,7 @@ export interface EmailResult {
   error: string | null;
 }
 
-const FROM_DEFAULT = "Sheila Studio <onboarding@resend.dev>";
+const FROM_DEFAULT = "Mercedes Studio <onboarding@resend.dev>";
 
 async function sendReal(env: Env, mail: OutgoingEmail): Promise<EmailResult> {
   if (!env.RESEND_API_KEY) return { ok: false, providerId: null, error: "Resend is not connected." };
@@ -70,12 +70,18 @@ export async function sendEmail(env: Env, mail: OutgoingEmail): Promise<EmailRes
 /** Plain, phone-friendly email frame. Every email says exactly what to click. */
 export function emailFrame(title: string, lines: string[], cta?: { label: string; url: string }): { html: string; text: string } {
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const html = `<!doctype html><html><body style="margin:0;background:#f7f1e7;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#211713">
+  // Mercedes Studio palette (app/styles/tokens.css): sand #f3eae0 ground, card #f6f1ea, espresso ink
+  // #24160f (14.8:1), muted #5e4f45 (7.0:1 on card), gold button #deb05a with ink text (8.7:1).
+  // Bodoni Moda / Jost only render where the mail client has them; Georgia / Helvetica stand in.
+  const html = `<!doctype html><html><body style="margin:0;background:#f3eae0;font-family:Jost,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#24160f">
 <div style="max-width:520px;margin:0 auto;padding:32px 20px">
-<h1 style="font-family:'Playfair Display',Georgia,serif;font-size:26px;margin:0 0 16px">${esc(title)}</h1>
+<div style="background:#f6f1ea;border:1px solid #e3d3bd;border-radius:18px;padding:28px 22px">
+<h1 style="font-family:'Bodoni Moda',Didot,'Bodoni 72',Georgia,serif;font-style:italic;font-weight:500;font-size:28px;line-height:1.2;margin:0 0 16px">${esc(title)}</h1>
 ${lines.map((l) => `<p style="font-size:16px;line-height:1.5;margin:0 0 12px">${esc(l)}</p>`).join("")}
-${cta ? `<p style="margin:24px 0"><a href="${esc(cta.url)}" style="display:inline-block;background:#d7b56d;color:#211713;text-decoration:none;font-weight:700;padding:14px 22px;border-radius:999px">${esc(cta.label)}</a></p>` : ""}
-<p style="font-size:13px;color:#6f625b;margin-top:32px">Sheila Studio</p>
+${cta ? `<p style="margin:24px 0 4px"><a href="${esc(cta.url)}" style="display:inline-block;background:#deb05a;color:#24160f;text-decoration:none;font-weight:600;padding:14px 22px;border-radius:999px">${esc(cta.label)}</a></p>` : ""}
+</div>
+<p style="font-family:'Bodoni Moda',Didot,'Bodoni 72',Georgia,serif;font-style:italic;font-size:15px;color:#725420;margin:24px 0 0">Mercedes Studio</p>
+<p style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#5e4f45;margin:4px 0 0">justbeingmercedes.com</p>
 </div></body></html>`;
   const text = [title, "", ...lines, cta ? `\n${cta.label}: ${cta.url}` : ""].join("\n");
   return { html, text };

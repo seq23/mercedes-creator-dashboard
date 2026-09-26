@@ -1,7 +1,7 @@
 /* Hallmark · design-system: docs/design/DESIGN.md · designed-as-app
-   Media kit. The public page (/kit/:slug) is the Letter shape: one centred sheet in A Sheila
-   Bruce Affair's own palette (cream, ivory, espresso, gold, rose script, Playfair + Montserrat,
-   her logo), always light whatever the viewer's device theme, because it is her brand, not the
+   Media kit. The public page (/kit/:slug) is the Letter shape: one centred sheet in Just Being
+   Mercedes' own palette (sand, card white, espresso ink, nameplate gold, rust accent, Bodoni Moda +
+   Jost, her monogram), always light whatever the viewer's device theme, because it is her brand, not the
    app. /kit/:slug/print lays the same sheet out as two Letter pages. The editor is her side of
    it, the Media kit tab on Deals. Tokens only. */
 .kit-page {
