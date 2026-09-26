@@ -17,11 +17,6 @@ const ALLOW = new Set(["migrations/0001_init.sql", "migrations/0018_mercedes_own
 // names in config and the tests that pin them). Remove each entry as its PR lands; an entry
 // that is already clean is a problem, so the list cannot linger.
 const PENDING_SIBLING = new Set([
-  "app/styles/global.css",
-  "app/styles/mediakit.css",
-  "app/styles/tokens.css",
-  "app/components/Shell.tsx",
-  "worker/services/email.ts",
   "tests/unit/staging-env.test.ts",
   "tests/live/helpers.ts",
   "tests/e2e/demo.ts",
