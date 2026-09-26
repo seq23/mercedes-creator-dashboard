@@ -21,6 +21,7 @@ const ALLOW = new Set(["migrations/0001_init.sql", "migrations/0018_mercedes_own
 const SHARED_IDS = [
   "sheila-youtube-api-key",
   "sheila-hunter-api-key",
+  "sheila-resend-api-key", // the Resend account both dashboards send from (RUNBOOK → Secrets, 26 Sep 2026)
   "sheilastudio-staging-p0",
   "seq23/sheila-creator-dashboard",
   "Sheila Studio YouTube public stats",

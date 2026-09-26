@@ -7,12 +7,13 @@
 //   node scripts/staging-login-code.mjs --request  # ask staging for a fresh code first
 //
 // Prints one JSON line: {email_id, last_event, code}. The Resend key comes from RESEND_API_KEY
-// or, on the owner's Mac, from the vault (resend-app-18f24eb6) through its Keychain adapter, never echoed.
+// or, on the owner's Mac, from the vault (sheila-resend-api-key, the Resend account both studios
+// share) through its Keychain adapter, never echoed.
 import { execFileSync } from "node:child_process";
 
 const BASE = "https://mercedesstudio-staging.seq-taylor.workers.dev";
 const OWNER = "sequoia@westpeek.ventures";
-const VAULT_ITEM = "repo-operator-credential-resend-app-18f24eb6";
+const VAULT_ITEM = "repo-operator-credential-sheila-resend-api-key";
 
 // Read through the vault's own Keychain adapter (no-prompt mode): a bare `security` call can raise
 // a macOS permission dialog and hang an unattended agent. The value comes back on the child's
@@ -32,7 +33,7 @@ function resendKey() {
     stdio: ["ignore", "pipe", "ignore"],
     timeout: 20_000,
   }).trim();
-  if (!key) throw new Error("the vault has no Resend key (resend-app-18f24eb6)");
+  if (!key) throw new Error("the vault has no Resend key (sheila-resend-api-key)");
   return key;
 }
 

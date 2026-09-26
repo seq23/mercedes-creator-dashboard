@@ -89,10 +89,22 @@ describe("envs-match validator", () => {
     expect(checkWorkflow("job-x.yml", ok + "          BUCKET: s-files\n", buckets).problems).toEqual(["job-x.yml: a job workflow must not name a bucket; storage goes through the Worker at WORKER_URL"]);
   });
 
-  it("staging logs in at the West Peek Resend owner's address; production stays Mercedes's", () => {
+  it("staging logs in at the operator's own address; production stays Mercedes's", () => {
     const c = cfg();
     expect(c.env.staging.vars.OWNER_EMAIL).toBe("sequoia@westpeek.ventures");
     expect(c.vars.OWNER_EMAIL).toBe("mercasare.social@gmail.com");
+  });
+
+  // 26 Sep 2026: production sent from Resend's shared onboarding@resend.dev, which delivers only
+  // to the key's own account address, so Mercedes never got an email. Both deployments send from
+  // her own domain, justbeingmercedes.com, verified in the Resend account both studios share
+  // (the owner's decision, 26 Sep 2026; RUNBOOK "Secrets").
+  it("both deployments send as Mercedes Studio from studio@justbeingmercedes.com, never Resend's shared test sender", () => {
+    const c = cfg();
+    for (const from of [c.vars.EMAIL_FROM, c.env.staging.vars.EMAIL_FROM]) {
+      expect(from).toBe("Mercedes Studio <studio@justbeingmercedes.com>");
+      expect(String(from)).not.toMatch(/resend\.dev|westpeek/);
+    }
   });
 
   it("production owns the custom domain; staging answers only on workers.dev", () => {

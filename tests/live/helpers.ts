@@ -20,7 +20,7 @@ sys.stdout.write(v or "")
 
 const vaultCache = new Map<string, string>();
 /**
- * A vault credential by its id (e.g. `resend-app-18f24eb6`), read from the Keychain service the
+ * A vault credential by its id (e.g. `sheila-resend-api-key`), read from the Keychain service the
  * vault RECORDS for it (`vault inspect` → KEYCHAIN SERVICE); ids do not all follow one pattern
  * (`openrouter-ai-c4dc6108` lives under `repo-operator-provider-openrouter`).
  */
@@ -49,7 +49,7 @@ export interface ResendEmail {
 
 async function resend<T>(p: string): Promise<T> {
   for (let i = 0; i < 4; i++) {
-    const res = await fetch(`https://api.resend.com${p}`, { headers: { Authorization: `Bearer ${vaultSecret("resend-app-18f24eb6")}` } });
+    const res = await fetch(`https://api.resend.com${p}`, { headers: { Authorization: `Bearer ${vaultSecret("sheila-resend-api-key")}` } });
     if (res.status === 429) {
       await new Promise((r) => setTimeout(r, 1500));
       continue;

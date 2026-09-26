@@ -16,6 +16,13 @@ export interface Env {
    * "code": the email one-time-code login (staging, dev, e2e). Anything else reads as "code".
    */
   AUTH_MODE?: string;
+  /**
+   * The From header of every email ("Mercedes Studio <studio@justbeingmercedes.com>" in
+   * wrangler.jsonc: her own domain, verified in the Resend account RESEND_API_KEY belongs to).
+   * Unset or empty: Resend's shared onboarding@resend.dev, which delivers only to the key's own
+   * account address.
+   */
+  EMAIL_FROM?: string;
 
   // secrets
   SESSION_SECRET: string;
