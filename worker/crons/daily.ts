@@ -35,21 +35,33 @@ export async function dailyMaintenance(env: Env): Promise<void> {
 }
 
 async function supplyMonitor(env: Env) {
+  const { low } = await runwayNumbers(env);
+  if (!low) return;
+  await runwayEmail(env, false);
+}
+
+async function runwayNumbers(env: Env) {
   const s = await readSettings(env);
   const approved = (await env.DB.prepare("SELECT COUNT(*) AS n FROM clips WHERE status = 'approved' AND id NOT IN (SELECT clip_id FROM posts WHERE status IN ('posted','in_buffer','planned'))").first<{ n: number }>())?.n ?? 0;
   const low = runwayLow(approved, s.weekly_caps, s.runway_threshold_weeks);
   const weeks = runwayWeeks(approved, weeklyNeed(s.weekly_caps));
   await setHealth(env.DB, "Runway", low ? "yellow" : "green", `${Number.isFinite(weeks) ? weeks : "∞"} weeks of approved clips`, low ? "dump-new-footage" : null);
-  if (!low) return;
+  return { s, approved, low, weeks };
+}
 
-  // Repeat every 3 days until a dump arrives; a dump newer than the last email resets it.
-  const last = await env.DB.prepare("SELECT sent_at FROM emails_sent WHERE kind = 'time_to_dump' ORDER BY sent_at DESC LIMIT 1").first<{ sent_at: string }>();
-  const lastDump = await env.DB.prepare("SELECT created_at FROM dumps WHERE status != 'uploading' ORDER BY created_at DESC LIMIT 1").first<{ created_at: string }>();
-  if (last && new Date(last.sent_at).getTime() > Date.now() - TIME_TO_DUMP_REPEAT_DAYS * 86400_000) return;
-  if (last && lastDump && lastDump.created_at > last.sent_at) {
-    // she dumped since the last nag: only nag again if still low after cutting
-    const cutting = await env.DB.prepare("SELECT COUNT(*) AS n FROM dumps WHERE status IN ('queued','cutting','ready')").first<{ n: number }>();
-    if ((cutting?.n ?? 0) > 0) return;
+/**
+ * The "Time to dump" email with today's real numbers. The daily lane sends it while the runway
+ * is low, at most every TIME_TO_DUMP_REPEAT_DAYS; `now` (Settings → "Send me the runway email
+ * now", `POST /api/settings/email/runway-now`) sends it once regardless, which is how a change
+ * to the sender or the Resend key is proven end to end on production, where there is no login
+ * and so no login-code email (RUNBOOK "Secrets"). Returns what was sent: the recipients and
+ * Resend's id (null when Resend refused; the Email light then says why).
+ */
+export async function runwayEmail(env: Env, now: boolean): Promise<{ sent: boolean; to: string[]; providerId: string | null }> {
+  const { s, approved, weeks } = await runwayNumbers(env);
+  if (!now) {
+    const skip = await runwayEmailRecentlySent(env);
+    if (skip) return { sent: false, to: s.notify_emails, providerId: null };
   }
   const brief = await env.DB.prepare("SELECT body FROM research_briefs WHERE status = 'approved' ORDER BY version DESC LIMIT 1").first<{ body: string }>();
   let shots: string[] = [];
@@ -65,7 +77,23 @@ async function supplyMonitor(env: Env) {
     ...shots.map((t, i) => `${i + 1}. ${t}`),
   ];
   const { html, text } = emailFrame("Time to dump some footage", lines, { label: "Open Dump", url: `${env.PUBLIC_BASE_URL}/dump` });
-  await sendEmail(env, { kind: "time_to_dump", to: s.notify_emails, subject: "Time to dump: under 2 weeks of clips left", html, text });
+  const r = await sendEmail(env, { kind: "time_to_dump", to: s.notify_emails, subject: "Time to dump: under 2 weeks of clips left", html, text });
+  return { sent: r.ok, to: s.notify_emails, providerId: r.providerId };
+}
+
+/** True when the daily lane should hold the nag: one went out within the repeat window, or she dumped since and clips are still cutting. */
+async function runwayEmailRecentlySent(env: Env): Promise<boolean> {
+
+  // Repeat every 3 days until a dump arrives; a dump newer than the last email resets it.
+  const last = await env.DB.prepare("SELECT sent_at FROM emails_sent WHERE kind = 'time_to_dump' ORDER BY sent_at DESC LIMIT 1").first<{ sent_at: string }>();
+  const lastDump = await env.DB.prepare("SELECT created_at FROM dumps WHERE status != 'uploading' ORDER BY created_at DESC LIMIT 1").first<{ created_at: string }>();
+  if (last && new Date(last.sent_at).getTime() > Date.now() - TIME_TO_DUMP_REPEAT_DAYS * 86400_000) return true;
+  if (last && lastDump && lastDump.created_at > last.sent_at) {
+    // she dumped since the last nag: only nag again if still low after cutting
+    const cutting = await env.DB.prepare("SELECT COUNT(*) AS n FROM dumps WHERE status IN ('queued','cutting','ready')").first<{ n: number }>();
+    if ((cutting?.n ?? 0) > 0) return true;
+  }
+  return false;
 }
 
 async function retention(env: Env) {

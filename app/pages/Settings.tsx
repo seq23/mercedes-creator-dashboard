@@ -217,7 +217,23 @@ function HealthSection({ health, onChange }: { health: HealthItem[] | null; onCh
   const toast = useToast();
   const { refreshCounts } = useApp();
   const [checking, setChecking] = useState(false);
+  const [sending, setSending] = useState(false);
   const rows = foldHealth(health);
+
+  // The one email she can send herself: the real runway ("Time to dump") email with today's
+  // numbers. Production has no login, so this is how "is email working?" gets a real answer.
+  async function sendRunwayEmail() {
+    setSending(true);
+    try {
+      const r = await post<{ ok: true; to: string[] }>("/api/settings/email/runway-now");
+      toast.ok(`Sent to ${r.to.join(", ")}.`);
+      onChange(await get<HealthItem[]>("/api/settings/health"));
+    } catch (e) {
+      toast.bad(e);
+    } finally {
+      setSending(false);
+    }
+  }
   const bad = rows.filter((r) => r.light === "red").length;
 
   async function recheck() {
@@ -256,6 +272,11 @@ function HealthSection({ health, onChange }: { health: HealthItem[] | null; onCh
                     <span className={`light-word ${h.light}`} aria-hidden="true">{LIGHT_WORD[h.light]}</span> · {h.note} · checked {ago(h.checked_at)}
                   </div>
                 </div>
+                {h.name === "Email (Resend)" ? (
+                  <button className="btn quiet small" onClick={sendRunwayEmail} disabled={sending} data-action="runway-email">
+                    {sending ? "Sending…" : "Send me the runway email"}
+                  </button>
+                ) : null}
                 {h.fix_guide && h.light !== "green" ? (
                   <Link className="btn quiet small" to={`/help/${h.fix_guide}`}>
                     How to fix

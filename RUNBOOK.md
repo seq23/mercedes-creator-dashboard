@@ -22,17 +22,28 @@ Worker (`wrangler secret put NAME`): `SESSION_SECRET`, `SECRETS_KEY` (32 bytes b
 `JOB_SHARED_SECRET`, `GITHUB_DISPATCH_TOKEN`, `RESEND_API_KEY`.
 GitHub repo secrets for `promote.yml` (production from a green e2e): `CLOUDFLARE_API_TOKEN` = vault `cloudflare-claude-deploy` (Keychain → `gh secret set`, never on screen; if a promote run fails on auth, re-set it from the vault) and `CLOUDFLARE_ACCOUNT_ID` = `8d147e242033699dd37c6f5a451f48d2`.
 
-RESEND_API_KEY (production and staging, set 26 Sep 2026) is the West Peek Resend key (vault
-`resend-app-18f24eb6`). That account has verified domains (`westpeek.ventures`,
-`joinwestpeek.com`), but the Worker sends from `onboarding@resend.dev` (`FROM_DEFAULT` in
-`worker/services/email.ts`), and Resend's test sender delivers only to the account owner's own
-address (sequoia@westpeek.ventures). So: staging email works as is (its OWNER_EMAIL is that
-address). **Production email reaches mercasare.social@gmail.com only once ONE of these is done**
-(the `Email (Resend)` light says which state it is in): (a) `FROM_DEFAULT` moves to a verified West
-Peek domain, e.g. `Mercedes Studio <studio@westpeek.ventures>`, one line, then a deploy; or (b)
-Mercedes's own Resend account key replaces it (`npx wrangler secret put RESEND_API_KEY`, value on
-stdin) — her key delivers to her own address with no domain. Production has no login, so no
-login-code email is ever needed; only the runway, recap and brief emails wait on this.
+RESEND_API_KEY (production and staging, set 26 Sep 2026) is the SAME Resend key the upstream
+dashboard uses (vault `sheila-resend-api-key`; one Resend account for both dashboards, the
+owner's decision, 26 Sep 2026). `justbeingmercedes.com` is verified in that account (Resend domain
+`adf659a0-2d77-43e1-9cdf-a5499db7883f`, region us-east-1; its four DNS records, DKIM TXT
+`resend._domainkey`, MX + SPF TXT on `send`, CNAME `rsend`, sit DNS-only on the Cloudflare zone
+`781c117e76fb4bed2167cd251afdd015`, written with vault `cloudflare-claude-deploy`, which has DNS
+write there). Every email is sent from the var `EMAIL_FROM` in `wrangler.jsonc` (production and
+staging: `Mercedes Studio <studio@justbeingmercedes.com>`), so mail reaches any address, Mercedes's
+included, from her own domain. Resend's shared test sender `onboarding@resend.dev` (`FROM_DEFAULT`
+in `worker/services/email.ts`, used only when the var is unset or blank) delivers only to the
+key's own account address; that is why nothing reached Mercedes before 26 Sep 2026. Resend refuses
+a From on a domain the key's account has not verified, and the `Email (Resend)` light says so.
+Prove it after any change to the sender or the key: one real send through the app, then read
+Resend's record. Production has no login (open mode), so no login-code email exists there; the
+one on-demand send is the real runway email, Settings → Connections + health → Email (Resend) →
+"Send me the runway email", or `curl -s -X POST
+https://dashboard.justbeingmercedes.com/api/settings/email/runway-now` (no cookie in open mode;
+it answers `{ok, to, provider_id}` and writes the `emails_sent` row). Staging's is the login code
+(`node scripts/staging-login-code.mjs --request`). Then `GET https://api.resend.com/emails/<provider_id>`
+(key from the vault as in "Staging: reading a login code" below) must say `last_event: delivered`
+and `from: Mercedes Studio <studio@justbeingmercedes.com>`. Local dev and e2e never send
+(FAKE_SERVICES=1). The runway, recap, brief and clips-ready emails are what this carries.
 
 `GITHUB_DISPATCH_TOKEN` (production and staging) only needs to fire `repository_dispatch` on this
 repo (Contents: Read and write). **Not set yet (26 Sep 2026): a NAMED STOP that only the account
@@ -73,7 +84,8 @@ Per-user keys (Buffer, OpenRouter, Firecrawl, Hunter, ElevenLabs) are pasted on 
 Connections and stored AES-GCM encrypted in D1 `connections.secret_enc`.
 
 **Pre-wired connections** (OpenRouter = Sequoia's, vault `openrouter-ai-c4dc6108`; Firecrawl =
-vault `seq-firecrawl-api-key`; Hunter = vault `sheila-hunter-api-key`, shared with the upstream dashboard):
+vault `seq-firecrawl-api-key`; Hunter = vault `sheila-hunter-api-key`, the same Hunter account as the
+upstream dashboard, like the Resend key, the owner's decision 26 Sep 2026):
 never raw SQL of a plaintext key. The route `POST /api/connections/:service/key` checks the key
 live and stores it encrypted with that Worker's `SECRETS_KEY`, so pre-wiring is one authenticated
 call per service against the deployed Worker. Staging (code login; the cookie comes from the
@@ -441,7 +453,7 @@ Mercedes's production is never touched by it.
 | Config | `wrangler.jsonc` `env.staging`; `npm run validate:envs` fails on any drift from production except name, routes (production routes `dashboard.justbeingmercedes.com`; staging must say `routes: []`, since wrangler inherits `routes` into an env and staging would otherwise take the domain over), D1/R2 and the vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE (staging keeps the email-code login) |
 | D1 | `mercedes-creator-dashboard-db-staging` (`19ea68a7-c501-4a4b-af6a-f1817ed824d2`) |
 | R2 | `mercedes-creator-dashboard-files-staging` |
-| Login | `sequoia@westpeek.ventures` (OWNER_EMAIL). The West Peek Resend key delivers only to its account owner's address, and she reads that mailbox. |
+| Login | `sequoia@westpeek.ventures` (OWNER_EMAIL): the operator's own address, she reads that mailbox. |
 | Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows only after the nightly `e2e` run is green on that sha: `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote mercedes-creator-dashboard` is the by-hand path and reads the same record. |
 
 ```bash
@@ -450,8 +462,8 @@ npx wrangler tail mercedesstudio-staging --format pretty
 ```
 
 Secrets (`wrangler secret put <NAME> --env staging`, value on stdin): `SESSION_SECRET`,
-`SECRETS_KEY`, `JOB_SHARED_SECRET` (fresh, staging-only), `RESEND_API_KEY` (the West Peek Resend
-key, vault `resend-app-18f24eb6`), `GITHUB_DISPATCH_TOKEN` (see Secrets above). GitHub secret
+`SECRETS_KEY`, `JOB_SHARED_SECRET` (fresh, staging-only), `RESEND_API_KEY` (the Resend key both
+dashboards share, vault `sheila-resend-api-key`), `GITHUB_DISPATCH_TOKEN` (see Secrets above). GitHub secret
 `JOB_SHARED_SECRET_STAGING` holds the same job secret; every `job-*.yml` picks it when the
 dispatch payload says `env: staging`, and the job reaches files only through the staging
 Worker (`worker_url` in the payload), so it can only ever touch the staging bucket.
@@ -462,19 +474,19 @@ Worker (`worker_url` in the payload), so it can only ever touch the staging buck
 | --- | --- |
 | Worker, D1, R2, crons | Real, all migrations applied (`mercedesstudio-staging`, D1 `19ea68a7-c501-4a4b-af6a-f1817ed824d2`, R2 `mercedes-creator-dashboard-files-staging`) |
 | Buffer | Not connected yet. The upstream dashboard's staging used the owner's test Buffer account (seq.taylor@gmail.com, free plan, 3 of 3 channels): TikTok `@iamcindymercer`, Instagram `seq23`, YouTube "Sequoia Taylor". All three are her **test channels** (her word, 25 Sep 2026); the Phase 0 TEST POST goes to all three. Key: vault `buffer-access-token`, created 25 Sep 2026, **expires 25 Sep 2027** (Buffer → Settings → API; the free plan allows ONE key per account, so this key is shared with `authority-backlink-network`'s `BUFFER_ACCESS_TOKEN` secret; renewing it means Regenerate there, then `vault set buffer-access-token --from-file`, `gh secret set BUFFER_ACCESS_TOKEN -R seq23/authority-backlink-network`, and paste on staging's Connect). The account's 3,000 requests / 30 days are shared too; the dashboard's own idle spend is 20 a day (`tests/unit/buffer-budget.test.ts`). |
-| Email (Resend) | Real: the West Peek Resend key sends from `onboarding@resend.dev` to its own account owner, `sequoia@westpeek.ventures`, which is staging's OWNER_EMAIL. Login codes and every staging email land there. Production's OWNER_EMAIL and sender are unchanged. |
+| Email (Resend) | Real: the shared Resend key (`sheila-resend-api-key`) sends from `EMAIL_FROM` (`Mercedes Studio <studio@justbeingmercedes.com>`, verified in that account 26 Sep 2026) to `sequoia@westpeek.ventures`, staging's OWNER_EMAIL. Login codes and every staging email land there. Production uses the same key and sender with its own OWNER_EMAIL (mercasare.social@gmail.com); proven 26 Sep 2026 with one delivered runway email. |
 | Jobs (cut, extract, research, metrics, brand finder, voice, full video, YouTube upload) | Wired but WAITING on `GITHUB_DISPATCH_TOKEN` (see Secrets: a named stop). Once set: dispatch with it; the job fetches its spec and files from the staging Worker and writes its outputs back through it (no storage keys anywhere). |
 | YouTube stats | Real, no sign-in: `YOUTUBE_API_KEY` set (the same Google API key as the upstream dashboard); channel from Buffer's serviceId (see "Stats: no-login"). The optional Google sign-in needs `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (set separately, same Google project as the upstream dashboard). |
 | Instagram stats | The form path (public profile login-walled from the Worker); a Meta app is not set up (optional) |
-| OpenRouter, Firecrawl, Hunter | Pre-wired through `/api/connections/:service/key` (Secrets → "Pre-wired connections"): OpenRouter = Sequoia's key, Firecrawl = `seq-firecrawl-api-key`, Hunter = `sheila-hunter-api-key`. Production gets the same three after its first deploy. |
+| OpenRouter, Firecrawl, Hunter | Pre-wired through `/api/connections/:service/key` (Secrets → "Pre-wired connections"): OpenRouter = Sequoia's key, Firecrawl = `seq-firecrawl-api-key`, Hunter = `sheila-hunter-api-key` (the same Hunter account as the upstream dashboard, the owner's decision 26 Sep 2026; its credits are shared). Production has the same three (Hunter connected 26 Sep 2026). |
 
 ### Staging: named stops
 
 - **`GITHUB_DISPATCH_TOKEN`** (staging and production): not set; only the GitHub account owner can
   mint a fine-grained token for `seq23/mercedes-creator-dashboard` (Contents: Read and write). Until
   then the `Job runner (GitHub)` light is red with its fix guide and every job waits by name. Steps:
-  Secrets → `GITHUB_DISPATCH_TOKEN` above. Everything else staging needs is set: email goes to the
-  Resend owner's address, and jobs need no storage keys.
+  Secrets → `GITHUB_DISPATCH_TOKEN` above. Everything else staging needs is set: email goes out
+  from `studio@justbeingmercedes.com`, and jobs need no storage keys.
 
 ### Staging: reading a login code without a mailbox
 
@@ -497,7 +509,7 @@ npx wrangler d1 execute mercedes-creator-dashboard-db-staging --remote --env sta
 # 3. the email itself; its "text" says "Your login code is NNNNNN." and "last_event" is sent/delivered
 #    (key from the vault through its Keychain adapter; a bare `security` read can pop a macOS
 #    permission dialog and hang an unattended agent)
-RESEND_API_KEY="$(cd ~/repo-tools/agent && python3 -c 'from repo_operator.vault import keychain as kc; print(kc.get().get("repo-operator-credential-resend-app-18f24eb6", kc.owner_account()) or "", end="")')" \
+RESEND_API_KEY="$(cd ~/repo-tools/agent && python3 -c 'from repo_operator.vault import keychain as kc; print(kc.get().get("repo-operator-credential-sheila-resend-api-key", kc.owner_account()) or "", end="")')" \
   sh -c 'curl -s https://api.resend.com/emails/<provider_id> -H "Authorization: Bearer $RESEND_API_KEY"'
 # 4. trade the code for a session cookie
 curl -s -c cookies.txt -X POST https://mercedesstudio-staging.seq-taylor.workers.dev/api/auth/verify \

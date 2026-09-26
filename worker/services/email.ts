@@ -24,14 +24,25 @@ export interface EmailResult {
   error: string | null;
 }
 
-const FROM_DEFAULT = "Mercedes Studio <onboarding@resend.dev>";
+/**
+ * Resend's shared test sender: it delivers only to the RESEND_API_KEY account's own address, so it
+ * is right only for a key whose account owns no verified domain (a personal Resend key). Every
+ * deployment sets EMAIL_FROM (wrangler.jsonc) to an address on a domain that key's account has
+ * verified: studio@justbeingmercedes.com, Mercedes's own domain, verified in the Resend account
+ * both studios share. Found 26 Sep 2026: production sent from here, so no email ever reached
+ * Mercedes.
+ */
+export const FROM_DEFAULT = "Mercedes Studio <onboarding@resend.dev>";
+
+/** The From header every real send uses: EMAIL_FROM when set (and not blank), else FROM_DEFAULT. */
+export const emailFrom = (env: Pick<Env, "EMAIL_FROM">): string => env.EMAIL_FROM?.trim() || FROM_DEFAULT;
 
 async function sendReal(env: Env, mail: OutgoingEmail): Promise<EmailResult> {
   if (!env.RESEND_API_KEY) return { ok: false, providerId: null, error: "Resend is not connected." };
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: FROM_DEFAULT, to: mail.to, subject: mail.subject, html: mail.html, text: mail.text }),
+    body: JSON.stringify({ from: emailFrom(env), to: mail.to, subject: mail.subject, html: mail.html, text: mail.text }),
   });
   if (!res.ok) return { ok: false, providerId: null, error: resendRefusal(res.status, await res.text().catch(() => "")) };
   const data = (await res.json()) as { id?: string };

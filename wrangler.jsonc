@@ -54,6 +54,15 @@
     "PUBLIC_BASE_URL": "http://localhost:8787",
     "GITHUB_REPO": "seq23/mercedes-creator-dashboard",
     "AUDIENCE_TIMEZONE": "America/New_York",
+    // The address every email is sent from: Mercedes's own domain. RESEND_API_KEY is the Resend
+    // key the upstream dashboard uses too (vault sheila-resend-api-key, one account for both,
+    // the owner's decision 26 Sep 2026), and justbeingmercedes.com is verified in that account
+    // (Resend domain adf659a0-2d77-43e1-9cdf-a5499db7883f; DKIM/SPF records on the Cloudflare
+    // zone). Resend's shared test sender (onboarding@resend.dev, the code default in
+    // worker/services/email.ts) delivers only to the key's own account address, so with it nothing
+    // ever reached Mercedes. Unset → the code default, right only for a key whose account has no
+    // verified domain. Resend refuses a From on a domain the key's account has not verified.
+    "EMAIL_FROM": "Mercedes Studio <studio@justbeingmercedes.com>",
     // Which deployment this is: "production" here, "staging" in env.staging, "dev" in .dev.vars.
     // /healthz reports it and every job dispatch carries it, so a job reaches the right
     // Worker, bucket and shared secret.
@@ -99,12 +108,13 @@
       },
       "vars": {
         "APP_NAME": "Mercedes Studio",
-        // The West Peek Resend key delivers only to its account owner's address, so staging logs in there.
+        // Staging is the operator's twin, so its login codes go to her West Peek address.
         "OWNER_EMAIL": "sequoia@westpeek.ventures",
         "FAKE_SERVICES": "0",
         "PUBLIC_BASE_URL": "https://mercedesstudio-staging.seq-taylor.workers.dev",
         "GITHUB_REPO": "seq23/mercedes-creator-dashboard",
         "AUDIENCE_TIMEZONE": "America/New_York",
+        "EMAIL_FROM": "Mercedes Studio <studio@justbeingmercedes.com>",
         "ENV_NAME": "staging",
         // Staging keeps the email-code login (the operator's instruction, 26 Sep 2026).
         "AUTH_MODE": "code"

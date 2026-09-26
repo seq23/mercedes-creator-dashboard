@@ -69,6 +69,20 @@ settings.patch("/", requireOwner, async (c) => {
 
 settings.get("/health", async (c) => c.json(await listHealth(c.env.DB)));
 
+/**
+ * "Send me the runway email now": the real "Time to dump" email with today's numbers, to the
+ * notify addresses, regardless of the 3-day repeat. It is the one on-demand send production has
+ * (open mode: no login, so no login-code email), so it proves the sender and key end to end;
+ * RUNBOOK "Secrets" reads the Resend record back by the provider id this returns.
+ */
+settings.post("/email/runway-now", requireOwner, async (c) => {
+  const { runwayEmail } = await import("../crons/daily");
+  const r = await runwayEmail(c.env, true);
+  await recordEvent(c.env.DB, "email.runway_now", r.providerId, { sent: r.sent, recipients: r.to.length }, c.get("user").email);
+  if (!r.sent) return fail(c, 502, "Resend did not accept the email; the Email light says why.", "connect-resend");
+  return c.json({ ok: true, to: r.to, provider_id: r.providerId });
+});
+
 /** "Check everything now": re-check Buffer and every pasted key, rewrite the lights, return them. */
 settings.post("/health/recheck", async (c) => {
   const { recheckEverything } = await import("../crons/buffer-sync");
