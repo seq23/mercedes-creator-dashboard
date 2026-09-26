@@ -22,8 +22,6 @@ const PENDING_SIBLING = new Set([
   "app/styles/tokens.css",
   "app/components/Shell.tsx",
   "worker/services/email.ts",
-  "tests/unit/auth-mode.test.ts",
-  "tests/unit/legal-pages.test.ts",
   "tests/unit/staging-env.test.ts",
   "tests/live/helpers.ts",
   "tests/e2e/demo.ts",
