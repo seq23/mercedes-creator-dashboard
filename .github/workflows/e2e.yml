@@ -25,7 +25,9 @@ concurrency:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # ~15 min of tests on a normal run (161 tests, 1 worker; a CI retry adds minutes): 60 min is the
+    # ~4x fault detector, never a budget. 20 min cancelled a green run at its last test (26 Sep 2026).
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
