@@ -1,7 +1,7 @@
 # Production promote: on a green nightly `e2e` run of main, with nobody in the loop.
 #
 # BUILD FIRST, TEST IN BATCHES (26 Sep 2026). `land <pr>` merges on the fast check and deploys
-# STAGING; production waited for a person to run `land --promote sheila-creator-dashboard` after
+# STAGING; production waited for a person to run `land --promote mercedes-creator-dashboard` after
 # the 08:00 UTC `e2e` run went green. That was a wait on the owner. This workflow fires on that
 # run's completion and, ONLY when it succeeded on main, deploys production from exactly the sha it
 # passed on — never main's head, which may have moved since. A red nightly deploys nothing and is
@@ -11,7 +11,7 @@
 # with FAKE_SERVICES=0, healthz + login-mode smoke): never a bare `wrangler deploy`. Then it records
 # a GitHub Deployment (environment `production`), the same record `land --promote` writes from a
 # laptop and reads to know what production runs, so the two paths agree: a sha production already
-# runs is skipped here, not deployed twice. `land --promote sheila-creator-dashboard [--run-e2e]`
+# runs is skipped here, not deployed twice. `land --promote mercedes-creator-dashboard [--run-e2e]`
 # remains the by-hand path.
 #
 # workflow_dispatch takes a sha (default main's head) and is REFUSED unless a green e2e run exists
@@ -65,7 +65,7 @@ jobs:
           HAS_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
         run: |
           if [ "$HAS_TOKEN" != "true" ] || [ "$HAS_ACCOUNT" != "true" ]; then
-            echo "::error::NAMED STOP: repo secrets CLOUDFLARE_API_TOKEN (vault cloudflare-claude-deploy) and CLOUDFLARE_ACCOUNT_ID must both be set. Until then: land --promote sheila-creator-dashboard."
+            echo "::error::NAMED STOP: repo secrets CLOUDFLARE_API_TOKEN (vault cloudflare-claude-deploy) and CLOUDFLARE_ACCOUNT_ID must both be set. Until then: land --promote mercedes-creator-dashboard."
             exit 1
           fi
 
@@ -87,7 +87,7 @@ jobs:
               sha="$(git rev-parse "${INPUT_SHA:-origin/main}")"
               green="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/e2e.yml/runs?head_sha=$sha&status=success&per_page=1" --jq '.workflow_runs | length')"
               if [ "$green" != 1 ]; then
-                echo "::error::REFUSED: no successful e2e run on $sha. Run it first: gh workflow run e2e.yml --ref main (or land --promote sheila-creator-dashboard --run-e2e)"
+                echo "::error::REFUSED: no successful e2e run on $sha. Run it first: gh workflow run e2e.yml --ref main (or land --promote mercedes-creator-dashboard --run-e2e)"
                 exit 1
               fi ;;
           esac
@@ -127,7 +127,7 @@ jobs:
         run: |
           body=""
           for i in 1 2 3 4 5 6 7 8; do
-            body="$(curl -s https://sheilastudio.seq-taylor.workers.dev/healthz || true)"
+            body="$(curl -s https://dashboard.justbeingmercedes.com/healthz || true)"
             case "$body" in *'"ok":true'*) break ;; esac
             sleep 5
           done
@@ -146,6 +146,6 @@ jobs:
           set -euo pipefail
           id="$(printf '{"ref":"%s","environment":"production","auto_merge":false,"required_contexts":[],"description":"%s from %s","production_environment":true}' "$SHA" "$NOTE" "${SHA:0:7}" \
                  | gh api -X POST "repos/${GITHUB_REPOSITORY}/deployments" --input - --jq .id)"
-          printf '{"state":"success","environment":"production","description":"%s","environment_url":"https://sheilastudio.seq-taylor.workers.dev"}' "$NOTE" \
+          printf '{"state":"success","environment":"production","description":"%s","environment_url":"https://dashboard.justbeingmercedes.com"}' "$NOTE" \
                  | gh api -X POST "repos/${GITHUB_REPOSITORY}/deployments/$id/statuses" --input - >/dev/null
           echo "PROMOTED $SHA to production ($NOTE); GitHub deployment $id." | tee -a "$GITHUB_STEP_SUMMARY"

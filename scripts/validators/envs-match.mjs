@@ -1,6 +1,9 @@
 // Staging must be production's twin. Parses wrangler.jsonc and fails if env.staging differs from
 // the top-level (production) config in anything except:
 //   * name,
+//   * routes: production routes the custom domain (PRODUCTION_DOMAIN); staging must say
+//     `routes: []` because wrangler inherits `routes` into an env, and a staging deploy that
+//     inherited it would take the production domain over,
 //   * D1 database_name / database_id and R2 bucket_name,
 //   * the vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE.
 // AUTH_MODE is pinned per deployment: production "open" (no login, the owner's choice, 26 Sep
@@ -59,10 +62,13 @@ const ALLOWED_VAR_DIFFS = new Set(["OWNER_EMAIL", "PUBLIC_BASE_URL", "ENV_NAME",
 // The login mode each deployment must ship. Switching production back to the login is
 // "code" here and in wrangler.jsonc, then a deploy.
 export const REQUIRED_AUTH_MODE = { production: "open", staging: "code" };
+// The custom domain production answers on (wrangler.jsonc routes, custom_domain: true). Staging
+// never routes it: it answers only on its workers.dev URL.
+export const PRODUCTION_DOMAIN = "dashboard.justbeingmercedes.com";
 // Keys wrangler never inherits into an env: staging must restate each one.
 const NON_INHERITED = ["vars", "d1_databases", "r2_buckets"];
 // Keys that differ by design, compared field by field below.
-const SPECIAL = new Set(["name", "vars", "d1_databases", "r2_buckets", "env"]);
+const SPECIAL = new Set(["name", "routes", "vars", "d1_databases", "r2_buckets", "env"]);
 // Deployment-level keys that stay top-level only (one account, one entry point).
 const TOP_ONLY = new Set(["$schema", "main", "compatibility_date", "compatibility_flags", "account_id", "workers_dev", "observability"]);
 
@@ -77,6 +83,14 @@ export function compareEnvs(cfg) {
 
   if (!stg.name || stg.name === prod.name) problems.push("env.staging.name must be its own Worker name");
   items++;
+  // routes: production owns the custom domain; staging must restate routes as [] (inherited otherwise).
+  const prodRoutes = Array.isArray(prod.routes) ? prod.routes : [];
+  if (!prodRoutes.some((r) => r?.pattern === PRODUCTION_DOMAIN && r?.custom_domain === true))
+    problems.push(`production must route the custom domain ${PRODUCTION_DOMAIN}`);
+  if (!Array.isArray(stg.routes)) problems.push("env.staging must set routes: [] (wrangler inherits production's custom domain otherwise)");
+  else if (stg.routes.length > 0) problems.push("env.staging.routes claims production's custom domain");
+  if (stg.vars?.PUBLIC_BASE_URL && stg.vars.PUBLIC_BASE_URL.includes(PRODUCTION_DOMAIN)) problems.push("env.staging PUBLIC_BASE_URL is production's domain");
+  items += 3;
   if (prod.vars?.ENV_NAME !== "production") problems.push(`top-level vars.ENV_NAME must be "production" (is ${JSON.stringify(prod.vars?.ENV_NAME)})`);
   if (stg.vars?.ENV_NAME !== "staging") problems.push(`env.staging vars.ENV_NAME must be "staging" (is ${JSON.stringify(stg.vars?.ENV_NAME)})`);
   if (stg.vars?.FAKE_SERVICES !== "0") problems.push("env.staging must be fully real: vars.FAKE_SERVICES \"0\"");

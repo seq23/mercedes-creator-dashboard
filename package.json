@@ -1,5 +1,5 @@
 {
-  "name": "sheila-creator-dashboard",
+  "name": "mercedes-creator-dashboard",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,9 +18,9 @@
     "e2e": "playwright test",
     "e2e:live": "playwright test -c playwright.live.config.ts",
     "e2e:open": "playwright test -c playwright.open.config.ts",
-    "db:migrate:local": "wrangler d1 migrations apply sheila-creator-dashboard-db --local",
-    "db:migrate:production": "wrangler d1 migrations apply sheila-creator-dashboard-db --remote",
-    "db:migrate:staging": "wrangler d1 migrations apply sheila-creator-dashboard-db-staging --remote --env staging",
+    "db:migrate:local": "wrangler d1 migrations apply mercedes-creator-dashboard-db --local",
+    "db:migrate:production": "wrangler d1 migrations apply mercedes-creator-dashboard-db --remote",
+    "db:migrate:staging": "wrangler d1 migrations apply mercedes-creator-dashboard-db-staging --remote --env staging",
     "deploy:production": "bash scripts/deploy-production.sh",
     "deploy:staging": "bash scripts/deploy-staging.sh",
     "help:screenshots": "HELP_SHOTS=1 playwright test tests/e2e/help-screenshots.spec.ts"

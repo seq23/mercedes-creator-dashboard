@@ -1,15 +1,15 @@
-# Runbook — sheila-creator-dashboard
+# Runbook — mercedes-creator-dashboard (Mercedes Studio)
 
 ## Where things are
 
 | Thing | Where |
 | --- | --- |
-| Production | https://sheilastudio.seq-taylor.workers.dev, Worker `sheilastudio` (renamed from `sheila-creator-dashboard` 26 Sep 2026; Cloudflare account SL Taylor, `8d147e242033699dd37c6f5a451f48d2`) |
+| Production | https://dashboard.justbeingmercedes.com (custom domain route in `wrangler.jsonc`, zone `justbeingmercedes.com`; also https://mercedesstudio.seq-taylor.workers.dev), Worker `mercedesstudio` (Cloudflare account SL Taylor, `8d147e242033699dd37c6f5a451f48d2`) |
 | Login | Production: none, `AUTH_MODE` "open" (every visitor is the owner, OWNER_EMAIL). Staging, local, e2e: the email code (`AUTH_MODE` "code") |
-| D1 | `sheila-creator-dashboard-db` (id in `wrangler.jsonc`) |
-| R2 | `sheila-creator-dashboard-files` |
-| Repo | https://github.com/seq23/sheila-creator-dashboard (public) |
-| Logs | Cloudflare dashboard → Workers → sheilastudio → Logs (observability on) |
+| D1 | `mercedes-creator-dashboard-db` (id in `wrangler.jsonc`) |
+| R2 | `mercedes-creator-dashboard-files` |
+| Repo | https://github.com/seq23/mercedes-creator-dashboard (public) |
+| Logs | Cloudflare dashboard → Workers → mercedesstudio → Logs (observability on) |
 
 **No login on production.** With open mode anyone who has the URL is the owner; that is by her choice; switching back is `AUTH_MODE: "code"` and a deploy. (`REQUIRED_AUTH_MODE` in
 `scripts/validators/envs-match.mjs` pins each deployment's mode, so change it there too; the
@@ -22,21 +22,36 @@ Worker (`wrangler secret put NAME`): `SESSION_SECRET`, `SECRETS_KEY` (32 bytes b
 `JOB_SHARED_SECRET`, `GITHUB_DISPATCH_TOKEN`, `RESEND_API_KEY`.
 GitHub repo secrets for `promote.yml` (production from a green e2e): `CLOUDFLARE_API_TOKEN` = vault `cloudflare-claude-deploy` (Keychain → `gh secret set`, never on screen; if a promote run fails on auth, re-set it from the vault) and `CLOUDFLARE_ACCOUNT_ID` = `8d147e242033699dd37c6f5a451f48d2`.
 
-RESEND_API_KEY on production is Sheila's own Resend account key (vault `sheila-resend-api-key`),
-never a West Peek key: without a verified domain Resend delivers only to the account owner's
-address, so the West Peek key cannot reach asheilabruceaffair@gmail.com. Staging uses the West
-Peek key (`resend-app-18f24eb6`) and delivers to sequoia@westpeek.ventures.
+RESEND_API_KEY (production and staging, set 26 Sep 2026) is the West Peek Resend key (vault
+`resend-app-18f24eb6`). That account has verified domains (`westpeek.ventures`,
+`joinwestpeek.com`), but the Worker sends from `onboarding@resend.dev` (`FROM_DEFAULT` in
+`worker/services/email.ts`), and Resend's test sender delivers only to the account owner's own
+address (sequoia@westpeek.ventures). So: staging email works as is (its OWNER_EMAIL is that
+address). **Production email reaches mercasare.social@gmail.com only once ONE of these is done**
+(the `Email (Resend)` light says which state it is in): (a) `FROM_DEFAULT` moves to a verified West
+Peek domain, e.g. `Mercedes Studio <studio@westpeek.ventures>`, one line, then a deploy; or (b)
+Mercedes's own Resend account key replaces it (`npx wrangler secret put RESEND_API_KEY`, value on
+stdin) — her key delivers to her own address with no domain. Production has no login, so no
+login-code email is ever needed; only the runway, recap and brief emails wait on this.
 
-`GITHUB_DISPATCH_TOKEN` (production and staging) is Sequoia's own GitHub token, the one the
-`gh` CLI on her Mac is logged in with (account seq23, scopes `repo` + `workflow`), set with
-`gh auth token | npx wrangler secret put GITHUB_DISPATCH_TOKEN [--env staging]` so it never
-appears on screen. It only needs to fire `repository_dispatch` on this repo. To swap in a
-narrower token at any time: github.com → Settings → Developer settings → Fine-grained tokens →
-Generate; Resource owner seq23, Only select repositories → `seq23/sheila-creator-dashboard`,
-Repository permissions → Contents: Read and write (Metadata: Read comes with it); copy it, run
+`GITHUB_DISPATCH_TOKEN` (production and staging) only needs to fire `repository_dispatch` on this
+repo (Contents: Read and write). **Not set yet (26 Sep 2026): a NAMED STOP that only the account
+owner can clear.** Why: Sheila's dashboard used `gh auth token` (the Mac's own broad GitHub
+login), which is not acceptable for a second client's Worker; the vault's fine-grained token
+(`github-cloud-1ab31c45`, seq23, expires 2027-07-12) reads this repo but was refused (403) on
+`POST /repos/seq23/mercedes-creator-dashboard/dispatches` because this repo is not in its
+repository list; and GitHub has no API that creates a personal access token. Until it is set the
+`Job runner (GitHub)` light is red with its fix guide and every job (cut, extract, research,
+metrics, brand finder, voice, full video, YouTube upload) waits by name; nothing else is affected.
+To clear it (two minutes, github.com): Settings → Developer settings → Fine-grained tokens →
+Generate (or edit `github-cloud-1ab31c45`'s repository list); Resource owner seq23, Only select
+repositories → `seq23/mercedes-creator-dashboard`, Repository permissions → Contents: Read and
+write (Metadata: Read comes with it); copy it, run
 `pbpaste | npx wrangler secret put GITHUB_DISPATCH_TOKEN` and
 `pbpaste | npx wrangler secret put GITHUB_DISPATCH_TOKEN --env staging`, then press "Check
 everything now" on Settings (the `Job runner (GitHub)` light) or start any job to confirm a 204.
+Then delete the stop under "Staging: named stops" below (`tests/unit/staging-env.test.ts` pins
+that section to the truth).
 
 `YOUTUBE_API_KEY` (production and staging): the no-login YouTube numbers (see "Stats: no-login").
 
@@ -57,17 +72,38 @@ client, an R2 credential or an S3 endpoint (`jobs-no-direct-storage`).
 Per-user keys (Buffer, OpenRouter, Firecrawl, Hunter, ElevenLabs) are pasted on Settings →
 Connections and stored AES-GCM encrypted in D1 `connections.secret_enc`.
 
+**Pre-wired connections** (OpenRouter = Sequoia's, vault `openrouter-ai-c4dc6108`; Firecrawl =
+vault `seq-firecrawl-api-key`; Hunter = vault `sheila-hunter-api-key`, shared with Sheila Studio):
+never raw SQL of a plaintext key. The route `POST /api/connections/:service/key` checks the key
+live and stores it encrypted with that Worker's `SECRETS_KEY`, so pre-wiring is one authenticated
+call per service against the deployed Worker. Staging (code login; the cookie comes from the
+login-code script below):
+
+```bash
+V() { (cd ~/repo-tools/agent && python3 -c 'import sys;from repo_operator.vault import keychain as kc;sys.stdout.write((kc.get().get(sys.argv[1], kc.owner_account()) or "").strip())' "$1"); }
+BASE=https://mercedesstudio-staging.seq-taylor.workers.dev
+CODE=$(node scripts/staging-login-code.mjs --request | python3 -c 'import sys,json;print(json.load(sys.stdin)["code"])')
+curl -s -c /tmp/ms-cookies -X POST $BASE/api/auth/verify -H 'content-type: application/json' -d "{\"email\":\"sequoia@westpeek.ventures\",\"code\":\"$CODE\"}" > /dev/null
+for pair in openrouter:repo-operator-provider-openrouter firecrawl:repo-operator-credential-seq-firecrawl-api-key hunter:repo-operator-credential-sheila-hunter-api-key; do
+  svc=${pair%%:*}; KEY="$(V "${pair#*:}")" sh -c "curl -s -b /tmp/ms-cookies -X POST $BASE/api/connections/$svc/key -H 'content-type: application/json' -d \"{\\\"key\\\":\\\"\$KEY\\\"}\"" | head -c 200; echo " ($svc)"
+done; rm -f /tmp/ms-cookies
+```
+
+Production has no login (`AUTH_MODE` open), so the same three calls need no cookie:
+`curl -s -X POST https://dashboard.justbeingmercedes.com/api/connections/<service>/key …` after the
+first production deploy. Buffer and ElevenLabs are Mercedes's own accounts: she pastes those.
+
 ## Common tasks
 
 ```bash
 # query production
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT status, COUNT(*) FROM clips GROUP BY status"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT status, COUNT(*) FROM clips GROUP BY status"
 
 # see recent jobs
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT id, type, status, safe_error, created_at FROM jobs ORDER BY created_at DESC LIMIT 10"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT id, type, status, safe_error, created_at FROM jobs ORDER BY created_at DESC LIMIT 10"
 
 # tail logs
-npx wrangler tail sheilastudio --format pretty
+npx wrangler tail mercedesstudio --format pretty
 
 # re-run a job by hand (fake mode only, local)
 curl -X POST http://localhost:8787/api/jobs/<job_id>/run-fake -H 'Cookie: ss_session=…'
@@ -122,7 +158,7 @@ Two engines, named the same on every screen, in `narrations.engine` and in the c
 **The free voice always works without ElevenLabs.** Her consented sample always feeds the
 built-in voice; the premium clone is extra.
 
-**How Sheila connects ElevenLabs** (guide `connect-elevenlabs`): elevenlabs.io → log in → her
+**How Mercedes connects ElevenLabs** (guide `connect-elevenlabs`): elevenlabs.io → log in → her
 profile (bottom left) → **API keys** → Create API key → copy → dashboard **Settings →
 Connections → Voice overs · premium** → paste → **Check key**. The card then shows her plan tier,
 characters used of this month's limit, and whether instant voice cloning is on her plan
@@ -190,7 +226,7 @@ service. Every clip is rendered in a **Look**, a named preset of the built-in ed
   plays until then. Refused plainly when the clip is in Buffer, already re-rendering, or its raw
   upload was cleared (7 days).
 - **Settings > Editing:** Looks in the mix (all on; stored as `looks_off` so a new Look starts
-  on), captions, end card (logo `public/assets/brand/sheila-logo.png` + her TikTok handle from
+  on), captions, end card (logo the logo in `public/assets/brand/` + her TikTok handle from
   Buffer, else Brand Profile), music bed. **Music is only her own uploads** (My music, R2
   `music/`, table `music_tracks`): no bundled music or libraries, because a song she does not hold
   the rights to can get a post muted or removed. The bed switches on with her first song and off
@@ -271,9 +307,9 @@ the talent-manager view: `docs/reviews/agency-pov.md`).
 
 ```bash
 # the pipeline at a glance
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT stage, COUNT(*) FROM deals GROUP BY stage"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT stage, COUNT(*) FROM deals GROUP BY stage"
 # kit versions and views
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT version, published_at FROM media_kit_versions ORDER BY version DESC LIMIT 5; SELECT COUNT(*) FROM kit_views"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT version, published_at FROM media_kit_versions ORDER BY version DESC LIMIT 5; SELECT COUNT(*) FROM kit_views"
 ```
 
 ## Steering a dump: Surprise me, chips and notes
@@ -390,27 +426,27 @@ Migration `0016_archive_storage.sql`.
 
 ```bash
 # storage by kind on production, and what Tidy up archived
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT value FROM settings WHERE key = 'storage_report'; SELECT name, light, note FROM health WHERE name = 'Storage'"
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT 'dumps', COUNT(*) FROM dumps WHERE archived_at IS NOT NULL UNION ALL SELECT 'deals', COUNT(*) FROM deals WHERE archived_at IS NOT NULL"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT value FROM settings WHERE key = 'storage_report'; SELECT name, light, note FROM health WHERE name = 'Storage'"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT 'dumps', COUNT(*) FROM dumps WHERE archived_at IS NOT NULL UNION ALL SELECT 'deals', COUNT(*) FROM deals WHERE archived_at IS NOT NULL"
 ```
 
 ## Staging
 
 The owner's fully real twin of production for testing with her own throwaway accounts;
-Sheila's production is never touched by it.
+Mercedes's production is never touched by it.
 
 | Thing | Where |
 | --- | --- |
-| URL | https://sheila-creator-dashboard-staging.seq-taylor.workers.dev (`/healthz` → `{"ok":true,"fake":false,"env":"staging"}`) |
-| Config | `wrangler.jsonc` `env.staging`; `npm run validate:envs` fails on any drift from production except name, D1/R2 and the vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE (staging keeps the email-code login) |
-| D1 | `sheila-creator-dashboard-db-staging` (`c8e9e2c9-0c30-48c5-9c93-acf66a26979c`) |
-| R2 | `sheila-creator-dashboard-files-staging` |
+| URL | https://mercedesstudio-staging.seq-taylor.workers.dev (`/healthz` → `{"ok":true,"fake":false,"env":"staging"}`) |
+| Config | `wrangler.jsonc` `env.staging`; `npm run validate:envs` fails on any drift from production except name, routes (production routes `dashboard.justbeingmercedes.com`; staging must say `routes: []`, since wrangler inherits `routes` into an env and staging would otherwise take the domain over), D1/R2 and the vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE (staging keeps the email-code login) |
+| D1 | `mercedes-creator-dashboard-db-staging` (`19ea68a7-c501-4a4b-af6a-f1817ed824d2`) |
+| R2 | `mercedes-creator-dashboard-files-staging` |
 | Login | `sequoia@westpeek.ventures` (OWNER_EMAIL). The West Peek Resend key delivers only to its account owner's address, and she reads that mailbox. |
-| Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows only after the nightly `e2e` run is green on that sha: `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote sheila-creator-dashboard` is the by-hand path and reads the same record. |
+| Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows only after the nightly `e2e` run is green on that sha: `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote mercedes-creator-dashboard` is the by-hand path and reads the same record. |
 
 ```bash
-npx wrangler d1 execute sheila-creator-dashboard-db-staging --remote --env staging --command "SELECT name, light, note FROM health"
-npx wrangler tail sheila-creator-dashboard-staging --format pretty
+npx wrangler d1 execute mercedes-creator-dashboard-db-staging --remote --env staging --command "SELECT name, light, note FROM health"
+npx wrangler tail mercedesstudio-staging --format pretty
 ```
 
 Secrets (`wrangler secret put <NAME> --env staging`, value on stdin): `SESSION_SECRET`,
@@ -422,20 +458,23 @@ Worker (`worker_url` in the payload), so it can only ever touch the staging buck
 
 ### What is real on staging
 
-| Piece | State (25 Sep 2026) |
+| Piece | State (26 Sep 2026, Mercedes Studio staging) |
 | --- | --- |
-| Worker, D1, R2, crons | Real, all migrations applied |
-| Buffer | Real: the owner's test Buffer account (seq.taylor@gmail.com, free plan, 3 of 3 channels): TikTok `@iamcindymercer`, Instagram `seq23`, YouTube "Sequoia Taylor". All three are her **test channels** (her word, 25 Sep 2026); the Phase 0 TEST POST goes to all three. Key: vault `buffer-access-token`, created 25 Sep 2026, **expires 25 Sep 2027** (Buffer → Settings → API; the free plan allows ONE key per account, so this key is shared with `authority-backlink-network`'s `BUFFER_ACCESS_TOKEN` secret; renewing it means Regenerate there, then `vault set buffer-access-token --from-file`, `gh secret set BUFFER_ACCESS_TOKEN -R seq23/authority-backlink-network`, and paste on staging's Connect). The account's 3,000 requests / 30 days are shared too; the dashboard's own idle spend is 20 a day (`tests/unit/buffer-budget.test.ts`). |
+| Worker, D1, R2, crons | Real, all migrations applied (`mercedesstudio-staging`, D1 `19ea68a7-c501-4a4b-af6a-f1817ed824d2`, R2 `mercedes-creator-dashboard-files-staging`) |
+| Buffer | Not connected yet. Sheila Studio's staging used the owner's test Buffer account (seq.taylor@gmail.com, free plan, 3 of 3 channels): TikTok `@iamcindymercer`, Instagram `seq23`, YouTube "Sequoia Taylor". All three are her **test channels** (her word, 25 Sep 2026); the Phase 0 TEST POST goes to all three. Key: vault `buffer-access-token`, created 25 Sep 2026, **expires 25 Sep 2027** (Buffer → Settings → API; the free plan allows ONE key per account, so this key is shared with `authority-backlink-network`'s `BUFFER_ACCESS_TOKEN` secret; renewing it means Regenerate there, then `vault set buffer-access-token --from-file`, `gh secret set BUFFER_ACCESS_TOKEN -R seq23/authority-backlink-network`, and paste on staging's Connect). The account's 3,000 requests / 30 days are shared too; the dashboard's own idle spend is 20 a day (`tests/unit/buffer-budget.test.ts`). |
 | Email (Resend) | Real: the West Peek Resend key sends from `onboarding@resend.dev` to its own account owner, `sequoia@westpeek.ventures`, which is staging's OWNER_EMAIL. Login codes and every staging email land there. Production's OWNER_EMAIL and sender are unchanged. |
-| Jobs (cut, extract, research, metrics, brand finder, voice) | Real: dispatch with `GITHUB_DISPATCH_TOKEN`; the job fetches its spec and files from the staging Worker and writes its outputs back through it (no storage keys anywhere). |
-| YouTube stats | Real, no sign-in: `YOUTUBE_API_KEY` set; channel from Buffer's serviceId (see "Stats: no-login"). A Google sign-in is also connected on staging (optional extra detail). |
+| Jobs (cut, extract, research, metrics, brand finder, voice, full video, YouTube upload) | Wired but WAITING on `GITHUB_DISPATCH_TOKEN` (see Secrets: a named stop). Once set: dispatch with it; the job fetches its spec and files from the staging Worker and writes its outputs back through it (no storage keys anywhere). |
+| YouTube stats | Real, no sign-in: `YOUTUBE_API_KEY` set (the same Google API key as Sheila Studio); channel from Buffer's serviceId (see "Stats: no-login"). The optional Google sign-in needs `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (set separately, same Google project as Sheila Studio). |
 | Instagram stats | The form path (public profile login-walled from the Worker); a Meta app is not set up (optional) |
-| OpenRouter, Firecrawl, Hunter | Not connected by design (Sheila's Hunter key stays hers). Connect shows "Not connected" with a guide; research and the brand finder refuse with the connect guide. The cut job falls back to its deterministic moment picker without OpenRouter. |
+| OpenRouter, Firecrawl, Hunter | Pre-wired through `/api/connections/:service/key` (Secrets → "Pre-wired connections"): OpenRouter = Sequoia's key, Firecrawl = `seq-firecrawl-api-key`, Hunter = `sheila-hunter-api-key`. Production gets the same three after its first deploy. |
 
 ### Staging: named stops
 
-None. Everything staging needs is set: email goes to the Resend owner's address, the dispatch
-token is Sequoia's own GitHub token, and jobs need no storage keys.
+- **`GITHUB_DISPATCH_TOKEN`** (staging and production): not set; only the GitHub account owner can
+  mint a fine-grained token for `seq23/mercedes-creator-dashboard` (Contents: Read and write). Until
+  then the `Job runner (GitHub)` light is red with its fix guide and every job waits by name. Steps:
+  Secrets → `GITHUB_DISPATCH_TOKEN` above. Everything else staging needs is set: email goes to the
+  Resend owner's address, and jobs need no storage keys.
 
 ### Staging: reading a login code without a mailbox
 
@@ -450,10 +489,10 @@ What it does, step by step (the same calls by hand):
 
 ```bash
 # 1. ask for a code through the real login form's endpoint
-curl -s -X POST https://sheila-creator-dashboard-staging.seq-taylor.workers.dev/api/auth/request \
+curl -s -X POST https://mercedesstudio-staging.seq-taylor.workers.dev/api/auth/request \
   -H 'content-type: application/json' -d '{"email":"sequoia@westpeek.ventures"}'
 # 2. the Resend id of that email
-npx wrangler d1 execute sheila-creator-dashboard-db-staging --remote --env staging --json \
+npx wrangler d1 execute mercedes-creator-dashboard-db-staging --remote --env staging --json \
   --command "SELECT provider_id FROM emails_sent WHERE kind='login_code' ORDER BY sent_at DESC LIMIT 1"
 # 3. the email itself; its "text" says "Your login code is NNNNNN." and "last_event" is sent/delivered
 #    (key from the vault through its Keychain adapter; a bare `security` read can pop a macOS
@@ -461,7 +500,7 @@ npx wrangler d1 execute sheila-creator-dashboard-db-staging --remote --env stagi
 RESEND_API_KEY="$(cd ~/repo-tools/agent && python3 -c 'from repo_operator.vault import keychain as kc; print(kc.get().get("repo-operator-credential-resend-app-18f24eb6", kc.owner_account()) or "", end="")')" \
   sh -c 'curl -s https://api.resend.com/emails/<provider_id> -H "Authorization: Bearer $RESEND_API_KEY"'
 # 4. trade the code for a session cookie
-curl -s -c cookies.txt -X POST https://sheila-creator-dashboard-staging.seq-taylor.workers.dev/api/auth/verify \
+curl -s -c cookies.txt -X POST https://mercedesstudio-staging.seq-taylor.workers.dev/api/auth/verify \
   -H 'content-type: application/json' -d '{"email":"sequoia@westpeek.ventures","code":"NNNNNN"}'
 ```
 
@@ -486,7 +525,7 @@ check that proves it.
 
 ## Stats: no-login
 
-Owner decision (25 Sep 2026, 20:40 CT): production Stats never needs a login. Sheila never sees a
+Owner decision (25 Sep 2026, 20:40 CT): production Stats never needs a login. Mercedes never sees a
 Google or Meta consent screen (Google OAuth in Testing shows "unverified app" and drops after 7
 days; Instagram Login needs Meta App Review). The Google / Instagram sign-ins stay visible on
 Stats and Connections, labelled optional extra detail with the sentence that Google or Meta may
@@ -506,7 +545,7 @@ The active path is stored in D1 settings (`youtube_public.state`, `instagram_pub
 `public` / `manual` / `oauth`) and logged as `stats.youtube.path` / `stats.instagram.path`:
 
 ```bash
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT key, value FROM settings WHERE key IN ('youtube_public','youtube_channel','instagram_public','instagram_manual','instagram_reminder')"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT key, value FROM settings WHERE key IN ('youtube_public','youtube_channel','instagram_public','instagram_manual','instagram_reminder')"
 ```
 
 When it runs: every "Update numbers" (never refused for a missing sign-in), the daily lane
@@ -526,7 +565,9 @@ N=$(gcloud --account seq.taylor@gmail.com services api-keys create --project she
   --display-name "Sheila Studio YouTube public stats" --api-target=service=youtube.googleapis.com \
   --format='value(response.name)')
 gcloud --account seq.taylor@gmail.com services api-keys get-key-string "$N" --format='value(keyString)' | tr -d '\n' > "$S"
-npx wrangler secret put YOUTUBE_API_KEY < "$S"                 # production (sheilastudio)
+npx wrangler secret put YOUTUBE_API_KEY < "$S"                 # production (mercedesstudio)
+# The same key is on Sheila Studio's Workers (vault sheila-youtube-api-key is shared): rotate it
+# there too (that repo's RUNBOOK, same steps) before deleting the old key below.
 npx wrangler secret put YOUTUBE_API_KEY --env staging < "$S"
 (cd ~/repo-tools/agent && python3 -m repo_operator.cli vault set sheila-youtube-api-key --class APPLICATION_SECRET --provider google --from-file "$S")
 rm -P "$S"
@@ -551,7 +592,7 @@ Proven on staging 25 Sep 2026: the real zip imported 5 videos with exact post ti
 
 ## YouTube: full videos straight to her channel
 
-Owner decision (26 Sep 2026): Sheila taps **Connect YouTube (full videos)** on Connect once, signs in
+Owner decision (26 Sep 2026): Mercedes taps **Connect YouTube (full videos)** on Connect once, signs in
 on Google's page (pick the account; on "Google hasn't verified this app" the small Advanced link, then "Go to seq-taylor.workers.dev (unsafe)"; then Continue on the consent page). From
 then on every approved full video on the Calendar goes to her own channel; Buffer keeps posting the
 Shorts, TikTok and Instagram clips. Code: `worker/domain/youtubeDirect.ts` (rules),
@@ -592,7 +633,7 @@ fake YouTube), `worker/jobs/ytupload.ts` + `jobs/ytupload.py` + `.github/workflo
   read by `jobs/tests/test_ytupload.py`, which runs the real job against a local fake YouTube).
 
 ```bash
-npx wrangler d1 execute sheila-creator-dashboard-db --remote --command "SELECT clip_id, status, video_id, privacy, publish_at, actual_privacy, actual_publish_at, thumbnail, reason FROM youtube_uploads ORDER BY updated_at DESC LIMIT 10"
+npx wrangler d1 execute mercedes-creator-dashboard-db --remote --command "SELECT clip_id, status, video_id, privacy, publish_at, actual_privacy, actual_publish_at, thumbnail, reason FROM youtube_uploads ORDER BY updated_at DESC LIMIT 10"
 ```
 
 ## Help guides and their pictures
@@ -624,7 +665,7 @@ Review and decisions: `docs/HELP-REVIEW.md`. Guides are `help/guides/<slug>.md` 
 3. `jobs` table for `safe_error`; the Actions run id is in `run_id`.
 4. Fix at source, add or strengthen the test that would have caught it, `land`.
 
-## Handoff to Sheila (Phase 12)
+## Handoff to Mercedes (Phase 12)
 
 Transfer the GitHub repo and the Cloudflare Worker/D1/R2 to her accounts; set `OWNER_EMAIL`
 to hers; rotate every secret; she pastes her own vendor keys on Connections; walk every

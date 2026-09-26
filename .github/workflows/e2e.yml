@@ -7,7 +7,7 @@
 # BUILD FIRST, TEST IN BATCHES (26 Sep 2026). This suite runs NIGHTLY and on dispatch, never per
 # merge: the merge gate is check.yml (under 5 minutes), and `land <pr>` deploys STAGING on every
 # merge. Production deploys only from a commit this workflow has passed on: `land` holds it
-# ("WAITING") and `land --promote sheila-creator-dashboard` ships the newest green commit —
+# ("WAITING") and `land --promote mercedes-creator-dashboard` ships the newest green commit —
 # `--run-e2e` dispatches this workflow on main's head first. A red nightly blocks the next
 # production deploy and is fixed first (bisect between the last green and the red sha).
 # timeout-minutes is a fault detector (~4× normal), never a budget.

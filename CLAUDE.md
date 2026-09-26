@@ -1,12 +1,14 @@
-# sheila-creator-dashboard — working rules
+# mercedes-creator-dashboard — working rules
 
 Read `README.md` first, then `docs/BUILD_PLAN.md` for the locked decisions. `RUNBOOK.md` is the
-operational reference ("runbook sheila" opens it).
+operational reference ("runbook mercedes" opens it).
 
 ## What this repo is
 
-- Sheila's creator dashboard. Owner: Sheila. The builder hands off; after handoff she never
-  needs a terminal. Every screen has one obvious next action; every error says what to click.
+- Mercedes Studio: Mercedes Asare's creator dashboard. Owner: Mercedes. The builder hands off;
+  after handoff she never needs a terminal. Every screen has one obvious next action; every
+  error says what to click. A full-history copy of Sheila Studio (`seq23/sheila-creator-dashboard`,
+  git remote `upstream`), rebranded 26 Sep 2026; the two repos share code shape, never data.
 - **Public repo** (unlimited Actions minutes for video cutting). Section 13 rules are enforced
   by validators, not remembered.
 - Cost target $0/month. Optional levers are switches in Settings, ON by default (owner, 26 Sep
@@ -53,8 +55,8 @@ assigned in the brief that adds it) · `package.json` deps (union merge only).
   file in `help/guides/`. The validator `help-guides-exist` fails the build otherwise.
 - **Plain words.** Dump, Review, Calendar. No jargon in UI copy or emails.
 - **Phone first** for Dump and Review: 44 px targets, bottom tab bar under 900 px.
-- **Design language** is A Sheila Bruce Affair (`app/styles/tokens.css`): cream/ivory, espresso,
-  gold, rose script; Playfair Display + Montserrat + Allura. Not the wireframes' grey-blue.
+- **Design language** is Mercedes Studio's own (`app/styles/tokens.css`); see the brand pass in
+  `docs/` for the palette and type. Not the wireframes' grey-blue.
 - **Nothing waits on the owner.** A finding becomes an action with a measurement and an
   automatic fallback, never a question or a "waiting on the owner" stop. Only a secret or an
   account she alone holds may stop, and it stops as a NAMED stop (a health light + fix guide, or
@@ -74,20 +76,22 @@ merge. **Production moves on its own, nobody in the loop:** `promote.yml` fires 
 `e2e` run of main and runs `scripts/deploy-production.sh` from exactly the sha that passed (repo
 secrets `CLOUDFLARE_API_TOKEN` = vault `cloudflare-claude-deploy`, `CLOUDFLARE_ACCOUNT_ID`),
 smokes `/healthz`, and records a GitHub Deployment (environment `production`) — the same record
-`land --promote sheila-creator-dashboard [--run-e2e]` writes and reads, so the by-hand path still
-works and the two agree (a sha production already runs is skipped, not redeployed). By hand
+`land --promote mercedes-creator-dashboard [--run-e2e]` writes and reads, so the by-hand path
+still works and the two agree (a sha production already runs is skipped, not redeployed). By hand
 without `land`: `gh workflow run e2e.yml --ref main`, or `gh workflow run promote.yml -f sha=<sha>`
 (refused unless a green `e2e` run exists on that sha). Validator `promote-on-green` pins this
 shape: `e2e.yml` never on push/pull_request, `promote.yml` only on `workflow_run` of e2e +
 dispatch. `npm run deploy:production` by hand is the break-glass, not the route.
-Production URL: https://sheilastudio.seq-taylor.workers.dev (Worker `sheilastudio`, until her
-domain). Production has no login (`AUTH_MODE` "open"): with open mode anyone who has the URL
-is the owner; that is by her choice; switching back is `AUTH_MODE: "code"` and a deploy
-(`REQUIRED_AUTH_MODE` in `scripts/validators/envs-match.mjs` pins it). Staging, local and e2e
-keep the email code; `npm run e2e` proves code mode, `npm run e2e:open` open mode.
+Production URL: https://dashboard.justbeingmercedes.com (Worker `mercedesstudio`, custom domain
+route in `wrangler.jsonc`; also https://mercedesstudio.seq-taylor.workers.dev). Production has no
+login (`AUTH_MODE` "open"): with open mode anyone who has the URL is the owner; that is by her
+choice; switching back is `AUTH_MODE: "code"` and a deploy (`REQUIRED_AUTH_MODE` in
+`scripts/validators/envs-match.mjs` pins it). Staging, local and e2e keep the email code;
+`npm run e2e` proves code mode, `npm run e2e:open` open mode.
 
-Staging (the owner's real twin, her throwaway accounts): `npm run deploy:staging`, URL
-https://sheila-creator-dashboard-staging.seq-taylor.workers.dev. It is `env.staging` in
-`wrangler.jsonc`; `npm run validate:envs` fails if it drifts from production beyond its name,
-its D1/R2 and the vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE. `land`
-deploys it on every merge, so staging is always main and production is the last e2e-green main.
+Staging (the operator's real twin, her throwaway accounts): `npm run deploy:staging`, URL
+https://mercedesstudio-staging.seq-taylor.workers.dev. It is `env.staging` in `wrangler.jsonc`;
+`npm run validate:envs` fails if it drifts from production beyond its name, its routes (staging
+must say `routes: []`, or it inherits and takes over the production domain), its D1/R2 and the
+vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE. `land` deploys it on every
+merge, so staging is always main and production is the last e2e-green main.

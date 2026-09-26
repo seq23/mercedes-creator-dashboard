@@ -1,19 +1,21 @@
-// Sheila Creator Dashboard — one Worker serves the React app (static assets),
-// the API, the media links Buffer fetches, and the cron jobs.
+// Mercedes Studio (Mercedes Asare's creator dashboard) — one Worker serves the React app
+// (static assets), the API, the media links Buffer fetches, and the cron jobs.
 //
 // Why one Worker and not Pages + Worker (the plan said Pages): one deploy, one
 // origin, no CORS, and Workers Static Assets is the direction Cloudflare has
 // moved Pages toward. Nothing about the plan's behaviour changes.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Production Worker: https://sheilastudio.seq-taylor.workers.dev (renamed 26 Sep 2026 from
-  // sheila-creator-dashboard at the owner's request; the D1 database and R2 bucket kept their names).
-  "name": "sheilastudio",
+  // Production Worker: https://mercedesstudio.seq-taylor.workers.dev and the custom domain
+  // https://dashboard.justbeingmercedes.com (zone justbeingmercedes.com on this account; the
+  // route below makes Cloudflare create the DNS record and certificate on deploy).
+  "name": "mercedesstudio",
   "main": "worker/index.ts",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat"],
   "account_id": "8d147e242033699dd37c6f5a451f48d2",
   "workers_dev": true,
+  "routes": [{ "pattern": "dashboard.justbeingmercedes.com", "custom_domain": true }],
   "observability": { "enabled": true },
   "assets": {
     "directory": "./dist/client",
@@ -25,13 +27,13 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "sheila-creator-dashboard-db",
-      "database_id": "f2ddb225-deb9-42e6-b77c-3a122621792f",
+      "database_name": "mercedes-creator-dashboard-db",
+      "database_id": "ab67b7cc-20fc-42da-a48f-f9d7c4b11e76",
       "migrations_dir": "migrations"
     }
   ],
   "r2_buckets": [
-    { "binding": "FILES", "bucket_name": "sheila-creator-dashboard-files" }
+    { "binding": "FILES", "bucket_name": "mercedes-creator-dashboard-files" }
   ],
   "triggers": {
     "crons": [
@@ -42,15 +44,15 @@
   },
   "vars": {
     // Plain-text configuration only. Every key lives in `wrangler secret`.
-    "APP_NAME": "Sheila Studio",
-    "OWNER_EMAIL": "asheilabruceaffair@gmail.com",
+    "APP_NAME": "Mercedes Studio",
+    "OWNER_EMAIL": "mercasare.social@gmail.com",
     // "1" swaps every outside service (Buffer, OpenRouter, Firecrawl, Resend, Hunter, GitHub,
     // Meta, Google) for a realistic stand-in. Production sets it to "0".
     "FAKE_SERVICES": "1",
-    // Local default. Production's URL (https://sheilastudio.seq-taylor.workers.dev) is set by
+    // Local default. Production's URL (https://dashboard.justbeingmercedes.com) is set by
     // scripts/deploy-production.sh with --var, so `wrangler dev` never mints Secure cookies on http.
     "PUBLIC_BASE_URL": "http://localhost:8787",
-    "GITHUB_REPO": "seq23/sheila-creator-dashboard",
+    "GITHUB_REPO": "seq23/mercedes-creator-dashboard",
     "AUDIENCE_TIMEZONE": "America/New_York",
     // Which deployment this is: "production" here, "staging" in env.staging, "dev" in .dev.vars.
     // /healthz reports it and every job dispatch carries it, so a job reaches the right
@@ -63,14 +65,18 @@
     // scripts/validators/envs-match.mjs (which enforces both modes), then a deploy.
     "AUTH_MODE": "open"
   },
-  // STAGING: the owner's own fully real copy (FAKE_SERVICES=0) for testing with throwaway
-  // accounts while Sheila's production stays untouched. Deploy with `npm run deploy:staging`.
+  // STAGING: the operator's own fully real copy (FAKE_SERVICES=0) for testing with throwaway
+  // accounts while Mercedes's production stays untouched. Deploy with `npm run deploy:staging`.
   // scripts/validators/envs-match.mjs fails the build if staging differs from production in
-  // anything except the name, the D1/R2 ids and names, and the vars OWNER_EMAIL,
+  // anything except the name, the routes (production's custom domain is production's alone;
+  // staging answers only on workers.dev), the D1/R2 ids and names, and the vars OWNER_EMAIL,
   // PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES and AUTH_MODE.
   "env": {
     "staging": {
-      "name": "sheila-creator-dashboard-staging",
+      "name": "mercedesstudio-staging",
+      // Wrangler inherits `routes` into an env; an empty list here keeps the custom domain off
+      // staging (envs-match pins it).
+      "routes": [],
       "assets": {
         "directory": "./dist/client",
         "binding": "ASSETS",
@@ -80,27 +86,27 @@
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "sheila-creator-dashboard-db-staging",
-          "database_id": "c8e9e2c9-0c30-48c5-9c93-acf66a26979c",
+          "database_name": "mercedes-creator-dashboard-db-staging",
+          "database_id": "19ea68a7-c501-4a4b-af6a-f1817ed824d2",
           "migrations_dir": "migrations"
         }
       ],
       "r2_buckets": [
-        { "binding": "FILES", "bucket_name": "sheila-creator-dashboard-files-staging" }
+        { "binding": "FILES", "bucket_name": "mercedes-creator-dashboard-files-staging" }
       ],
       "triggers": {
         "crons": ["0 * * * *", "30 13 * * *", "0 12 * * 1"]
       },
       "vars": {
-        "APP_NAME": "Sheila Studio",
+        "APP_NAME": "Mercedes Studio",
         // The West Peek Resend key delivers only to its account owner's address, so staging logs in there.
         "OWNER_EMAIL": "sequoia@westpeek.ventures",
         "FAKE_SERVICES": "0",
-        "PUBLIC_BASE_URL": "https://sheila-creator-dashboard-staging.seq-taylor.workers.dev",
-        "GITHUB_REPO": "seq23/sheila-creator-dashboard",
+        "PUBLIC_BASE_URL": "https://mercedesstudio-staging.seq-taylor.workers.dev",
+        "GITHUB_REPO": "seq23/mercedes-creator-dashboard",
         "AUDIENCE_TIMEZONE": "America/New_York",
         "ENV_NAME": "staging",
-        // Staging keeps the email-code login (the owner's instruction, 26 Sep 2026).
+        // Staging keeps the email-code login (the operator's instruction, 26 Sep 2026).
         "AUTH_MODE": "code"
       }
     }
@@ -117,7 +123,8 @@
   //                           channel + video numbers, no Google sign-in. Not a reserved name:
   //                           no SDK or runtime reads YOUTUBE_API_KEY on its own (unlike
   //                           GOOGLE_API_KEY / GOOGLE_APPLICATION_CREDENTIALS), so it can never be
-  //                           picked up by something else. Vault: sheila-youtube-api-key.
+  //                           picked up by something else. Vault: sheila-youtube-api-key (shared
+  //                           with Sheila Studio; the same Google Cloud project).
   // Per-user connection keys (Buffer, OpenRouter, Firecrawl, Hunter, Meta, Google) are NOT
   // secrets here: she pastes them in Connect accounts and they are stored encrypted in D1.
 }

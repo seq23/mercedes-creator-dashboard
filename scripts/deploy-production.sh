@@ -7,7 +7,9 @@
 # touch a real vendor. Production flips it here, in one place, and the deploy refuses to run
 # if the account id is missing (the 7403 trap, see ~/bin/land).
 #
-# The Worker is `sheilastudio` (wrangler.jsonc name) and runs with AUTH_MODE "open": no login,
+# The Worker is `mercedesstudio` (wrangler.jsonc name), reached at https://dashboard.justbeingmercedes.com
+# (custom domain route in wrangler.jsonc) and https://mercedesstudio.seq-taylor.workers.dev, and
+# runs with AUTH_MODE "open": no login,
 # every visitor is the owner, by her choice. The smoke below proves the app answers as the owner
 # with no cookie, so a deploy that silently kept the login fails here.
 set -euo pipefail
@@ -17,13 +19,13 @@ cd "$(dirname "$0")/.."
 source scripts/lib/wrangler-retry.sh
 
 export CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-8d147e242033699dd37c6f5a451f48d2}"
-PUBLIC_BASE_URL="${PUBLIC_BASE_URL:-https://sheilastudio.seq-taylor.workers.dev}"
+PUBLIC_BASE_URL="${PUBLIC_BASE_URL:-https://dashboard.justbeingmercedes.com}"
 
 echo "==> build client"
 npm run build
 
 echo "==> D1 migrations (remote)"
-wr d1 migrations apply sheila-creator-dashboard-db --remote
+wr d1 migrations apply mercedes-creator-dashboard-db --remote
 
 echo "==> deploy worker"
 wr deploy --var FAKE_SERVICES:0 --var PUBLIC_BASE_URL:"$PUBLIC_BASE_URL"

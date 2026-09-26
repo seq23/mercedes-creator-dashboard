@@ -139,8 +139,8 @@ describe("envs-match pins the modes", () => {
     expect(REQUIRED_AUTH_MODE).toEqual({ production: "open", staging: "code" });
     expect(c.vars.AUTH_MODE).toBe("open");
     expect(c.env.staging.vars.AUTH_MODE).toBe("code");
-    expect(c.name).toBe("sheilastudio");
-    expect(c.env.staging.name).toBe("sheila-creator-dashboard-staging");
+    expect(c.name).toBe("mercedesstudio");
+    expect(c.env.staging.name).toBe("mercedesstudio-staging");
   });
 
   it("fails when production keeps the login or staging loses it", () => {
