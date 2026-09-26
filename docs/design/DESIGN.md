@@ -8,8 +8,8 @@ needs to grow. The rules marked **guarded** are enforced by `scripts/validators/
 
 ## Genre and shape
 
-- **Genre:** editorial, warm. Cream paper, espresso ink, gold as the single accent, rose script
-  as the one flourish.
+- **Genre:** editorial, warm. Sand paper, espresso ink, nameplate gold as the single accent, an
+  italic Bodoni flourish in rust or coral (midnight-denim chrome).
 - **App pages (every screen behind login):** *Workbench* — espresso sidebar (desktop) or bottom
   tab bar (phone), a page head (title + one-line lede + the screen's one action), then the work
   surface. Two columns at ≥ 1100 px wherever the wireframe shows two (Home, Dump, Calendar,
@@ -22,14 +22,14 @@ needs to grow. The rules marked **guarded** are enforced by `scripts/validators/
 
 | Role | Token | Value |
 | --- | --- | --- |
-| Paper | `--bg` / `--cream` | #f7f1e7 |
-| Card | `--surface` / `--ivory` | #fffaf1 |
+| Paper | `--bg` / `--cream` | #f3eae0 (sand) |
+| Card | `--surface` / `--ivory` | #f6f1ea |
 | Input well | `--surface-2` / `--paper` | #fffdf8 |
-| Ink | `--text` / `--espresso` | #211713 |
-| Muted text | `--text-muted` | #665850 (6.0:1 on cream) |
-| Accent fill | `--accent` / `--gold` | #d7b56d, text on it `--accent-ink` (9.0:1) |
-| Gold as text | `--gold-ink` | #7a5a1c (6.1:1) |
-| Script | `--rose` | #8f4b5b |
+| Ink | `--text` / `--ink` | #24160f (14.8:1 on sand); chrome `--espresso` #1c2632 midnight denim |
+| Muted text | `--text-muted` / `--muted` | #5e4f45 (6.6:1 on sand) |
+| Accent fill | `--accent` / `--gold` | #deb05a, hover `--gold-deep` #c9a14f (ink 7.3:1), hairline `--gold-line` #8a6a33 |
+| Gold as text | `--gold-ink` | #725420 (5.9:1) |
+| Script | `--rose` rust / `--blush` coral | #a3321f on sand (5.8:1) / #f08a74 on chrome (6.3:1); `--blue-grey` #a9bfd6 login and empty washes |
 | Warning text | `--warning-ink` | #85510a (5.4:1 on its soft fill) |
 | Focus | `--focus-color` | rose on light surfaces, gold on espresso (both ≥ 3:1) |
 
@@ -38,10 +38,10 @@ they are not a requirement of this pass.
 
 ## Typography (**guarded**)
 
-- Display: Playfair Display 600/700 (`--font-display`) — page titles, section heads, card
+- Display: Bodoni Moda 500–700 (`--font-display`) — page titles, section heads, card
   titles, stats.
-- Body: Montserrat 400–800 (`--font-body`).
-- Outlier: Allura (`--font-script`) — the brand flourish only: the sidebar sub-line, the login
+- Body: Jost 400–800 (`--font-body`).
+- Outlier: Bodoni Moda italic (`--font-script`, always italic) — the brand flourish only: the sidebar sub-line, the login
   greeting, the door letters on Dump, the media-kit name flourish. Never body text.
 - Mono (`--font-mono`) — times, codes and counts only.
 - Scale: `--text-2xs` 12 · `--text-xs` 13 · `--text-sm` 14 · `--text-base` 16 · `--text-md` 18 ·

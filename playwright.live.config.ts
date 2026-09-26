@@ -7,9 +7,9 @@ import { defineConfig, devices } from "@playwright/test";
 // Outside test-results/: Playwright empties its output folder at the start of every run, which
 // threw the saved session away (a fresh emailed code per run) and broke parallel runs' traces.
 export const LIVE_STORAGE = ".live-auth/owner.json";
-const BASE = process.env.LIVE_BASE_URL ?? "https://sheila-creator-dashboard-staging.seq-taylor.workers.dev";
+const BASE = process.env.LIVE_BASE_URL ?? "https://mercedesstudio-staging.seq-taylor.workers.dev";
 
-// Production is Sheila's live app: this suite posts, deletes and disconnects. Refuse it outright.
+// Production is Mercedes's live app: this suite posts, deletes and disconnects. Refuse it outright.
 if (!/staging|localhost|127\.0\.0\.1/.test(BASE)) throw new Error(`LIVE_BASE_URL must be staging, not ${BASE}`);
 
 export default defineConfig({

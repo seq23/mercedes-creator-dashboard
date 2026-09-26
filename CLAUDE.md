@@ -7,7 +7,7 @@ operational reference ("runbook mercedes" opens it).
 
 - Mercedes Studio: Mercedes Asare's creator dashboard. Owner: Mercedes. The builder hands off;
   after handoff she never needs a terminal. Every screen has one obvious next action; every
-  error says what to click. A full-history copy of Sheila Studio (`seq23/sheila-creator-dashboard`,
+  error says what to click. A full-history copy of the upstream dashboard (`seq23/sheila-creator-dashboard`,
   git remote `upstream`), rebranded 26 Sep 2026; the two repos share code shape, never data.
 - **Public repo** (unlimited Actions minutes for video cutting). Section 13 rules are enforced
   by validators, not remembered.

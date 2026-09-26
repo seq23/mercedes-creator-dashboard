@@ -22,7 +22,7 @@ const OUT = path.join(ROOT, "docs", "design", label);
 const TMP = path.join(OUT, ".png");
 mkdirSync(TMP, { recursive: true });
 
-const DB = "sheila-creator-dashboard-db";
+const DB = "mercedes-creator-dashboard-db";
 const d1 = (args) => execFileSync("npx", ["wrangler", "d1", "execute", DB, "--local", ...args], { cwd: ROOT, stdio: "pipe", env: { ...process.env, CI: "1" } });
 const SEED = path.join("tests", "e2e", "seed-demo.sql");
 const seedSql = readFileSync(SEED, "utf8");

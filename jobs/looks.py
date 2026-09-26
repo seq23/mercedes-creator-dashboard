@@ -408,6 +408,9 @@ def render_look(
     else:
         for k, seg in enumerate(parts):
             i = seg_input(seg)
+            # setpts BEFORE fps in each cut's chain: a chain ending in setpts leaves the stream flagged
+            # variable-rate and ffmpeg 7.1's xfade (the crossfade Looks) refuses it ("inputs need to be
+            # a constant frame rate"); fps last keeps the rate on the pad. ffmpeg 6.1 (CI) accepted both.
             if opts["layout"] == "blur_fill":
                 bars = seg.bars if seg.bars and seg.bars[0] >= seg.width * 0.5 and seg.bars[1] >= seg.height * 0.5 else None
                 pre = f"crop={bars[0]}:{bars[1]}:{bars[2]}:{bars[3]}," if bars else ""
@@ -415,10 +418,10 @@ def render_look(
                     f"[{i}:v]{pre}split=2[bi{k}][fi{k}];"
                     f"[bi{k}]scale={OUT_W}:{OUT_H}:force_original_aspect_ratio=increase:flags=bilinear,crop={OUT_W}:{OUT_H},gblur=sigma=40,eq=brightness=-0.06:saturation=0.85[bg{k}];"
                     f"[fi{k}]scale={OUT_W}:{OUT_H}:force_original_aspect_ratio=decrease:flags=lanczos[fg{k}];"
-                    f"[bg{k}][fg{k}]overlay=(W-w)/2:(H-h)/2,setsar=1,fps={FPS},format=yuv420p,setpts=PTS-STARTPTS[v{k}]"
+                    f"[bg{k}][fg{k}]overlay=(W-w)/2:(H-h)/2,setsar=1,setpts=PTS-STARTPTS,fps={FPS},format=yuv420p[v{k}]"
                 )
             else:
-                chains.append(f"[{i}:v]{crop_to(seg, OUT_W, OUT_H)},fps={FPS},format=yuv420p,setpts=PTS-STARTPTS[v{k}]")
+                chains.append(f"[{i}:v]{crop_to(seg, OUT_W, OUT_H)},setpts=PTS-STARTPTS,fps={FPS},format=yuv420p[v{k}]")
             chains.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo,asetpts=PTS-STARTPTS[a{k}]")
         n = len(parts)
         if n == 1:

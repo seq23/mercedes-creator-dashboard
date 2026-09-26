@@ -7,7 +7,7 @@ import path from "node:path";
 import { expect, type Page } from "@playwright/test";
 
 export const OWNER = process.env.LIVE_OWNER_EMAIL ?? "sequoia@westpeek.ventures";
-export const STAGING_DB = "sheila-creator-dashboard-db-staging";
+export const STAGING_DB = "mercedes-creator-dashboard-db-staging";
 const EVIDENCE_DIR = "docs/design/live";
 const EVIDENCE_FILE = path.join(EVIDENCE_DIR, "evidence.json");
 
@@ -138,7 +138,7 @@ export function evidence(item: string, data: Record<string, unknown>): void {
 
 /** The newest GitHub Actions run of a job workflow started after `sinceMs`, via the gh CLI. */
 export function latestRun(workflow: string, sinceMs: number): { databaseId: number; status: string; conclusion: string; createdAt: string } | null {
-  const out = execFileSync("gh", ["run", "list", "--repo", "seq23/sheila-creator-dashboard", "--workflow", workflow, "--limit", "5", "--json", "databaseId,status,conclusion,createdAt"], { encoding: "utf8" });
+  const out = execFileSync("gh", ["run", "list", "--repo", "seq23/mercedes-creator-dashboard", "--workflow", workflow, "--limit", "5", "--json", "databaseId,status,conclusion,createdAt"], { encoding: "utf8" });
   const runs = JSON.parse(out) as { databaseId: number; status: string; conclusion: string; createdAt: string }[];
   return runs.find((r) => Date.parse(r.createdAt) >= sinceMs - 60_000) ?? null;
 }

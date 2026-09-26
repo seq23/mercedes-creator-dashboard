@@ -1,4 +1,4 @@
-// Mercedes Studio is a full-history copy of Sheila Studio (26 Sep 2026). A leftover "Sheila",
+// Mercedes Studio is a full-history copy of the upstream dashboard (26 Sep 2026). A leftover "Sheila",
 // "A Sheila Bruce Affair" handle or the old owner's address in copy, guides, fixtures or seeds
 // is the wrong woman's name on her dashboard, in her emails or in her media kit.
 // Scope: every tracked text file under the roots below. Git history, docs/ (BUILD_PLAN's
@@ -13,19 +13,19 @@ const ROOTS = ["app/", "worker/", "shared/", "help/guides/", "help/index.json", 
 const PATTERN = /sheila|asheilabruceaffair/i;
 // History that is allowed to say the old name.
 const ALLOW = new Set(["migrations/0001_init.sql", "migrations/0018_mercedes_owner.sql"]);
-// Owned by the sibling rename PRs (brand: styles, email templates, logo block; infra: Worker/D1/R2
-// names in config and the tests that pin them). Remove each entry as its PR lands; an entry
-// that is already clean is a problem, so the list cannot linger.
-const PENDING_SIBLING = new Set([
-  "tests/unit/staging-env.test.ts",
-  "tests/live/helpers.ts",
-  "tests/e2e/demo.ts",
-  "tests/e2e/helpers.ts",
-  "tests/e2e/serve.sh",
-  "wrangler.jsonc",
-  "RUNBOOK.md",
-  "CLAUDE.md",
-]);
+// Identifiers of resources this repo really shares with the upstream dashboard. They are named
+// after her and cannot be renamed from here (a vault entry, a Google Cloud project and its API
+// key's display name, the upstream repo path). Only these exact strings pass; any other use of
+// the name on the same line still fails. Adding to this list needs the resource to exist under
+// that name (RUNBOOK → Secrets says which); it is never a place for copy.
+const SHARED_IDS = [
+  "sheila-youtube-api-key",
+  "sheila-hunter-api-key",
+  "sheilastudio-staging-p0",
+  "seq23/sheila-creator-dashboard",
+  "Sheila Studio YouTube public stats",
+  "no-sheila", // this validator's own name is not her name
+];
 const BINARY = /\.(png|jpg|jpeg|gif|mp4|mov|webp|ico|woff2?|pdf|zip)$/i;
 const MUST_EXIST = "migrations/0018_mercedes_owner.sql";
 
@@ -34,6 +34,7 @@ export default async function ({ root }) {
   const files = tracked.filter((f) => ROOTS.some((r) => (r.endsWith("/") ? f.startsWith(r) : f === r))).filter((f) => !BINARY.test(f) && !f.startsWith("help/screenshots/"));
   const problems = [];
   if (!tracked.includes(MUST_EXIST)) problems.push(`${MUST_EXIST} is missing: 0001_init.sql seeds the media kit link as 'sheila' and only a new migration may move it`);
+  if (tracked.includes("public/assets/brand/sheila-logo.png")) problems.push("public/assets/brand/sheila-logo.png: the old logo file is still shipped; the mark is /assets/brand/mercedes-logo.{svg,png}");
   let items = 0;
   for (const f of files) {
     if (ALLOW.has(f)) continue;
@@ -43,12 +44,9 @@ export default async function ({ root }) {
     const lines = text.split("\n");
     const hits = [];
     lines.forEach((line, i) => {
-      if (PATTERN.test(line.replace(/no-sheila/g, ""))) hits.push(i + 1); // this validator's own name is not her name
+      const stripped = SHARED_IDS.reduce((l, id) => l.split(id).join(""), line);
+      if (PATTERN.test(stripped)) hits.push(i + 1);
     });
-    if (PENDING_SIBLING.has(f)) {
-      if (!hits.length) problems.push(`${f}: clean now; remove it from PENDING_SIBLING in scripts/validators/no-sheila.mjs`);
-      continue;
-    }
     for (const n of hits.slice(0, 5)) problems.push(`${f}:${n}: says Sheila; this is Mercedes Studio`);
     if (hits.length > 5) problems.push(`${f}: ${hits.length - 5} more`);
   }
