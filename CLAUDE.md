@@ -71,7 +71,8 @@ assigned in the brief that adds it) · `package.json` deps (union merge only).
 `land <pr>` (from `~/bin`). Never bare `wrangler deploy`. Build first, test in batches: the
 merge gate is `check.yml` (typecheck, unit, validators, build, under 5 min); `land` merges on
 green, deploys **staging** from the merge sha, and prints WAITING for production. `e2e.yml`
-(e2e, e2e-open, help-screenshots) runs nightly (08:00 UTC) and on `workflow_dispatch`, never per
+(e2e, e2e-open, help-screenshots) runs on `workflow_dispatch` only — a person, `land --promote
+--run-e2e`, or `land` after a large change — never on a schedule (owner, 2 Oct 2026), never per
 merge. **Production moves on its own, nobody in the loop:** `promote.yml` fires on every green
 `e2e` run of main and runs `scripts/deploy-production.sh` from exactly the sha that passed (repo
 secrets `CLOUDFLARE_API_TOKEN` = vault `cloudflare-claude-deploy`, `CLOUDFLARE_ACCOUNT_ID`),

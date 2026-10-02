@@ -454,7 +454,7 @@ Mercedes's production is never touched by it.
 | D1 | `mercedes-creator-dashboard-db-staging` (`19ea68a7-c501-4a4b-af6a-f1817ed824d2`) |
 | R2 | `mercedes-creator-dashboard-files-staging` |
 | Login | `sequoia@westpeek.ventures` (OWNER_EMAIL): the operator's own address, she reads that mailbox. |
-| Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows only after the nightly `e2e` run is green on that sha: `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote mercedes-creator-dashboard` is the by-hand path and reads the same record. |
+| Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows only after an `e2e` run (dispatched on demand: a person, `land --promote --run-e2e`, or `land` after a large change; never a schedule) is green on that sha: `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote mercedes-creator-dashboard` is the by-hand path and reads the same record. |
 
 ```bash
 npx wrangler d1 execute mercedes-creator-dashboard-db-staging --remote --env staging --command "SELECT name, light, note FROM health"
@@ -667,7 +667,7 @@ Review and decisions: `docs/HELP-REVIEW.md`. Guides are `help/guides/<slug>.md` 
   a held video, Stats results, voice overs, deals at every stage) + `seed-help-lights.sql`
   (connections and the health board, re-applied after a guide changes them) + today's posts
   (`helpPostsSql` in `tests/e2e/demo.ts`).
-- CI: `e2e.yml` job `help-screenshots` nightly (08:00 UTC) and on dispatch, the gate for every production deploy (`promote.yml` fires on the green run; `land --promote` by hand); `job-help_screenshots.yml` on each release
+- CI: `e2e.yml` job `help-screenshots` on dispatch only (a person or `land`; never a schedule, owner 2 Oct 2026), the gate for every production deploy (`promote.yml` fires on the green run; `land --promote` by hand); `job-help_screenshots.yml` on each release
   opens a PR with refreshed pictures.
 
 ## When something is red
