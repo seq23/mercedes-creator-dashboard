@@ -70,7 +70,13 @@ assigned in the brief that adds it) · `package.json` deps (union merge only).
 
 `land <pr>` (from `~/bin`). Never bare `wrangler deploy`. Build first, test in batches: the
 merge gate is `check.yml` (typecheck, unit, validators, build, under 5 min); `land` merges on
-green, deploys **staging** from the merge sha, and prints WAITING for production. `e2e.yml`
+green, deploys **staging** from the merge sha, and then ships **production** by the size of the
+change (owner, 2 Oct 2026): a **small** change goes to production at once, on the fast check
+alone, recorded as "small change: N lines, M files; shipped on the fast check, e2e on demand";
+after a **large** change `land` runs `e2e.yml` on main itself and ships only on green. "Large" is
+defined once, in the `large` block of `land` (seq23/seq-bin) — this repo restates no threshold.
+A **known-red** e2e (the newest run on main that reached a verdict is not success; cancelled runs
+do not count) blocks every small change until a green run is newer. `e2e.yml`
 (e2e, e2e-open, help-screenshots) runs on `workflow_dispatch` only — a person, `land --promote
 --run-e2e`, or `land` after a large change — never on a schedule (owner, 2 Oct 2026), never per
 merge. **Production moves on its own, nobody in the loop:** `promote.yml` fires on every green
@@ -80,9 +86,11 @@ smokes `/healthz`, and records a GitHub Deployment (environment `production`) �
 `land --promote mercedes-creator-dashboard [--run-e2e]` writes and reads, so the by-hand path
 still works and the two agree (a sha production already runs is skipped, not redeployed). By hand
 without `land`: `gh workflow run e2e.yml --ref main`, or `gh workflow run promote.yml -f sha=<sha>`
-(refused unless a green `e2e` run exists on that sha). Validator `promote-on-green` pins this
+(refused unless a green `e2e` run exists on that sha, or it is given `-f reason=` — land's
+small-change verdict — with `check.yml` green on that sha and the suite not known red;
+`scripts/production-gate.mjs` decides, for every path). Validator `promote-on-green` pins this
 shape: `e2e.yml` never on push/pull_request, `promote.yml` only on `workflow_run` of e2e +
-dispatch. `npm run deploy:production` by hand is the break-glass, not the route.
+dispatch, every path through the gate, and the gate's own table. `npm run deploy:production` by hand is the break-glass, not the route.
 Production URL: https://dashboard.justbeingmercedes.com (Worker `mercedesstudio`, custom domain
 route in `wrangler.jsonc`; also https://mercedesstudio.seq-taylor.workers.dev). Production has no
 login (`AUTH_MODE` "open"): with open mode anyone who has the URL is the owner; that is by her
@@ -95,4 +103,5 @@ https://mercedesstudio-staging.seq-taylor.workers.dev. It is `env.staging` in `w
 `npm run validate:envs` fails if it drifts from production beyond its name, its routes (staging
 must say `routes: []`, or it inherits and takes over the production domain), its D1/R2 and the
 vars OWNER_EMAIL, PUBLIC_BASE_URL, ENV_NAME, FAKE_SERVICES, AUTH_MODE. `land` deploys it on every
-merge, so staging is always main and production is the last e2e-green main.
+merge, so staging is always main, and production is main as soon as `land` has shipped it (at
+once for a small change, after a green e2e for a large one).
