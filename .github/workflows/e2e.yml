@@ -8,9 +8,11 @@
 # --promote mercedes-creator-dashboard --run-e2e`, or by `land` after a large change (the `land`
 # PR in seq23/seq-bin defines "large"); never on a schedule (owner decision, 2 Oct 2026), never
 # per merge. The merge gate is check.yml, and `land <pr>` deploys STAGING on every merge.
-# Production deploys only from a commit this workflow has passed on. A successful dispatch on
-# main triggers promote.yml; `land --promote` can also ship the newest green commit. A red run
-# blocks the next production deploy and is fixed first (bisect between the last green and the
+# After a LARGE change production deploys only from a commit this workflow has passed on: a
+# successful dispatch on main triggers promote.yml; `land --promote` can also ship the newest
+# green commit. A SMALL change ships on the fast check without this suite (owner decision,
+# 2 Oct 2026; scripts/production-gate.mjs). A red run here blocks every small change until a
+# green run is newer (known red), and is fixed first (bisect between the last green and the
 # red sha).
 # timeout-minutes is a fault detector (~4× normal), never a budget.
 name: e2e

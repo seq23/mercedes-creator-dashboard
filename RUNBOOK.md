@@ -20,7 +20,7 @@ is a 404, `/api/me` answers as the owner with no cookie, and the Help "Log in" g
 
 Worker (`wrangler secret put NAME`): `SESSION_SECRET`, `SECRETS_KEY` (32 bytes base64),
 `JOB_SHARED_SECRET`, `GITHUB_DISPATCH_TOKEN`, `RESEND_API_KEY`.
-GitHub repo secrets for `promote.yml` (production from a green e2e): `CLOUDFLARE_API_TOKEN` = vault `cloudflare-claude-deploy` (Keychain → `gh secret set`, never on screen; if a promote run fails on auth, re-set it from the vault) and `CLOUDFLARE_ACCOUNT_ID` = `8d147e242033699dd37c6f5a451f48d2`.
+GitHub repo secrets for `promote.yml` (production from a green e2e, after a large change): `CLOUDFLARE_API_TOKEN` = vault `cloudflare-claude-deploy` (Keychain → `gh secret set`, never on screen; if a promote run fails on auth, re-set it from the vault) and `CLOUDFLARE_ACCOUNT_ID` = `8d147e242033699dd37c6f5a451f48d2`.
 
 RESEND_API_KEY (production and staging, set 26 Sep 2026) is the SAME Resend key the upstream
 dashboard uses (vault `sheila-resend-api-key`; one Resend account for both dashboards, the
@@ -454,7 +454,7 @@ Mercedes's production is never touched by it.
 | D1 | `mercedes-creator-dashboard-db-staging` (`19ea68a7-c501-4a4b-af6a-f1817ed824d2`) |
 | R2 | `mercedes-creator-dashboard-files-staging` |
 | Login | `sequoia@westpeek.ventures` (OWNER_EMAIL): the operator's own address, she reads that mailbox. |
-| Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows only after an `e2e` run (dispatched on demand: a person, `land --promote --run-e2e`, or `land` after a large change; never a schedule) is green on that sha: `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote mercedes-creator-dashboard` is the by-hand path and reads the same record. |
+| Deploy | `land <pr>` deploys it from every merge sha (twin check → build → remote migrations → deploy → healthz must say `env: staging`); `npm run deploy:staging` by hand is the break-glass. Production follows in the same `land` run: a small change at once, on the fast check (`land` deploys it and records why); a large change — "large" is defined in `land`, seq23/seq-bin — only after an `e2e` run (dispatched on demand: a person, `land <pr> --run-e2e`, `land --promote --run-e2e`, or `land` after a large change; never a schedule) is green on that sha; a known-red e2e blocks every small change until a green run is newer. On that green run `promote.yml` ships it on its own (`scripts/deploy-production.sh` at that sha, healthz smoke, GitHub Deployment `production`); `land --promote mercedes-creator-dashboard` is the by-hand path and reads the same record. |
 
 ```bash
 npx wrangler d1 execute mercedes-creator-dashboard-db-staging --remote --env staging --command "SELECT name, light, note FROM health"
@@ -667,7 +667,7 @@ Review and decisions: `docs/HELP-REVIEW.md`. Guides are `help/guides/<slug>.md` 
   a held video, Stats results, voice overs, deals at every stage) + `seed-help-lights.sql`
   (connections and the health board, re-applied after a guide changes them) + today's posts
   (`helpPostsSql` in `tests/e2e/demo.ts`).
-- CI: `e2e.yml` job `help-screenshots` on dispatch only (a person or `land`; never a schedule, owner 2 Oct 2026), the gate for every production deploy (`promote.yml` fires on the green run; `land --promote` by hand); `job-help_screenshots.yml` on each release
+- CI: `e2e.yml` job `help-screenshots` on dispatch only (a person or `land`; never a schedule, owner 2 Oct 2026), the gate for a production deploy after a large change (`promote.yml` fires on the green run; `land --promote` by hand) — a small change ships on the fast check without it; `job-help_screenshots.yml` on each release
   opens a PR with refreshed pictures.
 
 ## When something is red
