@@ -55,7 +55,7 @@
     "GITHUB_REPO": "seq23/mercedes-creator-dashboard",
     "AUDIENCE_TIMEZONE": "America/New_York",
     // The address every email is sent from: Mercedes's own domain. RESEND_API_KEY is the Resend
-    // key the upstream dashboard uses too (vault sheila-resend-api-key, one account for both,
+    // key the upstream dashboard uses too (Boss OS vault RESEND_SHEILA_API_KEY, one account for both,
     // the owner's decision 26 Sep 2026), and justbeingmercedes.com is verified in that account
     // (Resend domain adf659a0-2d77-43e1-9cdf-a5499db7883f; DKIM/SPF records on the Cloudflare
     // zone). Resend's shared test sender (onboarding@resend.dev, the code default in
