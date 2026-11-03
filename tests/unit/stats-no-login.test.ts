@@ -53,7 +53,7 @@ beforeEach(async () => {
   db = sqliteD1();
   env = {
     DB: db.DB,
-    OWNER_EMAIL: "mercasare.social@gmail.com",
+    OWNER_EMAIL: "owner@example.com",
     SESSION_SECRET: "session-secret-for-tests",
     SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=",
     APP_NAME: "Mercedes Studio",
@@ -269,7 +269,7 @@ describe("Monday lane", () => {
     await connectBuffer([YT_CH, IG_CH("justbeingmercedes")]);
     db.raw.prepare("INSERT INTO brand_profile (version, sections, locked, source) VALUES (1, '{}', 1, 'draft')").run();
     await setSetting(env.DB, "features", { voice: true, deeper_research: true, weekly_recap: true, help_ask: true });
-    await setSetting(env.DB, "notify_emails", ["mercasare.social@gmail.com"]);
+    await setSetting(env.DB, "notify_emails", ["owner@example.com"]);
     await setSetting(env.DB, "instagram_reminder", { on: true, last_sent_at: null });
     await weekly(env);
     expect(await getSetting(env.DB, "youtube_public", null)).toMatchObject({ state: "ok", subscribers: 1260 });

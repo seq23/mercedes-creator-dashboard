@@ -32,7 +32,7 @@ Open the email from Mercedes Studio and find the 6-digit code.
 ## Type the code
 
 ![Step 4](/help/screenshots/log-in-4.png)
-<!-- fill: input[type="email"] => mercasare.social@gmail.com -->
+<!-- fill: input[type="email"] => owner@example.com -->
 <!-- click: role=button[name="Email me a code"] -->
 <!-- target: .code-input -->
 

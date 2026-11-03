@@ -16,7 +16,7 @@ import { compareEnvs, loginLinks, parseJsonc, REQUIRED_AUTH_MODE } from "../../s
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-const OWNER = "mercasare.social@gmail.com";
+const OWNER = "owner@example.com";
 const BASE = "http://w.example";
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();

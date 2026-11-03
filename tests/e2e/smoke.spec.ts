@@ -10,7 +10,7 @@ test.describe("login", () => {
   // database would hit the cap and see no code. Each test puts back the codes it asked for
   // (used ones count too; sessions are cookies and are not touched).
   test.afterEach(() => {
-    sql("DELETE FROM login_codes WHERE email = 'mercasare.social@gmail.com'");
+    sql("DELETE FROM login_codes WHERE email = 'owner@example.com'");
   });
 
   test("the login page shows the brand and asks for an email", async ({ page }) => {
@@ -21,7 +21,7 @@ test.describe("login", () => {
 
   test("a code from the email logs her in", async ({ page }) => {
     await page.goto("/");
-    await page.getByLabel("Your email").fill("mercasare.social@gmail.com");
+    await page.getByLabel("Your email").fill("owner@example.com");
     await page.getByRole("button", { name: "Email me a code" }).click();
     const code = await page.locator(".notice strong").textContent();
     await page.getByLabel("The code from your email").fill(code!.trim());

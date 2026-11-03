@@ -7,7 +7,7 @@ import { selectorOf } from "../../scripts/validators/help-targets-exist.mjs";
 
 describe("help-targets-exist: fill directives", () => {
   it("checks the selector, not the value typed into it", () => {
-    expect(selectorOf("fill", 'input[type="email"] => mercasare.social@gmail.com')).toBe('input[type="email"]');
+    expect(selectorOf("fill", 'input[type="email"] => owner@example.com')).toBe('input[type="email"]');
     expect(selectorOf("fill", "#name => Mercedes Asare (TEST kit)")).toBe("#name");
   });
   it("leaves click and target directives whole", () => {

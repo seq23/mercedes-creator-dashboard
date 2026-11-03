@@ -170,7 +170,7 @@ beforeEach(async () => {
   env = {
     DB: db.DB,
     FILES: r2.FILES,
-    OWNER_EMAIL: "mercasare.social@gmail.com",
+    OWNER_EMAIL: "owner@example.com",
     SESSION_SECRET: "session-secret-for-tests",
     SECRETS_KEY: "YcLVEjArFviauClfN6thsYumeyr3wqfUT9D2VnMNTm0=",
     APP_NAME: "Mercedes Studio",

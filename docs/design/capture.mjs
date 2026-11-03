@@ -63,10 +63,10 @@ const VIEWPORTS = [
 ];
 
 async function login(ctx) {
-  const r = await ctx.request.post(`${BASE}/api/auth/request`, { data: { email: "mercasare.social@gmail.com" } });
+  const r = await ctx.request.post(`${BASE}/api/auth/request`, { data: { email: "owner@example.com" } });
   const { dev_code } = await r.json();
   if (!dev_code) throw new Error("fake services did not return a login code");
-  const v = await ctx.request.post(`${BASE}/api/auth/verify`, { data: { email: "mercasare.social@gmail.com", code: dev_code } });
+  const v = await ctx.request.post(`${BASE}/api/auth/verify`, { data: { email: "owner@example.com", code: dev_code } });
   if (!v.ok()) throw new Error(`verify failed ${v.status()}`);
 }
 
