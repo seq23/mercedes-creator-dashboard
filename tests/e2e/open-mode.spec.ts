@@ -5,7 +5,7 @@
 import { sql } from "./helpers";
 import { expect, test } from "@playwright/test";
 
-const OWNER = "mercasare.social@gmail.com";
+const OWNER = "owner@example.com";
 
 test.describe("open mode: no login at all", () => {
   test("the server says it is open: /api/me is the owner with no cookie", async ({ request }) => {

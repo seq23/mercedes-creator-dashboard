@@ -14,7 +14,7 @@ const sent = () => raw.prepare("SELECT kind, to_email, provider_id FROM emails_s
 beforeEach(() => {
   const d = sqliteD1();
   raw = d.raw;
-  env = { DB: d.DB, FAKE_SERVICES: "0", RESEND_API_KEY: "re_test", GITHUB_DISPATCH_TOKEN: "x", OWNER_EMAIL: "mercasare.social@gmail.com", PUBLIC_BASE_URL: "https://e.test", EMAIL_FROM: "Mercedes Studio <studio@justbeingmercedes.com>" } as unknown as Env;
+  env = { DB: d.DB, FAKE_SERVICES: "0", RESEND_API_KEY: "re_test", GITHUB_DISPATCH_TOKEN: "x", OWNER_EMAIL: "owner@example.com", PUBLIC_BASE_URL: "https://e.test", EMAIL_FROM: "Mercedes Studio <studio@justbeingmercedes.com>" } as unknown as Env;
 });
 afterEach(() => vi.unstubAllGlobals());
 
@@ -23,20 +23,20 @@ describe("runway email", () => {
     const fetchMock = vi.fn(async () => new Response(JSON.stringify({ id: "em_runway" }), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
     // 0 approved clips: the runway is low, so the lane sends.
-    expect(await runwayEmail(env, false)).toEqual({ sent: true, to: ["mercasare.social@gmail.com"], providerId: "em_runway" });
+    expect(await runwayEmail(env, false)).toEqual({ sent: true, to: ["owner@example.com"], providerId: "em_runway" });
     // Same day again: the lane holds (repeat window), nothing new is sent.
-    expect(await runwayEmail(env, false)).toEqual({ sent: false, to: ["mercasare.social@gmail.com"], providerId: null });
+    expect(await runwayEmail(env, false)).toEqual({ sent: false, to: ["owner@example.com"], providerId: null });
     expect(sent()).toHaveLength(1);
     // "Now" sends anyway, the real email, kind time_to_dump.
     const now = await runwayEmail(env, true);
-    expect(now).toEqual({ sent: true, to: ["mercasare.social@gmail.com"], providerId: "em_runway" });
+    expect(now).toEqual({ sent: true, to: ["owner@example.com"], providerId: "em_runway" });
     expect(sent()).toEqual([
-      { kind: "time_to_dump", to_email: "mercasare.social@gmail.com", provider_id: "em_runway" },
-      { kind: "time_to_dump", to_email: "mercasare.social@gmail.com", provider_id: "em_runway" },
+      { kind: "time_to_dump", to_email: "owner@example.com", provider_id: "em_runway" },
+      { kind: "time_to_dump", to_email: "owner@example.com", provider_id: "em_runway" },
     ]);
     const body = JSON.parse(String((fetchMock.mock.calls[1] as unknown as [string, RequestInit])[1].body)) as { from: string; to: string[]; subject: string };
     expect(body.from).toBe("Mercedes Studio <studio@justbeingmercedes.com>");
-    expect(body.to).toEqual(["mercasare.social@gmail.com"]);
+    expect(body.to).toEqual(["owner@example.com"]);
     expect(body.subject).toMatch(/Time to dump/);
     expect(raw.prepare("SELECT light FROM health WHERE name = 'Email (Resend)'").get()).toEqual({ light: "green" });
   });

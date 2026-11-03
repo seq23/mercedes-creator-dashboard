@@ -5,7 +5,7 @@
 Mercedes Asare's creator dashboard (her site: https://justbeingmercedes.com). Mercedes dumps
 footage; the dashboard cuts it into vertical clips, she approves them, they post through Buffer to
 TikTok, Instagram and YouTube on a schedule the research says works, and the Deals tab finds
-brands and drafts pitches she sends herself. Owner: **Mercedes** (mercasare.social@gmail.com).
+brands and drafts pitches she sends herself. Owner: **Mercedes**.
 Cost target: **$0/month**. Nothing posts unless she approves it. Repo:
 `seq23/mercedes-creator-dashboard`, a full-history copy of an earlier creator's dashboard (named
 at the top of `docs/BUILD_PLAN.md`; a validator in `scripts/validators/` keeps her name out of this one);

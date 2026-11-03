@@ -92,7 +92,7 @@ describe("envs-match validator", () => {
   it("staging logs in at the operator's own address; production stays Mercedes's", () => {
     const c = cfg();
     expect(c.env.staging.vars.OWNER_EMAIL).toBe("sequoia@westpeek.ventures");
-    expect(c.vars.OWNER_EMAIL).toBe("mercasare.social@gmail.com");
+    expect(c.vars.OWNER_EMAIL).toBe("owner@example.com");
   });
 
   // 26 Sep 2026: production sent from Resend's shared onboarding@resend.dev, which delivers only
