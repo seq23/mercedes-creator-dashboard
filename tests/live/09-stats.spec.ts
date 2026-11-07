@@ -1,7 +1,7 @@
 // Checklist 9: Stats on staging for real. YouTube stats are connected with Google sign-in (the
 // owner clicked Allow on 25 Sep 2026); Sync now runs the `metrics` job on Actions and real
-// numbers land. TikTok: the real TikTok Studio "Content" export of @iamcindymercer (the CSV
-// from the ZIP TikTok hands over) is uploaded on Stats and read. Instagram sign-in is not tested
+// numbers land. TikTok: the client's real TikTok Studio "Content" export (the CSV from the ZIP
+// TikTok hands over, path in LIVE_TIKTOK_CSV) is uploaded on Stats and read. Instagram sign-in is not tested
 // (owner decision: being replaced).
 import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
@@ -40,15 +40,18 @@ test("9b · TikTok: the real TikTok Studio export is read on Stats", async ({ pa
   const body = (await res.json()) as { ok?: boolean; kind?: string; videos?: number; skipped?: number; error?: string };
   expect(res.status(), JSON.stringify(body)).toBe(200);
   expect(body.kind).toBe("content");
-  const dataRows = readFileSync(CSV, "utf8").split(/\r?\n/).filter((l) => l.includes("tiktok.com/")).length;
+  const csvText = readFileSync(CSV, "utf8");
+  const dataRows = csvText.split(/\r?\n/).filter((l) => l.includes("tiktok.com/")).length;
   expect(dataRows).toBeGreaterThan(0);
   expect(body.videos, "every video row in the real export was read").toBe(dataRows);
   expect(body.skipped).toBe(0);
   await expect(page.locator(".toast").filter({ hasText: `Imported ${dataRows} TikTok video` }).first()).toBeVisible();
   const rows = d1<{ url: string; posted_at: string | null; views: number }>("SELECT url, posted_at, views FROM platform_videos WHERE platform = 'tiktok' AND source = 'import' ORDER BY views DESC");
   expect(rows.length).toBeGreaterThanOrEqual(dataRows);
+  expect(new Set(rows.map((r) => r.url.match(/\/@([^/]+)\//)?.[1])).size, "every imported video is from one account, hers").toBe(1);
   for (const r of rows) {
-    expect(r.url).toMatch(/^https:\/\/www\.tiktok\.com\/@iamcindymercer\/video\/\d+$/);
+    expect(r.url).toMatch(/^https:\/\/www\.tiktok\.com\/@[\w.]+\/video\/\d+$/);
+    expect(csvText, `${r.url} is a video from the uploaded export`).toContain(r.url.match(/\/video\/\d+$/)![0]);
     expect(r.posted_at, "a post date without a year still lands in the past year").toMatch(/^2026-/);
   }
   const [light] = d1<{ light: string; note: string }>("SELECT light, note FROM health WHERE name = 'TikTok stats'");

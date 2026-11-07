@@ -25,6 +25,9 @@ const vaultCache = new Map<string, string>();
  * (`openrouter-ai-c4dc6108` lives under `repo-operator-provider-openrouter`).
  */
 export function vaultSecret(id: string): string {
+  // The owner's own Buffer account (its key is vault `buffer-access-token`) held the Phase 0 test
+  // channels until 7 Nov 2026 and now holds another business's channels. Nothing here reads it.
+  if (RETIRED_VAULT_IDS.has(id)) throw new Error(`SHARED_BUFFER_KEY: vault ${id} belongs to the owner's shared Buffer account; this client's live suite never uses it`);
   const hit = vaultCache.get(id);
   if (hit) return hit;
   const cwd = `${process.env.HOME}/repo-tools/agent`;
@@ -101,6 +104,36 @@ export function d1<T = Record<string, unknown>>(sql: string): T[] {
       execFileSync("sleep", [String(5 * attempt)]);
     }
   }
+}
+
+/** The owner's shared Buffer account (Phase 0 test run, finished 7 Nov 2026). Never this client's. */
+export const SHARED_BUFFER_ORG = "6a1331f15351f4a7ea38e3d5";
+const RETIRED_VAULT_IDS = new Set(["buffer-access-token"]);
+
+export interface BufferChannel { platform: string; handle: string; connected: boolean; paused?: boolean }
+
+/**
+ * The Buffer channels the client connected on Connect, read from staging at run time. A named
+ * stop (never a skip) when Buffer is not connected, or when the connection is the owner's shared
+ * account, so no live spec can plan, post or read on channels that are not the client's.
+ */
+export function clientBuffer(): { organization_id: string; channels: BufferChannel[] } {
+  const [conn] = d1<{ status: string; meta: string | null }>("SELECT status, meta FROM connections WHERE service = 'buffer'");
+  if (!conn || conn.status !== "ok" || !conn.meta) throw new Error("BUFFER_NOT_CONNECTED: the client has not connected her Buffer on staging's Connect screen; the Buffer live checks need her own channels");
+  const meta = JSON.parse(conn.meta) as { organization_id: string; channels?: BufferChannel[] };
+  if (meta.organization_id === SHARED_BUFFER_ORG) throw new Error("SHARED_BUFFER_ACCOUNT: staging is connected to the owner's shared Buffer account, not the client's; Disconnect it on Connect before any live run");
+  const channels = meta.channels ?? [];
+  if (!channels.length) throw new Error("BUFFER_NO_CHANNELS: the client's Buffer has no channels; add one in Buffer, then Check again on Connect");
+  return { organization_id: meta.organization_id, channels };
+}
+
+/**
+ * A named stop while ANY Buffer is connected on staging: for live specs that plan TEST posts,
+ * which the hourly lane would hand to Buffer and publish on a real channel.
+ */
+export function noBufferConnected(): void {
+  const [conn] = d1<{ status: string }>("SELECT status FROM connections WHERE service = 'buffer'");
+  if (conn && conn.status !== "disconnected") throw new Error(`BUFFER_CONNECTED: staging has a Buffer connection (${conn.status}); this spec plans TEST posts the hourly lane would publish. Disconnect Buffer on Connect first`);
 }
 
 /** Poll a D1 query until `done` says yes (bounded). */
