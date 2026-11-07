@@ -1,8 +1,9 @@
 # Phase 0 live test — staging, 25–26 Sep 2026
 
 The dashboard run for real on staging (`FAKE_SERVICES=0`) with the owner's test accounts: the
-Buffer account seq.taylor@gmail.com (TikTok `@iamcindymercer`, Instagram `seq23`, YouTube
-"Sequoia Taylor"; all three are her test channels), the West Peek Resend key, the owner's
+owner's own Buffer account with three of her test channels (TikTok, Instagram, YouTube; the test
+run finished 7 Nov 2026 and those channels were removed from Buffer, which now holds another
+business's channels: the live suite never uses that account), the West Peek Resend key, the owner's
 OpenRouter key, the Google account that owns the YouTube channel.
 
 Suite: `tests/live/*.spec.ts`, `npm run e2e:live` (`playwright.live.config.ts`, `LIVE_BASE_URL`,
@@ -19,7 +20,7 @@ and `docs/design/live/evidence.json` (ids, run ids, counts; never content).
 | 5 | Dump → cut on Actions → clips + "clips ready" email → playable in Review | PASS | owner video 245 s 320×568: run 36206701421, 28 clips at 1080×1920, email `01a0db40-…`; synthetic TEST clip: run 36208674291, 5 clips, email `01a0db58-…` | #20 (someone else's video) |
 | 5b | Another creator's TikTok is held off the calendar | FIXED | run 36208158574, asset `source_owner=other`, note on Dump, not in the pool; `05-dump-held.jpg` | #20 |
 | 6 | Review: approve, reject with a reason, caption, hook swap, untick a platform, #ad once | PASS | `06-review-*.jpg`; `#ad` exactly once after two saves | — |
-| 7 | Calendar: Fill (caps), move, take off; hourly lane → Buffer; REAL posts | FIXED | Fill 15 posts within caps, move + take off on screen; the hourly lane loaded Buffer; Buffer `sent` and the dashboard shows Posted with links after the next run: TikTok https://tiktok.com/@iamcindymercer/video/7689660837077847309 · Instagram https://www.instagram.com/reel/DdvCgMMFRhk/ · YouTube https://www.youtube.com/shorts/lFDhkdWMj0w ; `07-*.jpg` | #23 (Instagram/YouTube metadata, error read-back), batch 5 (desktop week unreadable) |
+| 7 | Calendar: Fill (caps), move, take off; hourly lane → Buffer; REAL posts | FIXED | Fill 15 posts within caps, move + take off on screen; the hourly lane loaded Buffer; Buffer `sent` and the dashboard shows Posted with links on all three test channels after the next run (those posts and channels are gone; the posting half of `07-calendar.spec.ts` retired 7 Nov 2026); `07-*.jpg` | #23 (Instagram/YouTube metadata, error read-back), batch 5 (desktop week unreadable) |
 | 8 | Health: broken Buffer key → red + one "Buffer needs you" email; reconnect → green; Check everything now | FIXED | email `01a0db0c-36cd-76c9-a918-20be142def33` (exactly 1); `08-buffer-red.jpg`, `08-health-green.jpg` | #16, #17 (sidebar said "All systems OK" beside a red light) |
 | 9 | Stats: Google sign-in + Sync; TikTok Studio export | PASS (Instagram not tested) | YouTube: metrics run 36210125799, channel 1 subscriber / 0 videos at sync time, light green; TikTok CSV: 5 videos (views 7,016 / 68 / 56 / 35 / 26), light green. Instagram sign-in not tested: being replaced (owner decision) | — |
 | 10 | Deals (#32 design) | FIXED | Finder on Actions ranked by expected money (scores non-increasing): with Firecrawl run 36220828966, 24 cards; keyless (Firecrawl disconnected) run 36221145903, 28 cards, light green. Real-model pitch (968 chars) → Gmail compose link → marked sent by hand 6 days back → follow-up due on Home. Brand offer read (terms "from their email", red flags), memo fee $650, rate card 4 packages. Nothing to a brand: 0 dashboard emails to anyone but the owner | #36 (someone else's clip could reach the kit / a pitch) |
