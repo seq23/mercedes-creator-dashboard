@@ -21,6 +21,7 @@ export const REGISTER = {
   "jobs-no-direct-storage": "a job holding storage keys needs an R2 token the owner cannot mint and a public repo can leak; jobs reach storage only through the Worker",
   "jobs-registered": "every job type in the schema must have a handler or dispatch silently does nothing",
   "legal-pages": "Google will not publish the Connect YouTube sign-in without a public privacy policy and terms linked from every screen; a path the React app answers shows the login page to Google's reviewers (owner, 26 Sep 2026: full videos straight to her channel)",
+  "mediakit-deals": "a kit figure without its as-of date and source tells a brand something unverifiable; an email scenario without a template or a test, a benchmark without a source, or an undocumented marketplace is a made-up claim",
   "no-content-in-logs": "public repo: a console.* outside worker/lib/log.ts can leak her content into Actions logs (section 13)",
   "no-secrets": "a key in the repo is public the moment it is pushed",
   "no-sheila": "this repo is a full-history copy of the upstream dashboard (26 Sep 2026): a leftover of the old owner's name, handle or address in copy, guides, fixtures or seeds is the wrong woman's name on Mercedes's dashboard, emails and media kit",
