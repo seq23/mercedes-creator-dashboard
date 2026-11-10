@@ -3,8 +3,7 @@
 A locked design system for Mercedes' creator dashboard (Hallmark multi-page flow: one system,
 every screen reads it). Brand tokens: `app/styles/tokens.css` (Mercedes palette; the one file
 allowed to hold raw colours and font names). Do not regenerate per page — amend this file when the system
-needs to grow. The rules marked **guarded** are enforced by `scripts/validators/design-tokens.mjs`
-(`npm run validate`); the rest by `docs/design/capture.mjs` metrics and the e2e suite.
+needs to grow. The rules are checked by `docs/design/capture.mjs` metrics and the e2e suite.
 
 ## Genre and shape
 

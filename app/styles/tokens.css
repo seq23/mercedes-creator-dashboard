@@ -2,7 +2,7 @@
    Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V4 · contrast: pass (46–50) · tokens: pass (58) · mobile: pass (36, 59, 61–69)
 
    Mercedes Studio design tokens — the ONLY file in app/ allowed to hold raw colours, font names and
-   raw font sizes (scripts/validators/design-tokens.mjs enforces it; see docs/design/DESIGN.md).
+   raw font sizes (see docs/design/DESIGN.md).
    Source: Just Being Mercedes (seq23/justbeingmercedes, public/styles.css + favicon.svg):
    warm sand ground, espresso ink, nameplate gold, midnight-denim chrome (her site's dark frame),
    coral + rust for the one flourish, blue-grey and stone as quiet neutrals. Bodoni Moda (italic
